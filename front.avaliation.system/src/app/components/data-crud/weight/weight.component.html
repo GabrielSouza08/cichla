@@ -1,0 +1,130 @@
+<div class="body-weight">
+    <div *ngIf="statusLoading">
+        <div id="screen-protect" *ngIf="statusLoading"></div>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+
+    <div class="container-weight">
+
+        <div class="navbar">
+
+            <a title="Editar ou remover" (click)="openTable()"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true" ></i></a>
+
+            <a title="Cadastrar" (click)="openRegister()"><i  class="fa fa-plus fa-2x" aria-hidden="true"></i></a>
+
+            <a title="importar arquivo" (click)="openImport()"><i class="fa fa-upload fa-2x" aria-hidden="true" ></i></a>
+
+        </div>
+
+        <div class="contents">
+            <div class="group-weight" *ngIf="statusShowTable">
+
+                <h4> Editar ou remover</h4>
+
+                <div class="list" id="style-1">
+                    <table>
+                        <tr>
+                            <th *ngFor="let column of header">
+                                {{column}}
+                            </th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                        <tr *ngFor="let row of rows">
+                            <td *ngFor="let column of header">
+                                {{row [column]}}
+                            </td>
+                            <td (click)="change(row['Id'], row['Peso'], row['Data de cadastro'])" class="update-button"> Editar </td>
+                            <td (click)="delete(row['Id'])" class="delete-button"> Remover </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="change" *ngIf="statusShowChange">
+
+                <h4> Editar</h4>
+
+                <div class="update">
+                    <form [formGroup]="formChange" (ngSubmit)="inputChange()">
+                        <div class="form-group" id="input-change">
+                            <label for="Weight"> Peso </label>
+                            <input type="text" class="form-control" placeholder="Descrição do peso" formControlName="Weight">
+                            <span class="required" *ngIf="!formChange.controls.Weight.valid && formChange.controls.Weight.touched">Campo Obrigatório</span>
+
+                            <label for="DateRegister"> Data de cadastro </label>
+                            <a>{{formChange.controls.DateRegister.value}}</a>
+                        </div>
+                        <div id="action-change">
+
+                            <button type="submit"> <a id="save-update" title="Salvar"><i class="fa fa-floppy-o fa-2x" aria-hidden="true"></i></a></button>
+                            <a (click)="openTable()" id="close-update"> Voltar </a>
+                        </div>
+                        <span class="required" *ngIf="statusMessage">
+                            <div *ngFor="let message of messages">
+                                {{ message }}
+                            </div>
+                        </span>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="input" *ngIf="statusShowInput">
+
+                <h4> Cadastrar</h4>
+
+                <div class="register">
+                    <form [formGroup]="formInput" (ngSubmit)="inputRegister()">
+                        <div class="form-group" id="input-register">
+                            <label for="Weight"> Peso </label>
+                            <input type="text" class="form-control" placeholder="Descrição do peso" formControlName="Weight">
+                            <span class="required" *ngIf="!formInput.controls.Weight.valid && formInput.controls.Weight.touched">Campo Obrigatório</span>
+                        </div>
+                        <div id="action-register">
+                            <button type="submit"> <a id="save-register" title="Salvar"><i type="submit" class="fa fa-floppy-o fa-2x" aria-hidden="true"></i></a></button>
+                        </div>
+                        <span class="required" *ngIf="statusMessage">
+                            <div *ngFor="let message of messages">
+                                {{ message }}
+                            </div>
+                        </span>
+                    </form>
+                </div>
+            </div>
+
+            <div class="importer" *ngIf="statusShowImport">
+
+                <h4>Importar</h4>
+
+                <div class="import">
+                    <form [formGroup]="formImport" (ngSubmit)="inputImport()">
+                        <div class="form-group" id="input-file">
+                            <label for="File"> Arquivo </label>
+                            <input z-index="2" opacity="0" type="file" class="form-control" id="file" (change)="getFile($event)" #file>
+                            <span class="required" *ngIf="!formImport.controls.File.valid && formImport.controls.File.touched">Campo Obrigatório</span>
+
+                            <label for="TypeImport"> Tipo de importação </label>
+
+                            <mat-radio-group aria-label="Select an option" formControlName="TypeImport" requerid>
+                                <mat-radio-button color="warn" value="1">Modificar os dados iguais</mat-radio-button>
+                                <mat-radio-button color="warn" value="2">Sobrepor os dados</mat-radio-button>
+                            </mat-radio-group>
+                            <span class="required" *ngIf="!formImport.controls.TypeImport.valid && formImport.controls.TypeImport.touched">Campo Obrigatório</span>
+                        </div>
+                        <div id="action-import">
+                            <button type="submit"> <a id="save-file" title="Importar"><i type="submit" class="fa fa-cloud-upload fa-2x" aria-hidden="true"></i></a> </button>
+                        </div>
+
+                        <span class="required" *ngIf="statusMessage">
+                            <div *ngFor="let message of messages">
+                                {{ message }}
+                            </div>
+                        </span>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

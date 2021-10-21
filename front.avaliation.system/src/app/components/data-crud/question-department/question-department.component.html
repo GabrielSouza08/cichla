@@ -1,0 +1,146 @@
+<div class="body-departmentQuestions">
+    <div *ngIf="statusLoading">
+        <div id="screen-protect" *ngIf="statusLoading"></div>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+
+    <div class="show-action" *ngIf="statusConfirmAction">
+        <div id="screen-protect-action"></div>
+        <div class="confirm-action">
+            <div id="mesage-action">
+                {{messageAction}}
+            </div>
+            <div id="buttons-confirm-action">
+                <a (click)="getValueAction(true)" id="buttons-action"> Sim </a>
+                <a (click)="getValueAction(false)" id="buttons-action"> Não </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-departmentQuestions">
+
+        <div class="navbar">
+
+            <a title="Lista" (click)="openTable()" *ngIf="!statusShowTable"><i class="fa fa-list fa-2x" aria-hidden="true" ></i></a>
+            <a title="Editar ou Remover" (click)="openGroupContext()" *ngIf="!statusShowTable && !statusShowGroupContext"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true" ></i></a>
+            <a title="Cadastrar" (click)="openRegister()" *ngIf="!statusShowTable && !statusShowInput"><i class="fa fa-plus fa-2x" aria-hidden="true" ></i></a>
+
+        </div>
+
+        <div class="contents">
+
+            <div class="message-success" *ngIf="statusSuccess">
+                {{messageSuccess}}
+            </div>
+
+            <div class="group-departmentQuestions" *ngIf="statusShowTable">
+
+                <div class="form-group" id="input-filter">
+                    <label> Filtro </label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Diretoria" #input>
+                </div>
+
+                <div class="list" id="style-1">
+                    <table mat-table [dataSource]="dataSourceDepartment">
+
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef> Departamento </th>
+                            <td mat-cell *matCellDef="let element" (click)="getLine(element)"> {{element.name}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="quantity">
+                            <th mat-header-cell *matHeaderCellDef> Nº Questões </th>
+                            <td mat-cell *matCellDef="let element" (click)="getLine(element)"> {{element.quantity}} </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsDepartment"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsDepartment;"></tr>
+                    </table>
+                </div>
+
+                <span class="required" *ngIf="statusMessage">
+                    <div *ngFor="let message of messages">
+                        {{ message }}
+                    </div>
+                </span>
+            </div>
+
+            <div class="groupQuestions" *ngIf="statusShowGroupContext">
+
+                <h4> Questões: {{departmentName}} </h4>
+                <h4> Editar ou remover </h4>
+
+                <div class="context-group">
+                    <div class="form-group" id="input-context">
+                        <div id="group-select">
+                            <div id="select" *ngFor="let question of questionDepartmentSet;">
+                                <p>
+                                    {{question.description}}
+                                </p>
+                                <div class="buttons-confirm-action">
+                                    <a [matMenuTriggerFor]="controlDetails" title="Opções"><i id="paint" class="fa fa-paint-brush fa-2x"></i></a>
+
+                                    <mat-menu #controlDetails="matMenu">
+                                        <a mat-menu-item title="Remover" (click)="delete(question)"><span> Remover</span></a>
+
+                                        <a mat-menu-item title="Editar" (click)="change(question)"><span> Editar</span></a>
+                                    </mat-menu>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input" *ngIf="statusShowInput">
+
+                <h4> Cadastrar </h4>
+
+                <div class="register">
+                    <form [formGroup]="formInput" (ngSubmit)="inputRegister()" style="height: 100%; width: 100%;">
+                        <div class="form-group" id="input-register">
+                            <label for="Description"> Descrição </label>
+                            <textarea type="text" class="form-control" maxlength="500" id="style-textArea" placeholder="Descrição da questão" formControlName="Description"></textarea>
+                            <label *ngIf="formInput.controls.Description.valid"> {{formInput.controls.Description.value.length}} / 500</label>
+                            <span class="required" *ngIf="!formInput.controls.Description.valid && formInput.controls.Description.touched">Campo Obrigatório</span>
+                        </div>
+                        <div id="action-register">
+                            <button type="submit"> <a id="save-register"a title="Salvar"><i type="submit" class="fa fa-floppy-o fa-2x" aria-hidden="true"></i></a></button>
+                        </div>
+                        <span class="required" *ngIf="statusMessage">
+                            <div *ngFor="let message of messages">
+                                {{ message }}
+                            </div>
+                        </span>
+                    </form>
+                </div>
+            </div>
+
+            <div class="change" *ngIf="statusShowChange">
+
+                <h4> Editar</h4>
+
+                <div class="update">
+                    <form [formGroup]="formChange" (ngSubmit)="inputChange()" style="height: 100%; width: 100%;">
+                        <div class="form-group" id="input-change">
+                            <label for="Description"> Descrição </label>
+                            <textarea type="text" class="form-control" maxlength="500" id="style-textArea" placeholder="Descrição da questão" formControlName="Description"></textarea>
+                            <label *ngIf="formChange.controls.Description.valid"> {{formChange.controls.Description.value.length}} / 500</label>
+                            <span class="required" *ngIf="!formChange.controls.Description.valid && formChange.controls.Description.touched">Campo Obrigatório</span>
+                        </div>
+                        <div id="action-change">
+
+                            <button type="submit"> <a id="save-update" title="Salvar"><i class="fa fa-floppy-o fa-2x" aria-hidden="true"></i></a></button>
+                            <a (click)="openGroupContext()" id="close-update"> Voltar </a>
+                        </div>
+                        <span class="required" *ngIf="statusMessage">
+                            <div *ngFor="let message of messages">
+                                {{ message }}
+                            </div>
+                        </span>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

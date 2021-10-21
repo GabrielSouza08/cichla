@@ -1,0 +1,101 @@
+<div class="container-home">
+    <!-- header area start -->
+    <header *ngIf="viewHeader">
+        <div class="left-area">
+            <h3><span>RH</span> - Avaliação</h3>
+
+            <label for="check"> <i class="fa fa-bars" id="sidebar_btn"></i> </label>
+        </div>
+
+        <div class="right-area">
+            <a (click)="exit()" class="logout_btn">Sair</a>
+        </div>
+    </header>
+    <!-- header area end -->
+
+    <div class="contects-home">
+        <input type="checkbox" id="check" (click)="(checkControlView())">
+
+        <!-- sidebar start -->
+        <div class="sidebar" id="style-sidebar">
+            <input type="checkbox" id="check" (click)="(checkControlView())">
+            <div id="center">
+                <img src="../../../assets/user.png" class="profile_image" alt="">
+                <h4>{{ userInfo.email }}</h4>
+            </div>
+
+            <label for="check" *ngIf="!viewHeader"> <i class="fa fa-bars" id="sidebar-internal"></i> </label>
+
+            <a *ngIf="statusDashboard" (click)="dashboardOpen()" title="Dashboard"><i class="fa fa-desktop"></i><span>Dashboard</span></a>
+
+            <a *ngIf="statusCRUD" [matMenuTriggerFor]="controlData" title="Controle de dados"><i class="fa fa-users"></i><span>Controle de dados</span></a>
+
+            <mat-menu #controlData="matMenu">
+                <a mat-menu-item (click)="CRUDColaboratorOpen()" title="Dados dos colaboradores"><i class="fa fa-pencil-square"></i><span> Colaboradores</span></a>
+
+                <a mat-menu-item (click)="CRUDWeightOpen()" title="Dados dos pesos avaliativos"><i class="fa fa-cogs"></i><span> Avaliativos</span></a>
+            </mat-menu>
+
+            <a *ngIf="statusEvaluation" [matMenuTriggerFor]="evaluation" title="Avaliação"><i class="fa fa-pencil-square-o"></i><span>Avaliação</span></a>
+
+            <mat-menu #evaluation="matMenu">
+                <a mat-menu-item (click)="evaluatioColaboratornOpen()" title="Avaliar colaboradores"><i class="fa fa-users"></i><span> Colaboradores</span></a>
+
+                <a mat-menu-item (click)="evaluationDepartmentOpen()" title="Avaliar departamentos"><i class="fa fa-wpforms"></i><span> Departamentos</span></a>
+            </mat-menu>
+
+            <!-- <a *ngIf="statusPersonalReport" (click)="PersonalReportOpen()" title="Sua Avaliação"><i class="fa fa-briefcase"></i><span>Sua Avaliação</span></a> -->
+
+            <div class="right-area-sidebar">
+                <a (click)="exit()" class="logout-sidebar">Sair</a>
+            </div>
+        </div>
+
+        <!-- sidebar end -->
+        <div *ngIf="statusHomeOpen" class="content" id="style-components">
+            <div class="componentAction">
+                <app-animation-background></app-animation-background>
+            </div>
+        </div>
+
+        <div *ngIf="statusDashboardOpen == true && statusDashboard == true" class="content" id="style-components">
+            <div class="componentAction">
+                <app-animation-background></app-animation-background>
+            </div>
+        </div>
+
+        <div *ngIf="statusCRUDColaboratorOpen" class="content-crud" id="style-components">
+            <div class="componentAction">
+                <!-- Componente de controle dos dados -->
+                <app-data-control></app-data-control>
+            </div>
+        </div>
+
+        <div *ngIf="statusCRUDWeightOpen" class="content-crud" id="style-components">
+            <div class="componentAction">
+                <!-- Componente de controle dos dados -->
+                <app-data-control-weight></app-data-control-weight>
+            </div>
+        </div>
+
+        <div *ngIf="statusEvaluationCollaboratorOpen" class="content" id="style-components">
+            <div class="componentAction">
+                <!-- <app-forms-options></app-forms-options> -->
+                <app-animation-not-found></app-animation-not-found>
+            </div>
+        </div>
+
+        <div *ngIf="statusEvaluationDepartmentOpen" class="content" id="style-components">
+            <div class="componentAction">
+                <app-formt-dpto></app-formt-dpto>
+            </div>
+        </div>
+
+        <div *ngIf="statusPersonalReportOpen == true && statusPersonalReport == true" class="content" id="style-components">
+            <div class="componentAction">
+                <!-- Criar componente para vizualição do relatório da avaliação pessoal -->
+                <app-animation-not-found></app-animation-not-found>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+<div class="main">
+    <div *ngIf="showDpto == null && showColaborator == null" class="box">
+
+        <div style="height: 105px;" class="listColaborator">
+            <h1>Avaliação departamental</h1>
+            <ul>
+                <li (click)="dptoAvaliator()">
+                    <span class="number"> </span>
+                    <span class="name">Avaliar departamentos</span>
+                    <!-- <span class="checkd">✔</span> -->
+                    <span class="points"> </span>
+                </li>
+            </ul>
+        </div>
+
+        <div style="height: 425px;" class="listColaborator">
+            <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+            <h1 *ngIf="!loading">Avaliar colaboradores</h1>
+            <ul >
+                <li *ngFor="let item of clientList" (click)="colaboratorAvaliator(item.IdColaborator)">
+                    <span class="number">{{ item.ColaboratorName }}</span>
+                    <span class="name">{{ item.ColaboratorOcupation }}</span>
+                    <span class="points">{{ item.Location }}</span>
+                    <!-- <span class="checkd">✔</span> -->
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div *ngIf="showDpto !== null" class="box">
+        <div class="templateBox">
+            <i style="margin-left: -94%;" (click)="showOptions()" class="fa fa-arrow-left"> Voltar</i>
+            <app-formt-dpto></app-formt-dpto>
+        </div>
+    </div>
+
+    <div *ngIf="showColaborator !== null" class="box">
+        <div class="templateBox">
+            <i style="margin-left: -94%;" (click)="showOptions()" class="fa fa-arrow-left"> Voltar</i>
+            <app-form-colaborator></app-form-colaborator>
+        </div>
+    </div>
+
+
+</div>

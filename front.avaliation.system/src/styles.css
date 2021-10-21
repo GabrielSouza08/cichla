@@ -1,0 +1,130 @@
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+html,
+body {
+    height: 100%;
+    overflow: auto;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+#style-body::-webkit-scrollbar-track {
+    cursor: pointer;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #FFFFFF;
+}
+
+#style-body::-webkit-scrollbar {
+    cursor: pointer;
+    width: 5px;
+    background-color: silver;
+    border-radius: 10px;
+}
+
+#style-body::-webkit-scrollbar-thumb {
+    cursor: pointer;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #19b3d3;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.mat-form-field-label {
+    color: white !important;
+}
+
+.mat-form-field-underline {
+    mix-blend-mode: color;
+}
+
+.mat-select-value .mat-select-value-text {
+    color: white;
+}
+
+.mat-select-arrow {
+    color: white;
+}
+
+.mat-radio-button.mat-warn .mat-radio-inner-circle {
+    background-color: #0e93af;
+}
+
+.mat-radio-outer-circle {
+    border-color: white;
+}
+
+.mat-radio-button.mat-warn.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #0e93af;
+}
+
+.mat-radio-button.mat-warn .mat-radio-inner-circle,
+.mat-radio-button.mat-warn .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple),
+.mat-radio-button.mat-warn.mat-radio-checked .mat-radio-persistent-ripple,
+.mat-radio-button.mat-warn:active .mat-radio-persistent-ripple {
+    background-color: #0e93af;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: rgb(47 50 58) !important;
+}
+
+.mat-step-header .mat-step-icon-selected,
+.mat-step-header .mat-step-icon-state-done,
+.mat-step-header .mat-step-icon-state-edit {
+    background-color: #179db9;
+    color: #f9f9f9;
+}
+
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+    color: #2f323a;
+    font-weight: 500;
+}
+
+.mat-form-field.mat-focused .mat-form-field-ripple {
+    background-color: #1896b1;
+}
+
+.mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+    color: #1896b1;
+}
+
+.mat-menu-item {
+    color: rgb(36 141 162);
+    font-size: 2vh;
+    font-weight: 600;
+}
+
+td.mat-cell,
+td.mat-footer-cell,
+th.mat-header-cell {
+    border-bottom-width: 0px;
+    border-bottom-style: solid;
+    text-align: center;
+}
+
+@media screen and (max-width: 428px) {
+    .mat-form-field {
+        width: 50vw;
+        display: inline-block;
+        position: relative;
+        text-align: left;
+    }
+}

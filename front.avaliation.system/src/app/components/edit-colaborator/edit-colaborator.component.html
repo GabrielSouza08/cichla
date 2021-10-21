@@ -1,0 +1,136 @@
+<div class="main">
+    <div class="box">
+
+        <div *ngIf="editColaborator == null">
+            <input class="search" type="text" placeholder=" Encontar colaborador..." required="" #nameColaborator>
+            <input class="search" type="submit" value="Ir" (click)="getColaborator(nameColaborator.value)">
+        </div>
+
+        <div *ngIf="editColaborator == null">
+            <ul>
+                <li (click)="showEditColaborator()">
+                    <span class="number">wesley gomes queiroz</span>
+                    <span class="name">Desenvolvedor de software jr</span>
+                    <span class="points">Tecnologia tatuape</span>
+                </li>
+                <li (click)="showEditColaborator()">
+                    <span class="number">Josefa vanessa martins</span>
+                    <span class="name">Cordenadora de desenvolvimento</span>
+                    <span class="points">Tecnologia tatuape</span>
+                </li>
+                <li (click)="showEditColaborator()">
+                    <span class="number">Alesandro lima cabral</span>
+                    <span class="name">Desenvolvedor de software pl</span>
+                    <span class="points">Tecnologia tatuape</span>
+                </li>
+                <li (click)="showEditColaborator()">
+                    <span class="number">Diego orich seto</span>
+                    <span class="name">Desenvolvedor de software jr</span>
+                    <span class="points">Tecnologia tatuape</span>
+                </li>
+                <li (click)="showEditColaborator()">
+                    <span class="number">Willian cristian souza santos</span>
+                    <span class="name">Estagiario de ti</span>
+                    <span class="points">Tecnologia tatuape</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- tela para editar os colaboradores -->
+        <div *ngIf="editColaborator !== null" class="editColaborator">
+
+            <div class="showEdit">
+                <div class="apresentationColaborator">
+                    <img src="../../../assets/user.png">
+                    <div class="data">
+                        <input class="userName" type="text" value="Tuacyo Woleko Ciarza Xuaseo">
+
+                        <select class="selectDpto">
+                            <option>Dpto/Op 1</option>
+                            <option>Dpto/Op 2</option>
+                            <option>Dpto/Op 3</option>
+                        </select>
+
+                        <select class="selectDpto">
+                            <option>Cargo Colaborador 1</option>
+                            <option>Cargo Colaborador 2</option>
+                            <option>Cargo Colaborador 3</option>
+                        </select>
+
+                        <select class="selectDpto">
+                            <option>DPTO_AVALIADO 1</option>
+                            <option>DPTO_AVALIADO 2</option>
+                            <option>DPTO_AVALIADO 3</option>
+                        </select>
+
+                    </div>
+                </div>
+
+                <div class="pesosColaborator">
+                    <h1>Pesos</h1>
+                    <table class="tablePesos" id="customers">
+                        <tr>
+                            <th>Comportamentais / Técnicas</th>
+                            <th>Desafios</th>
+                            <th>Resultado Financeiro</th>
+                            <th>Departamental</th>
+                            <th>Institucional</th>
+                        </tr>
+                        <tr>
+                            <td>30%</td>
+                            <td>45%</td>
+                            <td>15%</td>
+                            <td>0%</td>
+                            <td>10</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="selectColaborator">
+
+                    <div style="padding-top: 15px; margin-bottom: -30px;">
+                        <input class="search" type="text" placeholder=" Colaboradores que serao avaliados..."
+                            required="" #nameColaborator>
+                        <input class="search" type="submit" value="Ir" (click)="getColaborator(nameColaborator.value)">
+                    </div>
+
+                    <div>
+                        <ul>
+                            <li (click)="showEditColaborator()">
+                                <span class="number">wesley gomes queiroz</span>
+                                <span class="name">Desenvolvedor de software jr</span>
+                                <input type="checkbox">
+                            </li>
+                            <li (click)="showEditColaborator()">
+                                <span class="number">Josefa vanessa martins</span>
+                                <span class="name">Cordenadora de desenvolvimento</span>
+                                <input type="checkbox">
+                            </li>
+                            <li (click)="showEditColaborator()">
+                                <span class="number">Alesandro lima cabral</span>
+                                <span class="name">Desenvolvedor de software pl</span>
+                                <input type="checkbox">
+                            </li>
+                            <li (click)="showEditColaborator()">
+                                <span class="number">Diego orich seto</span>
+                                <span class="name">Desenvolvedor de software jr</span>
+                                <input type="checkbox">
+                            </li>
+                            <li (click)="showEditColaborator()">
+                                <span class="number">Willian cristian souza santos</span>
+                                <span class="name">Estagiario de ti</span>
+                                <input type="checkbox">
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="btns">
+                        <button (click)="closeEditColaborator()" class="btnExit">Cancelar</button>
+                        <button class="btnReturn">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

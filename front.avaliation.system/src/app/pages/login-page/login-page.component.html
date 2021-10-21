@@ -1,0 +1,36 @@
+<div class="main">
+
+    <div class="form">
+        <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+        <div>
+            <h2>RH - Avaliação</h2>
+            <form [formGroup]="credentialsForm" (ngSubmit)="login()">
+                <div class="input-box">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <input type="text" formControlName="username" placeholder="Nome de usuário">
+                </div>
+                <div class="input-box">
+
+                    <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+
+                    <input *ngIf="statusShowPassword == false" type="password" formControlName="password" placeholder="Senha">
+                    <input *ngIf="statusShowPassword" type="text" formControlName="password" placeholder="Senha">
+
+                    <a *ngIf="statusShowPassword == false" class="show-password" (click)="showPassword()"><i class="fa fa-eye" aria-hidden="true" title="Vizualizar"></i></a>
+                    <a *ngIf="statusShowPassword" class="show-password" (click)="showPassword()"><i class="fa fa-eye-slash"  aria-hidden="true" title="Esconder"></i></a>
+
+                </div>
+                <div class="input-box">
+                    <input type="submit">
+                </div>
+            </form>
+
+            <mat-card *ngIf="statusMessage">
+                <div *ngFor="let message of messages">
+                    {{ message }}
+                </div>
+            </mat-card>
+        </div>
+    </div>
+</div>

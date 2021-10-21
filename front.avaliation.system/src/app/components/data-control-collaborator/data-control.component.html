@@ -1,0 +1,52 @@
+<div class="container">
+    <div class="contents">
+        <div id="center">
+            <h1> Controlar os dados dos colaboradores</h1>
+        </div>
+
+        <div class="decision">
+
+            <div class="button">
+                <div id="select">
+                    <a (click)="checkOptionsDecision()">{{nameDataDecision}}</a>
+                    <i class="fa fa-caret-down" (click)="checkOptionsDecision()" title="Escolher o dado"></i>
+                </div>
+
+                <div *ngIf="statusDataDecisionView">
+                    <div *ngIf="statusDataLocalView" (click)="getselection('Local')" class="data-decision"><a> Local</a></div>
+                    <div *ngIf="statusDataDepartmentView" (click)="getselection('Departamento')" class="data-decision"><a> Departamento</a></div>
+                    <div *ngIf="statusDataAreaView" (click)="getselection('Área')" class="data-decision"><a> Área</a></div>
+                    <div *ngIf="statusDataResponsabilityView" (click)="getselection('Cargo')" class="data-decision"><a> Cargo</a></div>
+                    <div *ngIf="statusDataCollaboratorView" (click)="getselection('Colaborador')" class="data-decision"><a> Colaborador</a></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-space">
+
+            <div *ngIf="statusShowCollaborator">
+                <app-collaborator></app-collaborator>
+            </div>
+
+            <div *ngIf="statusShowLocal">
+                <app-local></app-local>
+            </div>
+
+            <div *ngIf="statusShowDepartment">
+                <app-department></app-department>
+            </div>
+
+            <div *ngIf="statusShowArea">
+                <app-area></app-area>
+            </div>
+
+            <div *ngIf="statusShowResponsability">
+                <app-responsability></app-responsability>
+            </div>
+
+            <div *ngIf="statusShowWeight">
+                <app-weight></app-weight>
+            </div>
+        </div>
+    </div>
+</div>

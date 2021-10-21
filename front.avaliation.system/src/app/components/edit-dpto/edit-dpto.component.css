@@ -1,0 +1,301 @@
+/* Search start */
+
+.main {
+    height: auto;
+    margin-top: -1px;
+}
+
+.box {
+    text-align: center;
+}
+
+.search {
+    position: relative;
+    display: inline-block;
+    font-size: 15px;
+    box-sizing: border-box;
+    transition: .5s;
+}
+
+.search[type="text"] {
+    background: #fff;
+    width: 340px;
+    height: 30px;
+    border: none;
+    outline: none;
+    padding: 0 25px;
+    border-radius: 25px 0 0 25px;
+}
+
+.search[type="submit"] {
+    position: relative;
+    border-radius: 0 25px 25px 0;
+    width: 70px;
+    height: 29px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background: #19b3d3;
+    margin-top: 2px;
+    color: #fff;
+    transition: 0.5s;
+}
+
+.search[type="submit"]:hover {
+    background: #0d9dbb;
+}
+
+
+/* Search end */
+
+
+/* list start */
+
+.listColaborator {
+    overflow: auto;
+    height: 515px;
+    margin-top: 17px;
+}
+
+ul {
+    /* position: relative; */
+    margin: 100px auto 0;
+    margin-top: 45px;
+    box-sizing: border-box;
+    width: 94%;
+}
+
+ul li {
+    display: flex;
+    background: rgba(255, 255, 255, .1);
+    padding: 10px 20px;
+    color: black;
+    margin: 5px 0;
+    transition: .5s;
+}
+
+ul li:nth-child(1) {
+    background: rgba(255, 255, 255, .5);
+}
+
+ul li:nth-child(2) {
+    background: rgba(255, 255, 255, .4);
+}
+
+ul li:nth-child(3) {
+    background: rgba(255, 255, 255, .2);
+}
+
+ul li span:nth-child(1) {
+    width: 326px;
+}
+
+ul li span:nth-child(2) {
+    width: 389px;
+}
+
+ul li span:nth-child(3) {
+    text-align: right;
+}
+
+ul li:hover {
+    transform: scale(1.06);
+    background: #0d9dbb;
+}
+
+
+/* list end */
+
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+
+/* edit colaborato start */
+
+
+/* apresentacao start */
+
+.editColaborator {
+    height: 500px;
+    margin-top: 23px;
+}
+
+.editColaborator .showEdit {
+    /* background: green; */
+    height: 100%;
+    width: 80%;
+    margin-left: 10%;
+    overflow: auto;
+}
+
+.showEdit .apresentationColaborator {
+    height: 150px;
+}
+
+.apresentationColaborator img {
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+    margin-bottom: 10px;
+    margin-top: 3%;
+    margin-left: 2%;
+    float: left;
+}
+
+.apresentationColaborator .data {
+    width: 78%;
+    margin-left: 21%;
+    height: 100%;
+}
+
+.apresentationColaborator .data .userName {
+    width: 90%;
+    font-size: 16px;
+    border: none;
+    border-bottom: 2px solid #777;
+    outline: none;
+    padding: 3px;
+    padding-left: 7px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+.apresentationColaborator .data .userName:focus {
+    border-bottom: 2px solid #03a9f4;
+}
+
+.apresentationColaborator .data .selectDpto {
+    width: 100%;
+    font-size: 16px;
+    border: none;
+    border-bottom: 2px solid #777;
+    outline: none;
+    padding: 3px;
+    padding-left: 21px;
+    /* box-sizing: border-box; */
+    font-weight: bold;
+    background: transparent;
+}
+
+.apresentationColaborator .data .selectDpto:focus {
+    border-bottom: 2px solid #03a9f4;
+}
+
+
+/* apresentacao end */
+
+
+/* pesos start */
+
+.editColaborator .pesosColaborator {
+    /* background: rgba(255, 255, 255, 0.363); */
+    height: 110px;
+    text-align: -webkit-center;
+}
+
+.editColaborator .pesosColaborator .tablePesos {
+    text-align: center;
+}
+
+#customers {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#customers td,
+#customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#customers tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#customers th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #03a9f4;
+    color: white;
+}
+
+
+/* pesos end */
+
+
+/* selecionar colaborador start */
+
+.showEdit .selectColaborator {
+    /* background: red; */
+    margin-top: 31px;
+    width: 100%;
+    height: auto;
+    overflow: auto;
+}
+
+
+/* selecionar colaborador end */
+
+
+/* btns colaboradores start */
+
+.selectColaborator .btns {
+    /* background: yellow; */
+    padding-top: 2px;
+    height: 35px;
+}
+
+.selectColaborator .btns .btnExit {
+    background: #fff;
+    margin-left: 700px;
+    border: none;
+    padding: 3px;
+    outline: 0;
+}
+
+.selectColaborator .btns .btnExit:hover {
+    background: red;
+    color: #fff;
+    cursor: pointer;
+}
+
+.selectColaborator .btns .btnReturn {
+    background: #fff;
+    margin-left: 20px;
+    border: none;
+    padding: 3px;
+    outline: 0;
+}
+
+.selectColaborator .btns .btnReturn:hover {
+    background: #03a9f4;
+    color: #fff;
+    cursor: pointer;
+}
+
+
+/* btns colaboradores end */
+
+
+/* edit colaborato end */
+
+
+/* scrollbar */
+
+ ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+ ::-webkit-scrollbar-thumb {
+    background: #19b3d3;
+}
+
+ ::-webkit-scrollbar-thumb:hover {
+    background: #0d9dbb;
+}

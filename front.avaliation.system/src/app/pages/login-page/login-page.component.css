@@ -1,0 +1,117 @@
+.main {
+    background: url(../../../assets/bg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 635px;
+}
+
+.main:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -25%;
+    width: 50%;
+    height: 100%;
+    background: #03a9f4;
+    opacity: 0.8;
+}
+
+.form {
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    min-height: 400px;
+    background: #fff;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, .5);
+    padding: 50px;
+    box-sizing: border-box;
+}
+
+.form h2 {
+    color: #777;
+    margin: 0 0 40px;
+    padding: 0;
+}
+
+.form .input-box {
+    position: relative;
+    display: flex;
+    margin: 20px 0;
+}
+
+.form .input-box input {
+    width: 100%;
+    font-size: 16px;
+    border: none;
+    border-bottom: 2px solid #777;
+    outline: none;
+    padding: 10px;
+    padding-left: 25px;
+    box-sizing: border-box;
+    font-weight: bold;
+    color: #777;
+}
+
+.form .input-box input:focus,
+.form .input-box input:valid {
+    border-bottom: 2px solid #03a9f4;
+}
+
+.form .input-box .fa {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    font-size: 18px;
+    color: #777;
+}
+
+.form .input-box input[type="submit"] {
+    border: none;
+    cursor: pointer;
+    background: #03a9f4;
+    color: white;
+    transition: 0.5s;
+}
+
+.form .input-box input[type="submit"]:hover {
+    color: #fff;
+    background: #0073a7;
+    border-bottom-color: #1e8fe9;
+}
+
+.form a {
+    text-decoration: none;
+    color: #777;
+    margin-top: 20px;
+    font-weight: bold;
+    display: inline-block;
+    transition: 0.5s;
+}
+
+.form a:hover {
+    color: #0d9dbb;
+    cursor: pointer;
+}
+
+mat-progress-bar {
+    margin-left: -50px;
+    margin-top: -50px;
+    width: 350px;
+    float: left;
+}
+
+mat-card {
+    color: red;
+    font-size: 13px;
+    padding: 9px;
+    text-align: center;
+}
+
+.show-password {
+    cursor: pointer;
+    right: 0;
+    position: absolute;
+    top: -22px;
+}

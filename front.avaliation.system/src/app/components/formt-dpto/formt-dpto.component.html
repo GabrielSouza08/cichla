@@ -1,0 +1,202 @@
+<app-animation-not-found *ngIf="statusShowNotFound"></app-animation-not-found>
+
+<div class="body-dpto-evaluation" *ngIf="!statusShowNotFound">
+    <div *ngIf="statusLoading">
+        <div id="screen-protect" *ngIf="statusLoading"></div>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+
+    <div class="show-action" *ngIf="statusConfirmAction">
+        <div id="screen-protect-action"></div>
+        <div class="confirm-action">
+            <div id="mesage-action">
+                {{messageAction}}
+            </div>
+            <div id="buttons-confirm-action">
+                <a (click)="getValueAction(true)" id="buttons-action"> Sim </a>
+                <a (click)="getValueAction(false)" id="buttons-action"> Não </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-dpto-evaluation">
+
+        <div class="navbar">
+
+            <a *ngIf="statusShowInput || statusShowView || statusShowChange" title="Lista de departamentos" (click)="showTable()"><i class="fa fa-list fa-2x" aria-hidden="true" ></i></a>
+            <!-- Capo de opções [Tabela, avaliacao ou historico caso necessario] -->
+        </div>
+
+        <div class="contents">
+            <div class="message-success" *ngIf="statusSuccess">
+                {{messageSuccess}}
+            </div>
+
+            <div class="group-dpto-evaluation" *ngIf="statusShowTable">
+
+                <div class="form-group" id="input-filter">
+                    <label> Filtro </label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Diretoria" #input>
+                </div>
+
+                <div class="list" id="style-1">
+                    <table mat-table [dataSource]="dataSourceDepartment">
+
+                        <ng-container matColumnDef="departmentName">
+                            <th mat-header-cell *matHeaderCellDef> Departamento </th>
+                            <td mat-cell *matCellDef="let element" (click)="ChangeOrInput(element)"> {{element.departmentName}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="statusEvaluation">
+                            <th mat-header-cell *matHeaderCellDef>Avaliação</th>
+                            <td mat-cell *matCellDef="let element" (click)="ChangeOrInput(element)">
+                                <i *ngIf="element.statusEvaluation" class="done"> Concluida</i>
+                                <i *ngIf="!element.statusEvaluation" class="pending"> Pendente</i>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsDepartment"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsDepartment;"></tr>
+                    </table>
+                </div>
+
+                <span class="required" *ngIf="statusMessage">
+                    <div *ngFor="let message of messages">
+                        {{ message }}
+                    </div>
+                </span>
+            </div>
+
+            <div class="view" *ngIf="statusShowView">
+
+                <h4> Avaliação: {{departmentName}}</h4>
+
+                <div class="buttons-confirm-action">
+                    <a [matMenuTriggerFor]="controlDetails" title="Opções"><i id="paint" class="fa fa-paint-brush fa-2x"></i></a>
+
+                    <mat-menu #controlDetails="matMenu">
+                        <a mat-menu-item title="Avaliar de novo" (click)="openChange()"><span> Reavaliar</span></a>
+                    </mat-menu>
+                </div>
+                <div class="details">
+                    <div class="data" id="style-1" *ngFor="let evaluation of evaluationCompletedSet;">
+
+                        <div data-columns="1">
+                            <div>
+                                <label>{{evaluation.questionName}}</label>
+                                <p><b>Avaliação:</b> {{evaluation.noteName}}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="input" *ngIf="statusShowInput">
+
+                <h4> Avaliar</h4>
+                <h4>Departamento: {{departmentName}}</h4>
+                <div class="register">
+                    <form [formGroup]="formEvaluation" style="width: 100%; height: 100%;">
+                        <div class="form-group" id="input-register">
+                            <mat-horizontal-stepper #stepper style="border-radius: 1vw; max-width: 100%; overflow-x: auto;">
+                                <mat-step [stepControl]="i" formArrayName="Evaluations" *ngFor="let item of formEvaluation.get('Evaluations')['controls']; let i = index;">
+                                    <form [formGroupName]="i">
+                                        <ng-template matStepLabel> {{i+1}}° Questão</ng-template>
+                                        <div class="group-step">
+                                            <div class="step">
+                                                <mat-label>{{item.controls.QuestionName.value}}</mat-label>
+
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Nota</mat-label>
+                                                    <mat-select formControlName="NoteId" required>
+                                                        <mat-option *ngFor="let note of noteSet" [value]="note.id"> {{note.description}} </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                                <span class="required" *ngIf="!item.controls.NoteId.valid && item.controls.NoteId.touched">☢ Campo Obrigatório</span>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <button type="button" mat-button matStepperNext style="color: #2f323a;">Pronto</button>
+                                        </div>
+                                    </form>
+                                </mat-step>
+
+                                <mat-step>
+                                    <ng-template matStepLabel>Conclusão</ng-template>
+                                    <p>Caso já tenha confirmado os dados, apenas concluir a avaliação!</p>
+                                    <div>
+                                        <div id="action-register">
+                                            <button mat-button matStepperPrevious>Voltar</button>
+                                            <button type="submit" (click)="inputRegister()"> <a id="save-register" title="Salvar"><i type="submit" class="fa fa-floppy-o fa-2x" aria-hidden="true"></i></a></button>
+                                        </div>
+                                    </div>
+                                </mat-step>
+
+                            </mat-horizontal-stepper>
+                        </div>
+                        <span class="required" *ngIf="statusMessage">
+                            <div *ngFor="let message of messages">
+                                {{ message }}
+                            </div>
+                        </span>
+                    </form>
+                </div>
+            </div>
+
+            <div class="input" *ngIf="statusShowChange">
+
+                <h4> Avaliar de novo </h4>
+                <h4>Departamento: {{departmentName}}</h4>
+                <div class="register">
+                    <form [formGroup]="formEvaluation" style="width: 100%; height: 100%;">
+                        <div class="form-group" id="input-register">
+                            <mat-horizontal-stepper #stepper style="border-radius: 1vw; max-width: 100%; overflow-x: auto;">
+                                <mat-step [stepControl]="i" formArrayName="Evaluations" *ngFor="let item of formEvaluation.get('Evaluations')['controls']; let i = index;">
+                                    <form [formGroupName]="i">
+                                        <ng-template matStepLabel> {{i+1}}° Questão</ng-template>
+                                        <div class="group-step">
+                                            <div class="step">
+                                                <mat-label>{{item.controls.QuestionName.value}}</mat-label>
+
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Nota</mat-label>
+                                                    <mat-select formControlName="NoteId" required>
+                                                        <mat-option *ngFor="let note of noteSet" [value]="note.id"> {{note.description}} </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                                <span class="required" *ngIf="!item.controls.NoteId.valid && item.controls.NoteId.touched">☢ Campo Obrigatório</span>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <button type="button" mat-button matStepperNext style="color: #2f323a;">Pronto</button>
+                                        </div>
+                                    </form>
+                                </mat-step>
+
+                                <mat-step>
+                                    <ng-template matStepLabel>Conclusão</ng-template>
+                                    <p>Caso já tenha confirmado os dados, apenas concluir a avaliação!</p>
+                                    <div>
+                                        <div id="action-register">
+                                            <button mat-button matStepperPrevious>Voltar</button>
+                                            <button type="submit" (click)="inputChange()"> <a id="save-register" title="Salvar"><i type="submit" class="fa fa-floppy-o fa-2x" aria-hidden="true"></i></a></button>
+                                        </div>
+                                    </div>
+                                </mat-step>
+
+                            </mat-horizontal-stepper>
+                        </div>
+                        <span class="required" *ngIf="statusMessage">
+                            <div *ngFor="let message of messages">
+                                {{ message }}
+                            </div>
+                        </span>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
