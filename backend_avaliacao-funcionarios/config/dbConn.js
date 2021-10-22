@@ -2,9 +2,9 @@ const mysql = require('mysql2')
 require ('dotenv').config()
 
 //constantes
-const {DB_USER, DB_PASSWORD, DB_HOST, DB_DATABASE} = process.env
+const {DB_USER, DB_PASSWORD, DB_HOST, DB_DATABASE, PORT} = process.env;
 
-//conection
+conection
 const connection = mysql.createConnection({
   host: DB_HOST,
   user: DB_USER,
@@ -12,15 +12,6 @@ const connection = mysql.createConnection({
   password: DB_PASSWORD
   });
 
-  console.log(connection)
-const MongoClient = require("mongodb").MongoClient;
-// Connection URI
-const uri = "mongodb://localhost:27017";
+console.log(connection);
 
-// Connect the client to the server
-function connection(f) {
-  MongoClient.connect(uri, (err, db) => {
-    f(err, db.db("cichla_db"));
-  });
-}
 module.exports = connection;
