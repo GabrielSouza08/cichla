@@ -12,10 +12,10 @@ app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     app.use(cors());
     next()
- });
+});
 
 /* configurar o middleware body-parser */
 
-consign().include("app/routes").then("app/models").into(app);
+consign().include("1-App/Controllers").then("3-Infra/Data/Repositories").into(app);
 
 module.exports = app;
