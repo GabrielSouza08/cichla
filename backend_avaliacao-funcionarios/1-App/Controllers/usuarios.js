@@ -3,10 +3,18 @@
 
 CreateDataBase = require("../../3-Infra/Data/Migrations/CreateDataBase.js");
 CreateTables = require("../../3-Infra/Data/Migrations/CreateDependentTables.js");
+CreateDataFeed = require("../../3-Infra/Data/Migrations/DataFeed.js");
+ValidationDb = require("../../3-Infra/Data/Migrations/ValidationsDb.js");
+
+let status = ValidationDb();
 
 CreateDataBase();
-setTimeout(function() { CreateTables(); }, 3000);
-console.log("pronto!");
+
+if (!status) {
+    setTimeout(function() { CreateTables(); }, 3000);
+    setTimeout(function() { CreateDataFeed(); }, 7000);
+    console.log("DADOS DE CONFIGURACAO CARREGADOS COM SUCESSO!")
+}
 
 module.exports = (application) => {
     application.get("/usuarios", (req, res) => {
