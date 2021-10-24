@@ -5,7 +5,7 @@ const { DB_DATABASE } = process.env;
 module.exports = ValidationDb = async() => {
 
     var t = this;
-    let accessDb = require("../../../4-Shared/dbConn");
+    let accessDb = require("../../../4-Shared/DbConnection");
     t.DataBese = new accessDb(false);
 
     t.scriptBaseStatusConfirmation = `

@@ -4,7 +4,7 @@ require('dotenv').config()
 module.exports = CreateDataBase = async() => {
 
     var t = this;
-    let accessDb = require("../../../4-Shared/dbConn");
+    let accessDb = require("../../../4-Shared/DbConnection");
     t.DataBese = new accessDb(true);
 
     t.scriptPopularSupplementalDataStatus = `

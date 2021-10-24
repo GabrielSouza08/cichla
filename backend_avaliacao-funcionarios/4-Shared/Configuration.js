@@ -1,21 +1,24 @@
 /* importar o módulo do framework express */
 const express = require("express");
+
+/* importar o módulo do cors */
 var cors = require('cors')
 
 /* importar o módulo do consign */
 const consign = require("consign");
 
-const app = express();
-app.use(express.json());
+const build = express();
+build.use(express.json());
 
-app.use((req, res, next) => {
+build.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
-    app.use(cors());
+    build.use(cors());
     next()
 });
 
 /* configurar o middleware body-parser */
+consign()
+    .include("3-Infra/Data/Migrations/StartMigration.js")
+    .then("1-App/Controllers").into(build)
 
-consign().include("1-App/Controllers").then("3-Infra/Data/Repositories").into(app);
-
-module.exports = app;
+module.exports = build;

@@ -3,9 +3,9 @@ const { DB_DATABASE } = process.env;
 
 
 (async() => {
-    ValidationDb = require("../../3-Infra/Data/Migrations/ValidationsDb.js");
-    CreateDataBase = require("../../3-Infra/Data/Migrations/CreateDataBase.js");
-    CreateTables = require("../../3-Infra/Data/Migrations/CreateTables.js");
+    ValidationDb = require("./ValidationsDb.js");
+    CreateDataBase = require("./CreateDataBase.js");
+    CreateTables = require("./CreateTables.js");
 
     let status = await ValidationDb();
     if (!status) {
@@ -14,7 +14,7 @@ const { DB_DATABASE } = process.env;
         await CreateTables()
             .then(async() => {
                 setTimeout(function() {
-                    CreateDataFeed = require("../../3-Infra/Data/Migrations/CreateDataFeed.js");
+                    CreateDataFeed = require("./CreateDataFeed.js");
                     CreateDataFeed();
                     console.log(`BASE DADOS CRIADA. NOME: ${DB_DATABASE}.`);
                     console.log(`DADOS DE CONFIGURAÇÃO CARREGADOS.`);
