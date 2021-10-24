@@ -2,37 +2,42 @@
 require('dotenv').config()
 const { DB_DATABASE } = process.env;
 
-module.exports = ValidationDb = function() {
+module.exports = ValidationDb = async() => {
 
     var t = this;
-    t.connection = require("../../../4-Shared/dbConn");
+    let accessDb = require("../../../4-Shared/dbConn");
+    t.DataBese = new accessDb(false);
 
     t.scriptBaseStatusConfirmation = `
                                       SELECT 
-                                      SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA as data
+                                      SCHEMA_NAME as data
+                                      FROM INFORMATION_SCHEMA.SCHEMATA
                                       WHERE SCHEMA_NAME="${DB_DATABASE}"
                                     `;
 
-
-    t.StatusDataBaseCreate = function() {
-        var status = false;
-
-        var data = t.connection(false).query(t.scriptBaseStatusConfirmation,
-            function(error, results) {
-                if (error) throw new Error(`Erro na validação do da existencia da base de dados`);
-
-                return status;
-            }
-        );
-        if (data)
-            status = true;
-
-        return status;
+    t.validation = async() => {
+        let someRows = [Object];
+        return await t.DataBese.query(t.scriptBaseStatusConfirmation)
+            .then(rows => {
+                someRows = rows;
+            }, err => {
+                return t.DataBese.close().then(() => { throw `$Validation: ${err}`; })
+            })
+            .then(() => {
+                if (someRows[0])
+                    return true;
+                else
+                    return false;
+            }).catch(err => {
+                console.log("Validation Database - MESSAGE:", err.message);
+            });
     }
 
-    var start = function() {
-        return t.StatusDataBaseCreate();
+    var execute = async() => {
+        let status = await t.validation();
+        t.DataBese.close();
+        return status;
     };
 
-    return start();
+    return await execute();
 }

@@ -1,10 +1,12 @@
-/* infra/data/creates/CreateDataBase*/
+/* infra/data/creates/CreateDataFeed*/
 require('dotenv').config()
 
-module.exports = CreateDataFeed = function() {
+module.exports = CreateDataBase = async() => {
 
     var t = this;
-    t.connection = require("../../../4-Shared/dbConn");
+    let accessDb = require("../../../4-Shared/dbConn");
+    t.DataBese = new accessDb(true);
+
     t.scriptPopularSupplementalDataStatus = `
                                                 INSERT INTO tb_status
                                                 (
@@ -56,24 +58,26 @@ module.exports = CreateDataFeed = function() {
                                                     ("Acessar Tela De Avaliação",curtime(),curtime(),1);
                                                 `;
 
+    t.start = async() => {
+        return await t.DataBese.query(t.scriptPopularSupplementalDataStatus)
+            .then(() => {
+                t.DataBese.query(t.scriptPopularSupplementalDataPermissions);
+                t.DataBese.query(t.scriptPopularSupplementalDataProfile);
+            }, err => {
+                return t.DataBese.close().then(() => { throw `$Create Feed: ${err}`; })
+            })
+            .then(() => {
+                return true;
+            }).catch(err => {
+                console.log(`Create Feed - MESSAGE: ${err}`);
+            });
+    }
 
-    var start = function() {
-        //TABLE STATUS
-        setTimeout(function() {
-            t.connection(true).query(t.scriptPopularSupplementalDataStatus);
-        }, 0);
-
-        //TABLE Permissions
-        setTimeout(function() {
-            t.connection(true).query(t.scriptPopularSupplementalDataPermissions);
-        }, 500);
-
-        //TABLE Profile
-        setTimeout(function() {
-            t.connection(true).query(t.scriptPopularSupplementalDataProfile);
-        }, 500);
-
+    var execute = async() => {
+        let status = await t.start();
+        await t.DataBese.close();
+        return status;
     };
 
-    start();
+    return await execute();
 }

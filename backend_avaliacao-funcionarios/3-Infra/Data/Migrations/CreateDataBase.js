@@ -2,26 +2,32 @@
 require('dotenv').config()
 const { DB_DATABASE } = process.env;
 
-module.exports = CreateDataBase = function() {
+
+module.exports = CreateDataBase = async() => {
 
     var t = this;
-    t.connection = require("../../../4-Shared/dbConn");
-    t.validation = require("../Migrations/ValidationsDb");
+    let accessDb = require("../../../4-Shared/dbConn");
+    t.DataBese = new accessDb(false);
 
     t.scriptCreate = `CREATE DATABASE IF NOT EXISTS ${DB_DATABASE};`;
 
-    t.IncludeDataBase = function() {
-        //Não utilizará a base oficial para rodar o script de criação de base
-        t.connection(false).query(t.scriptCreate);
+    t.start = async() => {
+        return await t.DataBese.query(t.scriptCreate)
+            .then(() => {}, err => {
+                return t.DataBese.close().then(() => { throw `$Create Database: ${err}`; })
+            })
+            .then(() => {
+                return true;
+            }).catch(err => {
+                console.log("Create Database - MESSAGE:", err.message);
+            });
     }
 
-    var start = function() {
-        if (!t.validation()) {
-            t.IncludeDataBase();
-            console.log(`BASE DADOS CRIADA. NOME:${DB_DATABASE}`)
-        } else
-            console.log(`BASE DADOS CONFIRMADA. NOME: ${DB_DATABASE}.`)
+    var execute = async() => {
+        let status = await t.start();
+        t.DataBese.close();
+        return status;
     };
 
-    start();
+    return await execute();
 }
