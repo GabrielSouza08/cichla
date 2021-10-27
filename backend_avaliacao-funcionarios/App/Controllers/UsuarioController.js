@@ -8,15 +8,15 @@ module.exports = (application) => {
     UsuariosDAO.inserirUser(req, res);
   });
   application.put("/usuarios/:id", (req, res) => {
-    let Usuarios = new application.app.models.UsuariosDAO();
+    let Usuarios = new application.App.Models.UsuariosDAO();
     Usuarios.atualizarUser(req, res);
   });
   application.delete("/usuarios/:id", (req, res) => {
     let Usuarios = new application.app.models.UsuariosDAO();
-    Usuarios.deletarUser(req, res);
+    Usuarios.desativarUser(req, res);
   });
   application.post("/usuarios/autenticar", (req, res) => {
-    let Usuarios = new application.app.models.UsuariosDAO();
+    let Usuarios = new application.App.Models.UsuariosDAO();
     Usuarios.autenticarUser(req, res);
   });
 };
