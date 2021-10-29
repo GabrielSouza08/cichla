@@ -4,16 +4,49 @@ function UsuariosDAO() {}
 
 UsuariosDAO.prototype.consultarUsers = (req, res) => {
   let conn = new dbConn(true);
-  let query = `select * from tb_usuarios`;
+  let query = `select 
+                      user.id_usuario,
+                      user.nome,
+                      user.email,
+                      user.senha,
+                      user.perfil,
+                      user.id_avaliador,
+                      user.id_cargo,
+                      user.id_area,
+                      user.id_departamento,
+                      user.dt_cadastro as user_dt_cadastro,
+                      user.dt_alteracao as user_dt_alteracao,
+                      user.id_status as user_id_status,
+                      cargo.ds_cargo,
+                      dpt.ds_departamento,
+                      status.ds_status,
+                      area.ds_area
+                from          tb_usuarios as user
+                  inner join tb_cargos as cargo
+                    on user.id_cargo = cargo.id_cargo
+                  inner join tb_departamentos as dpt
+                    on user.id_departamento = dpt.id_departamento
+                  inner join tb_status as status
+                    on user.id_status = status.id_status
+                  inner join tb_areas as area
+                    on user.id_area = area.id_area;`;
   conn.query(query).then((result) => {
-    res.json(result);
+    res.json({
+      status: true,
+      data: result,
+      msg: [],
+    });
   });
 };
 UsuariosDAO.prototype.desativarUser = (req, res) => {
   let conn = new dbConn(true);
   let query = `update usuarios set status = 2 where id = '${req.params.id}'`;
   conn.query(query).then((result) => {
-    res.json(result);
+    res.json({
+      status: true,
+      data: [],
+      msg: [{ texto: "Desativado com sucesso!" }],
+    });
   });
 };
 
@@ -29,7 +62,11 @@ UsuariosDAO.prototype.autenticarUser = (req, res) => {
     if (!result.length == 0) {
       res.json(result);
     } else {
-      res.json({ msg: "Email ou senha incorretos!" });
+      res.json({
+        status: false,
+        data: [],
+        msg: [{ texto: "Email ou senha incorretos!" }],
+      });
     }
   });
 };
@@ -38,8 +75,11 @@ UsuariosDAO.prototype.atualizarUser = (req, res) => {
   let user = req.body;
   user.id = req.params.id;
 
+  let query = `select * from tb_usuarios where email = '${user.email}'`;
   let conn = new dbConn(true);
-  let query = `update tb_usuarios set
+  conn.query(query).then((result) => {
+    if (result.length == 0) {
+      query = `update tb_usuarios set
               senha = '${user.senha}',
               email = '${user.email}',
               perfil = '${user.perfil}',
@@ -47,25 +87,36 @@ UsuariosDAO.prototype.atualizarUser = (req, res) => {
               id_cargo = ${user.id_cargo},
               id_area = ${user.id_area},
               id_departamento = ${user.id_departamento},
-              dt_alteracao = curtime(),
-              id_status = ${user.id_status}
+              dt_alteracao = curtime()
+              
               where id_usuario = '${user.id}'
               `;
 
-  conn.query(query).then((result) => {
-    console.log(result);
-    res.json(result);
+      conn.query(query).then((result) => {
+        res.json({
+          status: true,
+          data: [],
+          msg: [{ texto: "Alterado com sucesso!" }],
+        });
+      });
+    } else {
+      res.json({
+        status: false,
+        data: [],
+        msg: "Já existe um usuario com este email! Verifique se está desativado.",
+      });
+    }
   });
 };
 
-UsuariosDAO.prototype.inserirUser = async (req, res) => {
+UsuariosDAO.prototype.inserirUser = (req, res) => {
   let user = req.body;
   user.id = uuid.v1();
 
   let conn = new dbConn(true);
   let query = `select * from tb_usuarios where email = '${user.email}'`;
   conn.query(query).then((result) => {
-    if (!result.lengh == 0) {
+    if (result.lengh == 0) {
       query = `insert into tb_usuarios  
       (
       id_usuario,
@@ -93,19 +144,38 @@ UsuariosDAO.prototype.inserirUser = async (req, res) => {
       '${user.id_departamento}',
       curtime(),
       curtime(),
-      '${user.id_status}'
+      1
       )
       
       `;
       conn.query(query).then((result) => {
-        res.json({ msg: "Cadastrado com sucesso!" });
+        res.json({
+          status: true,
+          data: [],
+          msg: [{ texto: "Cadastrado com sucesso!" }],
+        });
       });
     } else {
-      res.json({ msg: "Usuario ja cadastrado" });
+      res.json({
+        status: false,
+        data: [],
+        msg: [{ text: "Usuario ja cadastrado! Verifique se está desativado." }],
+      });
     }
   });
 };
-
+UsuariosDAO.prototype.ativarUser = (req, res) => {
+  let idUser = req.params.id;
+  let query = `update tb_usuarios set id_status = 1 where id_usuario = '${idUser}'`;
+  let conn = new dbConn(true);
+  conn.query(query).then((result) => {
+    res.json({
+      status: true,
+      data: [],
+      msg: [{ texto: "Ativado com sucesso!" }],
+    });
+  });
+};
 module.exports = () => {
   return UsuariosDAO;
 };
