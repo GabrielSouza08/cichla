@@ -1,12 +1,12 @@
 /* infra/data/creates/CreateDataFeed*/
 require("dotenv").config();
 
-module.exports = CreateDataBase = async () => {
-  var t = this;
-  let accessDb = require("../../../Shared/DbConnection");
-  t.DataBese = new accessDb(true);
+module.exports = CreateDataBase = async() => {
+    var t = this;
+    let accessDb = require("../../../Shared/DbConnection");
+    t.DataBese = new accessDb(true);
 
-  t.scriptPopularSupplementalDataStatus = `
+    t.scriptPopularSupplementalDataStatus = `
                                                 INSERT INTO tb_status
                                                 (
                                                 id_status,
@@ -23,25 +23,7 @@ module.exports = CreateDataBase = async () => {
                                                 (5,"Habilitado",curtime(),curtime(),1);
                                             `;
 
-  // t.scriptPopularSupplementalDataProfile = `
-  //                                               INSERT INTO tb_perfis
-  //                                               (
-  //                                               id_perfil,
-  //                                               ds_perfil,
-  //                                               range_permissoes,
-  //                                               dt_cadastro,
-  //                                               dt_alteracao,
-  //                                               id_status
-  //                                               )
-  //                                               VALUES
-  //                                               (1,"Administrador","1,2,3,4,5,6",curtime(),curtime(),1),
-  //                                               (2,"RH-Master","1,2,3,4,5,6",curtime(),curtime(),1),
-  //                                               (3,"Avaliador-Master","1,2,3,4,6",curtime(),curtime(),1),
-  //                                               (4,"Avaliador","3,6",curtime(),curtime(),1),
-  //                                               (5,"Colaborador","6",curtime(),curtime(),1);
-  //                                           `;
-
-  t.scriptPopularSupplementalDataPermissions = `
+    t.scriptPopularSupplementalDataPermissions = `
                                                     INSERT INTO tb_permissoes
                                                     (
                                                     id_permissao,
@@ -59,32 +41,31 @@ module.exports = CreateDataBase = async () => {
                                                     (6,"Acessar Tela De Avaliação",curtime(),curtime(),1);
                                                 `;
 
-  t.start = async () => {
-    return await t.DataBese.query(t.scriptPopularSupplementalDataStatus)
-      .then(
-        () => {
-          t.DataBese.query(t.scriptPopularSupplementalDataPermissions);
-          //t.DataBese.query(t.scriptPopularSupplementalDataProfile);
-        },
-        (err) => {
-          return t.DataBese.close().then(() => {
-            throw `$Create Feed: ${err}`;
-          });
-        }
-      )
-      .then(() => {
-        return true;
-      })
-      .catch((err) => {
-        console.log(`Create Feed - MESSAGE: ${err}`);
-      });
-  };
+    t.start = async() => {
+        return await t.DataBese.query(t.scriptPopularSupplementalDataStatus)
+            .then(
+                () => {
+                    t.DataBese.query(t.scriptPopularSupplementalDataPermissions);
+                },
+                (err) => {
+                    return t.DataBese.close().then(() => {
+                        throw `$Create Feed: ${err}`;
+                    });
+                }
+            )
+            .then(() => {
+                return true;
+            })
+            .catch((err) => {
+                console.log(`Create Feed - MESSAGE: ${err}`);
+            });
+    };
 
-  var execute = async () => {
-    let status = await t.start();
-    await t.DataBese.close();
-    return status;
-  };
+    var execute = async() => {
+        let status = await t.start();
+        await t.DataBese.close();
+        return status;
+    };
 
-  return await execute();
+    return await execute();
 };

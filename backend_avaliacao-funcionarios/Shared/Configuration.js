@@ -11,15 +11,16 @@ const build = express();
 build.use(express.json());
 
 build.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  build.use(cors());
-  next();
+    res.header("Access-Control-Allow-Origin", "*");
+    build.use(cors());
+    next();
 });
 
 consign()
-  .include("Infra/Data/Migrations/StartMigration.js")
-  .then("App/Controllers")
-  .then("App/Models")
-  .into(build);
+    .include("Infra/Data/Migrations/StartMigration.js")
+    .then("App/Controllers")
+    .then("Domain/Services")
+    .then("Infra/Data/Repositories")
+    .into(build);
 
 module.exports = build;
