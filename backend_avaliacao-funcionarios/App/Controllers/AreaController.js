@@ -1,6 +1,6 @@
-/* Application/Controllers/UserControllers.js */
+/* Application/Controllers/AreaController.js */
 module.exports = (application) => {
-    application.post("/usuarios/cadastrar", (req, res) => {
+    application.post("/area/cadastrar", (req, res) => {
         let _userServices = new application.Domain.Services.UserServices(application);
         let _userRepository = new application.Infra.Data.Repositories.UserDAO();
         try {
@@ -10,7 +10,7 @@ module.exports = (application) => {
         }
     });
 
-    application.get("/usuarios", (req, res) => {
+    application.get("/area", (req, res) => {
         let _userServices = new application.Domain.Services.UserServices(application);
         let _userRepository = new application.Infra.Data.Repositories.UserDAO();
         try {
@@ -20,7 +20,7 @@ module.exports = (application) => {
         }
     });
 
-    application.post("/usuarios/autenticar", (req, res) => {
+    application.post("/area/autenticar", (req, res) => {
         let _userServices = new application.Domain.Services.UserServices(application);
         let _userRepository = new application.Infra.Data.Repositories.UserDAO();
 
@@ -31,7 +31,7 @@ module.exports = (application) => {
         }
     });
 
-    application.put("/usuarios", (req, res) => {
+    application.put("/area", (req, res) => {
         let _userServices = new application.Domain.Services.UserServices(application);
         let _userRepository = new application.Infra.Data.Repositories.UserDAO();
 
@@ -42,18 +42,18 @@ module.exports = (application) => {
         }
     });
 
-    application.delete("/usuarios/:id", (req, res) => {
+    application.delete("/area/:id", (req, res) => {
         let _userServices = new application.Domain.Services.UserServices(application);
         let _userRepository = new application.Infra.Data.Repositories.UserDAO();
 
         try {
             _userServices.Disable(req, res, _userRepository);
         } catch (err) {
-            res = this.NotificationTemplate(false, [], `Ocorreu uma execeção no processo de remoção. error: ${err.message}`)
+            res = this.NotificationTemplate(false, [], `Ocorreu uma execeção no processo de desabilitação. error: ${err.message}`)
         }
     });
 
-    application.put("/usuarios/ativar/:id", (req, res) => {
+    application.put("/area/ativar", (req, res) => {
         let _userServices = new application.Domain.Services.UserServices(application);
         let _userRepository = new application.Infra.Data.Repositories.UserDAO();
 
