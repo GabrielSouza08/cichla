@@ -39,9 +39,9 @@ DepartmentDAO.prototype.Get = async () => {
     return result;
   });
 };
-AreaDAO.prototype.ValidateByName = async (description) => {
+DepartmentDAO.prototype.ValidateByName = async (description) => {
   let conn = new dbConn(true);
-  let query = `  SELECT * FROM TB_AREAS  WHERE ds_area = '${description}'`;
+  let query = `  SELECT * FROM TB_DEPARTAMENTOS  WHERE ds_departamento = '${description}'`;
   return await conn.query(query).then(async (result) => {
     return AnalyzeResult(result);
   });
@@ -49,9 +49,9 @@ AreaDAO.prototype.ValidateByName = async (description) => {
 
 DepartmentDAO.prototype.UpdateStatus = async (status, id) => {
   let conn = new dbConn(true);
-  let query = `UPDATE TB_USUARIOS 
+  let query = `UPDATE TB_Departamentos
                  SET ID_STATUS = ${status} 
-                 WHERE ID_USUARIO = '${id}'`;
+                 WHERE ID_departamento = '${id}'`;
   conn.query(query).then(() => {});
 };
 

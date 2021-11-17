@@ -4,8 +4,8 @@ const uuid = require("uuid");
 function ResponsabilityDAO() {}
 
 ResponsabilityDAO.prototype.Include = async function (req) {
-  let cargo = req.body;
-  cargo.id = uuid.v1();
+  let responsability = req.body;
+  responsability.id = uuid.v1();
 
   let conn = new dbConn(true);
 
@@ -39,7 +39,7 @@ ResponsabilityDAO.prototype.Get = async () => {
     return result;
   });
 };
-AreaDAO.prototype.ValidateByName = async (description) => {
+ResponsabilityDAO.prototype.ValidateByName = async (description) => {
   let conn = new dbConn(true);
   let query = `  SELECT * FROM TB_CARGOS  WHERE ds_cargo = '${description}'`;
   return await conn.query(query).then(async (result) => {

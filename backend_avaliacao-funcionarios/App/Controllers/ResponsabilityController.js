@@ -1,12 +1,12 @@
 /* Application/Controllers/ResponsabilityController.js */
 module.exports = (application) => {
   application.post("/cargo/cadastrar", (req, res) => {
-    let _cargoServices = new application.Domain.Services.CargoServices(
-      application
-    );
-    let _cargoRepository = new application.Infra.Data.Repositories.CargoDAO();
+    let _responsabilityServices =
+      new application.Domain.Services.ResponsabilityServices(application);
+    let _responsabilityRepository =
+      new application.Infra.Data.Repositories.ResponsabilityDAO();
     try {
-      _cargoServices.Include(req, res, _cargoRepository);
+      _responsabilityServices.Include(req, res, _responsabilityRepository);
     } catch (err) {
       res = this.NotificationTemplate(
         false,
@@ -17,12 +17,12 @@ module.exports = (application) => {
   });
 
   application.get("/cargo", (req, res) => {
-    let _cargoServices = new application.Domain.Services.CargoServices(
-      application
-    );
-    let _cargoRepository = new application.Infra.Data.Repositories.CargoDAO();
+    let _responsabilityServices =
+      new application.Domain.Services.ResponsabilityServices(application);
+    let _responsabilityRepository =
+      new application.Infra.Data.Repositories.ResponsabilityDAO();
     try {
-      _cargoServices.Get(res, _cargoRepository);
+      _responsabilityServices.Get(res, _responsabilityRepository);
     } catch (err) {
       res = this.NotificationTemplate(
         false,
@@ -33,13 +33,13 @@ module.exports = (application) => {
   });
 
   application.delete("/cargo/:id", (req, res) => {
-    let _cargoServices = new application.Domain.Services.CargoServices(
-      application
-    );
-    let _cargoRepository = new application.Infra.Data.Repositories.CargoDAO();
+    let _responsabilityServices =
+      new application.Domain.Services.ResponsabilityServices(application);
+    let _responsabilityRepository =
+      new application.Infra.Data.Repositories.ResponsabilityDAO();
 
     try {
-      _cargoServices.Disable(req, res, _cargoRepository);
+      _responsabilityServices.Disable(req, res, _responsabilityRepository);
     } catch (err) {
       res = this.NotificationTemplate(
         false,
@@ -50,13 +50,13 @@ module.exports = (application) => {
   });
 
   application.put("/cargo/ativar", (req, res) => {
-    let _cargoServices = new application.Domain.Services.CargoServices(
-      application
-    );
-    let _cargoRepository = new application.Infra.Data.Repositories.CargoDAO();
+    let _responsabilityServices =
+      new application.Domain.Services.ResponsabilityServices(application);
+    let _responsabilityRepository =
+      new application.Infra.Data.Repositories.ResponsabilityDAO();
 
     try {
-      _cargoServices.Activate(req, res, _cargoRepository);
+      _responsabilityServices.Activate(req, res, _responsabilityRepository);
     } catch (err) {
       res = this.NotificationTemplate(
         false,

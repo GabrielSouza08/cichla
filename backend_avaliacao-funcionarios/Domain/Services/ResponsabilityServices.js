@@ -6,38 +6,43 @@ function ResponsabilityServices() {}
 ResponsabilityServices.prototype.Include = async (
   req,
   res,
-  _cargoRepository
+  _responsabilityRepository
 ) => {
-  var data = await _cargoRepository.ValidateByName(req.body.ds_cargo);
+  var data = await _responsabilityRepository.ValidateByName(
+    req.body.ds_responsability
+  );
 
   if (data.status == false && data.count == 0) {
-    await _cargoRepository.Include(req);
+    await _responsabilityRepository.Include(req);
     res.json(NotificationTemplate(true, [], `Dados cadastrados com sucesso!`));
   } else res.json(NotificationTemplate(true, [], `Este cargo já existe!`));
 };
 
-ResponsabilityServices.prototype.Get = async (res, _cargoRepository) => {
-  let data = await _cargoRepository.Get();
+ResponsabilityServices.prototype.Get = async (
+  res,
+  _responsabilityRepository
+) => {
+  let data = await _responsabilityRepository.Get();
   res.json(NotificationTemplate(true, data, "Lista de cargos cadastrados!"));
 };
 
 ResponsabilityServices.prototype.Activate = async (
   req,
   res,
-  _cargoRepository
+  _responsabilityRepository
 ) => {
   let statusActivate = 1;
-  await UpdateStatus(statusActivate, req.body.id, _cargoRepository);
+  await UpdateStatus(statusActivate, req.body.id, _responsabilityRepository);
   res.json(NotificationTemplate(true, [], "Cargo ativado com sucesso!"));
 };
 
 ResponsabilityServices.prototype.Disable = async (
   req,
   res,
-  _cargoRepository
+  _responsabilityRepository
 ) => {
   let statusDisable = 2;
-  await UpdateStatus(statusDisable, req.params.id, _cargoRepository);
+  await UpdateStatus(statusDisable, req.params.id, _responsabilityRepository);
   res.json(NotificationTemplate(true, [], "Cargo desabilitado com sucesso!"));
 };
 
@@ -45,8 +50,8 @@ ResponsabilityServices.prototype.Disable = async (
 
 //#region métodos de acesso ao banco auxiliares
 
-var UpdateStatus = async function (status, id, _cargoRepository) {
-  await _cargoRepository.UpdateStatus(status, id);
+var UpdateStatus = async function (status, id, _responsabilityRepository) {
+  await _responsabilityRepository.UpdateStatus(status, id);
 };
 
 //#endregion métodos de acesso ao banco auxiliares
