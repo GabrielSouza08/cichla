@@ -21,8 +21,6 @@ ResponsabilityServices.prototype.Get = async (res, _cargoRepository) => {
   res.json(NotificationTemplate(true, data, "Lista de cargos cadastrados!"));
 };
 
-
-
 ResponsabilityServices.prototype.Activate = async (
   req,
   res,
@@ -43,15 +41,9 @@ ResponsabilityServices.prototype.Disable = async (
   res.json(NotificationTemplate(true, [], "Cargo desabilitado com sucesso!"));
 };
 
-
-
 //#endregion métodos principais DAO
 
 //#region métodos de acesso ao banco auxiliares
-
-var Update = async (req, isChangePassword, _cargoRepository) => {
-
-
 
 var UpdateStatus = async function (status, id, _cargoRepository) {
   await _cargoRepository.UpdateStatus(status, id);
@@ -61,7 +53,6 @@ var UpdateStatus = async function (status, id, _cargoRepository) {
 
 //#region métodos logicos auxiliares
 
-
 var NotificationTemplate = function (_status, _data, _message) {
   return {
     status: _status,
@@ -69,7 +60,6 @@ var NotificationTemplate = function (_status, _data, _message) {
     msg: [{ text: _message }],
   };
 };
-
 
 //#endregion métodos auxiliares logicos
 module.exports = () => {
