@@ -1,12 +1,12 @@
 /* infra/data/creates/CreateDataFeed*/
 require("dotenv").config();
 
-module.exports = CreateDataBase = async() => {
-    var t = this;
-    let accessDb = require("../../../Shared/DbConnection");
-    t.DataBese = new accessDb(true);
+module.exports = CreateDataBase = async () => {
+  var t = this;
+  let accessDb = require("../../../Shared/DbConnection");
+  t.DataBase = new accessDb(true);
 
-    t.scriptPopularSupplementalDataStatus = `
+  t.scriptPopularSupplementalDataStatus = `
                                                 INSERT INTO tb_status
                                                 (
                                                 id_status,
@@ -23,7 +23,7 @@ module.exports = CreateDataBase = async() => {
                                                 (5,"Habilitado",curtime(),curtime(),1);
                                             `;
 
-    t.scriptPopularSupplementalDataPermissions = `
+  t.scriptPopularSupplementalDataPermissions = `
                                                     INSERT INTO tb_permissoes
                                                     (
                                                     id_permissao,
@@ -41,31 +41,31 @@ module.exports = CreateDataBase = async() => {
                                                     (6,"Acessar Tela De Avaliação",curtime(),curtime(),1);
                                                 `;
 
-    t.start = async() => {
-        return await t.DataBese.query(t.scriptPopularSupplementalDataStatus)
-            .then(
-                () => {
-                    t.DataBese.query(t.scriptPopularSupplementalDataPermissions);
-                },
-                (err) => {
-                    return t.DataBese.close().then(() => {
-                        throw `$Create Feed: ${err}`;
-                    });
-                }
-            )
-            .then(() => {
-                return true;
-            })
-            .catch((err) => {
-                console.log(`Create Feed - MESSAGE: ${err}`);
-            });
-    };
+  t.start = async () => {
+    return await t.DataBase.query(t.scriptPopularSupplementalDataStatus)
+      .then(
+        () => {
+          t.DataBase.query(t.scriptPopularSupplementalDataPermissions);
+        },
+        (err) => {
+          return t.DataBase.close().then(() => {
+            throw `$Create Feed: ${err}`;
+          });
+        }
+      )
+      .then(() => {
+        return true;
+      })
+      .catch((err) => {
+        console.log(`Create Feed - MESSAGE: ${err}`);
+      });
+  };
 
-    var execute = async() => {
-        let status = await t.start();
-        await t.DataBese.close();
-        return status;
-    };
+  var execute = async () => {
+    let status = await t.start();
+    await t.DataBase.close();
+    return status;
+  };
 
-    return await execute();
+  return await execute();
 };

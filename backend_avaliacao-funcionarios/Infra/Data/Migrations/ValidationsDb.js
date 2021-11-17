@@ -5,7 +5,7 @@ const { DB_DATABASE } = process.env;
 module.exports = ValidationDb = async () => {
   var t = this;
   let accessDb = require("../../../Shared/DbConnection");
-  t.DataBese = new accessDb(false);
+  t.DataBase = new accessDb(false);
 
   t.scriptBaseStatusConfirmation = `
                                       SELECT 
@@ -16,13 +16,13 @@ module.exports = ValidationDb = async () => {
 
   t.validation = async () => {
     let someRows = [Object];
-    return await t.DataBese.query(t.scriptBaseStatusConfirmation)
+    return await t.DataBase.query(t.scriptBaseStatusConfirmation)
       .then(
         (rows) => {
           someRows = rows;
         },
         (err) => {
-          return t.DataBese.close().then(() => {
+          return t.DataBase.close().then(() => {
             throw `$Validation: ${err}`;
           });
         }
@@ -38,7 +38,7 @@ module.exports = ValidationDb = async () => {
 
   var execute = async () => {
     let status = await t.validation();
-    t.DataBese.close();
+    t.DataBase.close();
     return status;
   };
 
