@@ -25,7 +25,7 @@ UserDAO.prototype.Include = async function(req) {
                     VALUES 
                     (
                         '${user.id}',
-                        '${user.nome}',
+                        '${user.name}',
                         '${user.email}',
                         '${user.password}',
                         '${user.avaliatorId}',
