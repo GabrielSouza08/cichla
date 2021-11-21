@@ -32,8 +32,19 @@ ResponsabilityDAO.prototype.Include = async function (req) {
 
 ResponsabilityDAO.prototype.Get = async () => {
   let conn = new dbConn(true);
-  let query = `SELECT 
-                      * from tb_cargos`;
+  let query = `select c.id_cargo,
+                c.ds_cargo,
+                c.dt_cadastro,
+                c.dt_alteracao,
+                c.id_status,
+                a.id_area,
+                a.ds_area
+                from tb_cargos as c
+                inner join tb_cargos_area as ca
+                on c.id_cargo = ca.id_cargo
+                inner join tb_areas as a
+                on a.id_area = ca.id_area
+                `;
 
   return conn.query(query).then((result) => {
     return result;

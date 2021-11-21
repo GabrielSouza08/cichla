@@ -13,7 +13,6 @@ AreaServices.prototype.Include = async (req, res, _areaRepository) => {
 };
 
 AreaServices.prototype.Get = async (res, _areaRepository) => {
-  let parameters = undefined; //req.params;
   let data = await _areaRepository.Get(parameters);
   res.json(NotificationTemplate(true, data, "Lista de areas cadastradas!"));
 };

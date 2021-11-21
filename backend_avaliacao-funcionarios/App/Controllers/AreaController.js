@@ -4,7 +4,7 @@ module.exports = (application) => {
     let _areaServices = new application.Domain.Services.AreaServices();
     let _areaRepository = new application.Infra.Data.Repositories.AreaDAO();
     try {
-      _userServices.Include(req, res, _areaRepository);
+      _areaServices.Include(req, res, _areaRepository);
     } catch (err) {
       res = this.NotificationTemplate(
         false,
@@ -29,13 +29,13 @@ module.exports = (application) => {
   });
 
   application.post("/area/autenticar", (req, res) => {
-    let _userServices = new application.Domain.Services.UserServices(
+    let _areaServices = new application.Domain.Services.AreaServices(
       application
     );
-    let _userRepository = new application.Infra.Data.Repositories.UserDAO();
+    let _areaRepository = new application.Infra.Data.Repositories.AreaDAO();
 
     try {
-      _userServices.Authenticator(req, res, _userRepository);
+      _areaServices.Authenticator(req, res, _areaRepository);
     } catch (err) {
       res = this.NotificationTemplate(
         false,
@@ -46,13 +46,13 @@ module.exports = (application) => {
   });
 
   application.put("/area", (req, res) => {
-    let _userServices = new application.Domain.Services.UserServices(
+    let _areaServices = new application.Domain.Services.AreaServices(
       application
     );
-    let _userRepository = new application.Infra.Data.Repositories.UserDAO();
+    let _areaRepository = new application.Infra.Data.Repositories.AreaDAO();
 
     try {
-      _userServices.Update(req, res, _userRepository);
+      _areaServices.Update(req, res, _areaRepository);
     } catch (err) {
       res = this.NotificationTemplate(
         false,
@@ -63,13 +63,13 @@ module.exports = (application) => {
   });
 
   application.delete("/area/:id", (req, res) => {
-    let _userServices = new application.Domain.Services.UserServices(
+    let _areaServices = new application.Domain.Services.AreaServices(
       application
     );
-    let _userRepository = new application.Infra.Data.Repositories.UserDAO();
+    let _areaRepository = new application.Infra.Data.Repositories.AreaDAO();
 
     try {
-      _userServices.Disable(req, res, _userRepository);
+      _areaServices.Disable(req, res, _areaRepository);
     } catch (err) {
       res = this.NotificationTemplate(
         false,
@@ -80,13 +80,13 @@ module.exports = (application) => {
   });
 
   application.put("/area/ativar", (req, res) => {
-    let _userServices = new application.Domain.Services.UserServices(
+    let _areaServices = new application.Domain.Services.AreaServices(
       application
     );
-    let _userRepository = new application.Infra.Data.Repositories.UserDAO();
+    let _areaRepository = new application.Infra.Data.Repositories.AreaDAO();
 
     try {
-      _userServices.Activate(req, res, _userRepository);
+      _areaServices.Activate(req, res, _areaRepository);
     } catch (err) {
       res = this.NotificationTemplate(
         false,
