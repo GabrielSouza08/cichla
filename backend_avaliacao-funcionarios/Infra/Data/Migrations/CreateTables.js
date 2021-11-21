@@ -1,11 +1,11 @@
 /* infra/data/creates/CreateTables*/
 
-module.exports = CreateTables = async() => {
-    var t = this;
-    let accessDb = require("../../../Shared/DbConnection");
-    t.DataBase = new accessDb(true);
+module.exports = CreateTables = async () => {
+  var t = this;
+  let accessDb = require("../../../Shared/DbConnection");
+  t.DataBase = new accessDb(true);
 
-    t.scriptIncludeTableStatus = `
+  t.scriptIncludeTableStatus = `
                                     -- cria tabela status
                                     CREATE TABLE IF NOT EXISTS tb_status (
                                     id_status INT NOT NULL,
@@ -18,7 +18,7 @@ module.exports = CreateTables = async() => {
                                     );
                                 `;
 
-    t.scriptIncludeTableResponsibility = `
+  t.scriptIncludeTableResponsibility = `
                                           -- Cria tabela de cargos
                                           CREATE TABLE IF NOT EXISTS tb_cargos (
                                           id_cargo VARCHAR (50) NOT NULL,
@@ -32,7 +32,7 @@ module.exports = CreateTables = async() => {
                                           );
                                         `;
 
-    t.scriptIncludeTableArea = `
+  t.scriptIncludeTableArea = `
                                 -- cria tabela areas
                                   CREATE TABLE IF NOT EXISTS tb_areas (
                                   id_area VARCHAR (50) NOT NULL,
@@ -48,7 +48,7 @@ module.exports = CreateTables = async() => {
                                   );
                               `;
 
-    t.scriptIncludeTableDepartment = `
+  t.scriptIncludeTableDepartment = `
                                         -- cria tabela departamentos
                                         CREATE TABLE IF NOT EXISTS tb_departamentos (
                                         id_departamento VARCHAR (50) NOT NULL,
@@ -62,7 +62,7 @@ module.exports = CreateTables = async() => {
                                         );
                                     `;
 
-    t.scriptIncludeTablePermissions = `
+  t.scriptIncludeTablePermissions = `
                                         -- cria tabela permissoes
                                         CREATE TABLE IF NOT EXISTS tb_permissoes (
                                         id_permissao INT NOT NULL,
@@ -75,7 +75,7 @@ module.exports = CreateTables = async() => {
                                         );
                                     `;
 
-    t.scriptIncludeTablePermissionsToResponsibilities = `
+  t.scriptIncludeTablePermissionsToResponsibilities = `
                                 -- cria tabela que relaciona cargos às permissões
                                 CREATE TABLE IF NOT EXISTS tb_cargos_permissoes (
                                 id_cargo_permissao VARCHAR(50) NOT NULL,
@@ -85,7 +85,7 @@ module.exports = CreateTables = async() => {
                                 );
                               `;
 
-    t.scriptIncludeTableresponsibilityToArea = `
+  t.scriptIncludeTableresponsibilityToArea = `
                                 -- cria tabela que relaciona cargos às respctivas areas
                                 CREATE TABLE IF NOT EXISTS tb_cargos_area (
                                 id_cargo_area VARCHAR(50) NOT NULL,
@@ -95,7 +95,7 @@ module.exports = CreateTables = async() => {
                                 );
                               `;
 
-    t.scriptIncludeTableUsers = `
+  t.scriptIncludeTableUsers = `
                                 -- cria tabela usuarios
                                     CREATE TABLE IF NOT EXISTS tb_usuarios (
                                     id_usuario VARCHAR(50) NOT NULL,
@@ -116,7 +116,7 @@ module.exports = CreateTables = async() => {
                                     );
                             `;
 
-    t.scriptIncludeTableCriterion = `
+  t.scriptIncludeTableCriterion = `
                                         -- cria tabela criterios
                                         CREATE TABLE IF NOT EXISTS tb_criterios (
                                         id_criterio VARCHAR(50) NOT NULL,
@@ -129,7 +129,7 @@ module.exports = CreateTables = async() => {
                                         INDEX (ds_criterio(20))
                                         );`;
 
-    t.scriptIncludeTableAreaCriterion = `
+  t.scriptIncludeTableAreaCriterion = `
                                             -- cria tabela que relaciona criterios às area
                                             CREATE TABLE IF NOT EXISTS tb_criterio_area (
                                             id_criterio_area VARCHAR(50) NOT NULL,
@@ -143,13 +143,12 @@ module.exports = CreateTables = async() => {
                                             INDEX (peso, dt_criacao)
                                             );`;
 
-
-    t.scriptIncludeTableQuestion = `
+  t.scriptIncludeTableQuestion = `
                                         -- cria tabela de questoes
                                         CREATE TABLE IF NOT EXISTS tb_questoes(
                                         id_questao VARCHAR(50) NOT NULL,
                                         ds_questao DATETIME NOT NULL,
-                                        id_criterio_area VARCHAR(50) NOT NULL,
+                                        id_criterio VARCHAR(50) NOT NULL,
                                         dt_cadastro DATETIME NOT NULL,
                                         dt_alteracao DATETIME NOT NULL,
                                         id_status INT NOT NULL,
@@ -159,7 +158,7 @@ module.exports = CreateTables = async() => {
                                         INDEX (ds_questao)
                                     );`;
 
-    t.scriptIncludeTableControlMacators = `
+  t.scriptIncludeTableControlMacators = `
                                             -- cria tabela de controle avaliativo
                                             CREATE TABLE IF NOT EXISTS tb_marcadores_avaliativos (
                                             id_marcador VARCHAR(50) NOT NULL,
@@ -176,45 +175,47 @@ module.exports = CreateTables = async() => {
                                             INDEX (ds_marcador, dt_inicio, dt_fim, dt_limite, periodo)
                                             );`;
 
-    t.start = async() => {
-        return await t.DataBase.query(t.scriptIncludeTableStatus)
-            .then(() => {
-                t.DataBase.query(t.scriptIncludeTableDepartment);
-                t.DataBase.query(t.scriptIncludeTablePermissions);
-                t.DataBase.query(t.scriptIncludeTableCriterion);
-                t.DataBase.query(t.scriptIncludeTableControlMacators);
-            })
-            .then(() => {
-                t.DataBase.query(t.scriptIncludeTableResponsibility);
-                t.DataBase.query(t.scriptIncludeTablePermissionsToResponsibilities);
-                t.DataBase.query(t.scriptIncludeTableArea);
-            })
-            .then(
-                () => {
-                    t.DataBase.query(t.scriptIncludeTableAreaCriterion);
-                    t.DataBase.query(t.scriptIncludeTableUsers);
-                    t.DataBase.query(t.scriptIncludeTableresponsibilityToArea);
-                })
-            .then(() => { t.DataBase.query(t.scriptIncludeTableQuestion); },
-                (err) => {
-                    return t.DataBase.close().then(() => {
-                        throw `$Create Tables: ${err}`;
-                    });
-                }
-            )
-            .then(() => {
-                return true;
-            })
-            .catch((err) => {
-                console.log(`Create Tables - MESSAGE: ${err.message}`);
-            });
-    };
+  t.start = async () => {
+    return await t.DataBase.query(t.scriptIncludeTableStatus)
+      .then(() => {
+        t.DataBase.query(t.scriptIncludeTableDepartment);
+        t.DataBase.query(t.scriptIncludeTablePermissions);
+        t.DataBase.query(t.scriptIncludeTableCriterion);
+        t.DataBase.query(t.scriptIncludeTableControlMacators);
+      })
+      .then(() => {
+        t.DataBase.query(t.scriptIncludeTableResponsibility);
+        t.DataBase.query(t.scriptIncludeTablePermissionsToResponsibilities);
+        t.DataBase.query(t.scriptIncludeTableArea);
+      })
+      .then(() => {
+        t.DataBase.query(t.scriptIncludeTableAreaCriterion);
+        t.DataBase.query(t.scriptIncludeTableUsers);
+        t.DataBase.query(t.scriptIncludeTableresponsibilityToArea);
+      })
+      .then(
+        () => {
+          t.DataBase.query(t.scriptIncludeTableQuestion);
+        },
+        (err) => {
+          return t.DataBase.close().then(() => {
+            throw `$Create Tables: ${err}`;
+          });
+        }
+      )
+      .then(() => {
+        return true;
+      })
+      .catch((err) => {
+        console.log(`Create Tables - MESSAGE: ${err.message}`);
+      });
+  };
 
-    var execute = async() => {
-        let status = await t.start();
-        t.DataBase.close();
-        return status;
-    };
+  var execute = async () => {
+    let status = await t.start();
+    t.DataBase.close();
+    return status;
+  };
 
-    return await execute();
+  return await execute();
 };

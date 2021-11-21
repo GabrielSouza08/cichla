@@ -28,23 +28,6 @@ module.exports = (application) => {
     }
   });
 
-  application.post("/area/autenticar", (req, res) => {
-    let _areaServices = new application.Domain.Services.AreaServices(
-      application
-    );
-    let _areaRepository = new application.Infra.Data.Repositories.AreaDAO();
-
-    try {
-      _areaServices.Authenticator(req, res, _areaRepository);
-    } catch (err) {
-      res = this.NotificationTemplate(
-        false,
-        [],
-        `Ocorreu uma exceção no processo de autenticação. error: ${err.message}`
-      );
-    }
-  });
-
   application.put("/area", (req, res) => {
     let _areaServices = new application.Domain.Services.AreaServices(
       application

@@ -18,6 +18,22 @@ ResponsabilityServices.prototype.Include = async (
   } else res.json(NotificationTemplate(true, [], `Este cargo já existe!`));
 };
 
+ResponsabilityServices.prototype.IncludeRelationResponsabilityArea = async (
+  req,
+  res,
+  _responsabilityRepository
+) => {
+  await _responsabilityRepository.IncludeRelationResponsabilityArea(req);
+  res.json(NotificationTemplate(true, [], `Dados cadastrados com sucesso!`));
+};
+ResponsabilityServices.prototype.IncludeRelationResponsabilityPermission =
+  async (req, res, _responsabilityRepository) => {
+    await _responsabilityRepository.IncludeRelationResponsabilityPermission(
+      req
+    );
+    res.json(NotificationTemplate(true, [], `Dados cadastrados com sucesso!`));
+  };
+
 ResponsabilityServices.prototype.Get = async (
   res,
   _responsabilityRepository

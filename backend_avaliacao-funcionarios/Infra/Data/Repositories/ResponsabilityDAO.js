@@ -29,6 +29,61 @@ ResponsabilityDAO.prototype.Include = async function (req) {
 
   conn.query(query).then(() => {});
 };
+ResponsabilityDAO.prototype.IncludeRelationResponsabilityArea = async function (
+  req
+) {
+  let relation = req.body;
+  relation.id = uuid.v1();
+
+  let conn = new dbConn(true);
+
+  query = `INSERT INTO tb_cargos_area 
+                    (
+                      id_cargo_area,
+                      id_cargo,
+                      id_area,
+                      dt_cadastro
+                      
+                    )
+                    VALUES 
+                    (
+                        '${relation.id}',
+                        '${relation.id_responsability}',
+                        '${relation.id_area}',
+                        
+                        curtime()
+                        
+                    );`;
+
+  conn.query(query).then(() => {});
+};
+ResponsabilityDAO.prototype.IncludeRelationResponsabilityPermission =
+  async function (req) {
+    let relation = req.body;
+    relation.id = uuid.v1();
+
+    let conn = new dbConn(true);
+
+    query = `INSERT INTO tb_cargos_permissoes
+                    (
+                      id_cargo_permissao,
+                      id_cargo,
+                      id_permissao,
+                      dt_cadastro
+                      
+                    )
+                    VALUES 
+                    (
+                        '${relation.id}',
+                        '${relation.id_responsability}',
+                        '${relation.id_permission}',
+                        
+                        curtime()
+                        
+                    );`;
+
+    conn.query(query).then(() => {});
+  };
 
 ResponsabilityDAO.prototype.Get = async () => {
   let conn = new dbConn(true);
