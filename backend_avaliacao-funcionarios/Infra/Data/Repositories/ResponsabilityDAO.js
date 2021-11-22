@@ -105,6 +105,15 @@ ResponsabilityDAO.prototype.Get = async () => {
     return result;
   });
 };
+ResponsabilityDAO.prototype.GetPermissions = async () => {
+  let conn = new dbConn(true);
+  let query = `select * from tb_permissoes
+                `;
+
+  return conn.query(query).then((result) => {
+    return result;
+  });
+};
 ResponsabilityDAO.prototype.ValidateByName = async (description) => {
   let conn = new dbConn(true);
   let query = `  SELECT * FROM TB_CARGOS  WHERE ds_cargo = '${description}'`;

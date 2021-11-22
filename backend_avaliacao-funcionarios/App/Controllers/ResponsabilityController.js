@@ -58,6 +58,27 @@ module.exports = (application) => {
       }
     });
   };
+  module.exports = (application) => {
+    application.post("/cargo/permissoes", (req, res) => {
+      let _responsabilityServices =
+        new application.Domain.Services.ResponsabilityServices(application);
+      let _responsabilityRepository =
+        new application.Infra.Data.Repositories.ResponsabilityDAO();
+      try {
+        _responsabilityServices.GetPermissions(
+          req,
+          res,
+          _responsabilityRepository
+        );
+      } catch (err) {
+        res = this.NotificationTemplate(
+          false,
+          [],
+          `Ocorreu uma exceção no processo de cadastro. error: ${err.message}`
+        );
+      }
+    });
+  };
   application.get("/cargo", (req, res) => {
     let _responsabilityServices =
       new application.Domain.Services.ResponsabilityServices(application);
