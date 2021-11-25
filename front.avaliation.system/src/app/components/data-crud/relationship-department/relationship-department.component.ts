@@ -4,7 +4,6 @@ import { ColaboratorService } from 'src/app/services/colaborator.service';
 import { AreaService } from 'src/app/services/area.service';
 import { DepartmentService } from 'src/app/services/department.service';
 import { ResponsibilityService } from 'src/app/services/responsibility.service';
-import { LocalService } from 'src/app/services/local.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
@@ -95,7 +94,7 @@ export class RelationshipDepartmentComponent implements OnInit {
   public accessCloseChange: boolean;
   public idRemove: number;
 
-  constructor(private formBuilder: FormBuilder, private collaboratorService: ColaboratorService, private areaService: AreaService, private departmentService: DepartmentService, private responsibilityService: ResponsibilityService, private localService: LocalService) { }
+  constructor(private formBuilder: FormBuilder, private collaboratorService: ColaboratorService, private areaService: AreaService, private departmentService: DepartmentService, private responsibilityService: ResponsibilityService) { }
 
   ngOnInit() {
     this.ListsUpdate();

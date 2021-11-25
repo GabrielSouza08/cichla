@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ResponsibilityService } from 'src/app/services/responsibility.service';
+import { DepartmentService } from 'src/app/services/department.service';
 import { MatTableDataSource } from '@angular/material/table';
 
 
 export interface ResponsibilityElements {
   id: number;
   name: string;
+  departmentId: string;
+  departmentName: string;
   registerDate: string;
   changeDate: string;
   statusCode: number;
@@ -50,7 +53,7 @@ export class ResponsabilityComponent implements OnInit {
   public accessActionRemove: boolean;
   public idRemove: number;
 
-  constructor(private formBuilder: FormBuilder, private responsibilityService: ResponsibilityService) { }
+  constructor(private formBuilder: FormBuilder, private responsibilityService: ResponsibilityService, private departmentService: DepartmentService) { }
 
   ngOnInit() {
     this.getListResponsibility();

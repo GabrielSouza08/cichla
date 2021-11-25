@@ -1,10 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AreaService } from 'src/app/services/area.service';
+import { DepartmentService } from 'src/app/services/department.service';
 import { MatTableDataSource } from '@angular/material/table';
 
 
 export interface AreaElements {
+  id: number;
+  name: string;
+  registerDate: string;
+  changeDate: string;
+  statusCode: number;
+}
+
+export interface DepartmentElements {
   id: number;
   name: string;
   registerDate: string;
@@ -29,8 +38,9 @@ export class AreaComponent implements OnInit {
   public statusConfirmAction: boolean = false;
 
   public dataSource = new MatTableDataSource<AreaElements>()
-  public displayedColumns: string[] = ["name", "registerDate", "changeDate", "update", "remove"];
-  public rows: AreaElements[] = [];
+  public displayedColumns: Array<string> = ["name", "registerDate", "changeDate", "remove"];
+  public rows: Array<AreaElements> = [];
+  public rowsDepartment: Array<AreaElements> = [];
   public messages: Array<string> = [];
   public messageSuccess: string;
   public messageAction: string;
@@ -50,17 +60,17 @@ export class AreaComponent implements OnInit {
   public idRemove: number;
 
 
-  constructor(private formBuilder: FormBuilder, private areaService: AreaService) { }
+  constructor(private formBuilder: FormBuilder, private areaService: AreaService, private departmentService: DepartmentService ) { }
 
   ngOnInit() {
+    this.getListDepartment();
     this.getListArea();
     this.formDeclaration();
     this.getDataUser();
   }
 
   getListArea() {
-    this.statusLoading = true;
-
+    
     this.areaService.Get().subscribe(res => {
       if (res.success == true) {
 
@@ -72,7 +82,18 @@ export class AreaComponent implements OnInit {
 
       } else {
         this.openTable();
-        res.data.forEach(data => { this.showMessageError(data.message); });
+        res.msg.forEach(mesage => { this.showMessageError(mesage.text); });
+      }
+    });
+  }
+
+  getListDepartment() {
+    this.statusLoading = true;
+
+    this.departmentService.Get().subscribe(res => {
+      if (res.success == true) { this.rowsDepartment = res.data; } 
+      else {
+        this.showMessageError('Falha na obteção dos dados complementares: Departamento');
       }
     });
   }
@@ -161,11 +182,11 @@ export class AreaComponent implements OnInit {
         if (res.success == true) {
 
           this.showMessageSucceess('Área removida!');
-          this.getListArea();
+          setTimeout(() => { this.getListArea();}, 1500);
 
         } else {
           this.openTable();
-          res.data.forEach(data => { this.showMessageError(data.message); });
+          res.msg.forEach(message => { this.showMessageError(message.text); });
         }
       });
     } else { this.showMessageSucceess('Ok!'); }
@@ -178,11 +199,11 @@ export class AreaComponent implements OnInit {
         if (res.success == true) {
 
           this.showMessageSucceess('Área atualizada!');
-          this.getListArea();
+          setTimeout(() => { this.getListArea();}, 1500);
 
-        } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
+        } else { res.msg.forEach(message => { this.showMessageError(message.text); }); }
       });
-    } else { this.showMessageError('Preencha o campo obrigatório!'); }
+    } else { this.showMessageError('Preencha os campos obrigatórios!'); }
   }
 
   inputRegister() {
@@ -192,11 +213,11 @@ export class AreaComponent implements OnInit {
         if (res.success == true) {
 
           this.showMessageSucceess('Área cadastrada!');
-          this.getListArea();
+          setTimeout(() => { this.getListArea();}, 1500);
 
         } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
       });
-    } else { this.showMessageError('Preencha o campo obrigatório!'); }
+    } else { this.showMessageError('Preencha os campos obrigatórios!'); }
   }
 
   inputImport() {

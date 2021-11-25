@@ -11,17 +11,15 @@ import { Ng5SliderModule } from 'ng5-slider';
 
 //Pages
 import { LoginPageComponent } from './pages/login-page/login-page.component';
-import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.component';
+import { HomePageComponent } from './pages/home-page/home-page.component';
 
 // Services
 import { LoginService } from '../app/services/login.service';
 import { ColaboratorService } from '../app/services/colaborator.service';
 import { DashboardService } from '../app/services/dashboard.service';
-import { DptoService } from '../app/services/dpto.service';
 import { PrintService } from '../app/services/print.service';
 import { ResponsibilityService } from './services/responsibility.service';
 import { DepartmentService } from '../app/services/department.service';
-import { LocalService } from '../app/services/local.service';
 import { AreaService } from '../app/services/area.service';
 
 
@@ -55,22 +53,14 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatStepperModule } from '@angular/material/stepper';
 
-
-
 //Components
-import { EditColaboratorComponent } from './components/edit-colaborator/edit-colaborator.component';
-import { EditDptoComponent } from './components/edit-dpto/edit-dpto.component';
-import { FormColaboratorComponent } from './components/form-colaborator/form-colaborator.component';
-import { FormtDptoComponent } from './components/formt-dpto/formt-dpto.component';
+import { FormtEvaluation } from './components/evaluation/evaluation';
 import { PrintComponent } from './components/print/print.component';
 import { LoadingComponent } from './components/loading/loading.component';
-import { FormsOptionsComponent } from './components/forms-options/forms-options.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HomePageComponent } from './pages/home-page/home-page.component';
 import { DataControlComponent } from './components/data-control-collaborator/data-control.component';
 import { CollaboratorComponent } from './components/data-crud/collaborator/collaborator.component';
 import { DepartmentComponent } from './components/data-crud/department/department.component';
-import { LocalComponent } from './components/data-crud/local/local.component';
 import { ResponsabilityComponent } from './components/data-crud/responsability/responsability.component';
 import { AreaComponent } from './components/data-crud/area/area.component';
 import { WeightComponent } from './components/data-crud/weight/weight.component';
@@ -87,19 +77,13 @@ import { QuestionDepartmentComponent } from './components/data-crud/question-dep
   declarations: [
     AppComponent,
     LoginPageComponent,
-    DashboardPageComponent,
-    EditColaboratorComponent,
-    EditDptoComponent,
-    FormColaboratorComponent,
-    FormtDptoComponent,
+    FormtEvaluation,
     PrintComponent,
     LoadingComponent,
-    FormsOptionsComponent,
     HomePageComponent,
     DataControlComponent,
     CollaboratorComponent,
     DepartmentComponent,
-    LocalComponent,
     ResponsabilityComponent,
     AreaComponent,
     WeightComponent,
@@ -142,7 +126,7 @@ import { QuestionDepartmentComponent } from './components/data-crud/question-dep
     MatSidenavModule,
     MatToolbarModule
   ],
-  providers: [LoginService, AuthGuard, ColaboratorService, DashboardService, DptoService, AreaService,LocalService,DepartmentService,ResponsibilityService,PrintService, { provide: LocationStrategy, useClass: HashLocationStrategy}],
+  providers: [LoginService, AuthGuard, ColaboratorService, DashboardService, AreaService,DepartmentService,ResponsibilityService,PrintService, { provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

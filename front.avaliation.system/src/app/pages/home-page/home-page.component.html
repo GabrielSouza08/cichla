@@ -2,7 +2,7 @@
     <!-- header area start -->
     <header *ngIf="viewHeader">
         <div class="left-area">
-            <h3><span>RH</span> - Avaliação</h3>
+            <h3><span>Cichla</span></h3>
 
             <label for="check"> <i class="fa fa-bars" id="sidebar_btn"></i> </label>
         </div>
@@ -21,7 +21,7 @@
             <input type="checkbox" id="check" (click)="(checkControlView())">
             <div id="center">
                 <img src="../../../assets/user.png" class="profile_image" alt="">
-                <h4>{{ userInfo.email }}</h4>
+                <h4>{{ userInfo.name }}</h4>
             </div>
 
             <label for="check" *ngIf="!viewHeader"> <i class="fa fa-bars" id="sidebar-internal"></i> </label>
@@ -31,7 +31,7 @@
             <a *ngIf="statusCRUD" [matMenuTriggerFor]="controlData" title="Controle de dados"><i class="fa fa-users"></i><span>Controle de dados</span></a>
 
             <mat-menu #controlData="matMenu">
-                <a mat-menu-item (click)="CRUDColaboratorOpen()" title="Dados dos colaboradores"><i class="fa fa-pencil-square"></i><span> Colaboradores</span></a>
+                <a mat-menu-item (click)="CRUDColaboratorOpen()" title="Dados dos colaboradores"><i class="fa fa-pencil-square"></i><span> Complementares</span></a>
 
                 <a mat-menu-item (click)="CRUDWeightOpen()" title="Dados dos pesos avaliativos"><i class="fa fa-cogs"></i><span> Avaliativos</span></a>
             </mat-menu>
@@ -39,9 +39,9 @@
             <a *ngIf="statusEvaluation" [matMenuTriggerFor]="evaluation" title="Avaliação"><i class="fa fa-pencil-square-o"></i><span>Avaliação</span></a>
 
             <mat-menu #evaluation="matMenu">
-                <a mat-menu-item (click)="evaluatioColaboratornOpen()" title="Avaliar colaboradores"><i class="fa fa-users"></i><span> Colaboradores</span></a>
+                <!-- <a mat-menu-item (click)="evaluatioColaboratornOpen()" title="Avaliar colaboradores"><i class="fa fa-users"></i><span> Colaboradores</span></a> -->
 
-                <a mat-menu-item (click)="evaluationDepartmentOpen()" title="Avaliar departamentos"><i class="fa fa-wpforms"></i><span> Departamentos</span></a>
+                <a mat-menu-item (click)="evaluationDepartmentOpen()" title="Avaliar departamentos"><i class="fa fa-wpforms"></i><span> Colaboradores</span></a>
             </mat-menu>
 
             <!-- <a *ngIf="statusPersonalReport" (click)="PersonalReportOpen()" title="Sua Avaliação"><i class="fa fa-briefcase"></i><span>Sua Avaliação</span></a> -->
@@ -87,7 +87,7 @@
 
         <div *ngIf="statusEvaluationDepartmentOpen" class="content" id="style-components">
             <div class="componentAction">
-                <app-formt-dpto></app-formt-dpto>
+                <app-evaluation></app-evaluation>
             </div>
         </div>
 

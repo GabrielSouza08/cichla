@@ -4,11 +4,9 @@ import { ColaboratorService } from 'src/app/services/colaborator.service';
 import { AreaService } from 'src/app/services/area.service';
 import { DepartmentService } from 'src/app/services/department.service';
 import { ResponsibilityService } from 'src/app/services/responsibility.service';
-import { LocalService } from 'src/app/services/local.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, ReplaySubject, Subject } from "rxjs";
 import { map, startWith, take, takeUntil } from "rxjs/operators";
-import { element } from 'protractor';
 
 export interface CollaboratorElements {
   id: number;
@@ -109,7 +107,7 @@ export class CollaboratorComponent implements OnInit {
   public accessActionRemove: boolean;
   public idRemove: number;
 
-  constructor(private formBuilder: FormBuilder, private collaboratorService: ColaboratorService, private areaService: AreaService, private departmentService: DepartmentService, private responsibilityService: ResponsibilityService, private localService: LocalService) { }
+  constructor(private formBuilder: FormBuilder, private collaboratorService: ColaboratorService, private areaService: AreaService, private departmentService: DepartmentService, private responsibilityService: ResponsibilityService) { }
 
   ngOnInit() {
     this.getListCollaborator();
@@ -121,7 +119,6 @@ export class CollaboratorComponent implements OnInit {
 
   ListsUpdate() {
     this.getListEvaluator();
-    this.getListLocal();
     this.getListDepartment();
     this.getListArea();
     this.getListResponsibility();
@@ -163,26 +160,6 @@ export class CollaboratorComponent implements OnInit {
         });
         this.evaluatorSet = list;
         this.evaluatorBackupSet = list;
-      }
-    });
-  }
-
-  getListLocal() {
-    let row: OptionsElements;
-    let list: Array<OptionsElements> = [];
-
-    this.localService.Get().subscribe(res => {
-
-
-      if (res.success == true) {
-        res.data.forEach(function (element) {
-          row = {
-            name: element.name,
-            id: element.id
-          };
-          if (row) { list.push(row); }
-        });
-        this.localSet = list;
       }
     });
   }

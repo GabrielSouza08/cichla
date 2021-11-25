@@ -24,23 +24,23 @@ export class DepartmentService {
   constructor(private http: HttpClient) { }
 
   Input(userId, name): Observable<any> {
-    var json = { "UserId": userId, "Name": name };
-    return this.http.post(`${environment.apiUrl}v1/department/register`, json);
+    var json = { "ds_departament": name };
+    return this.http.post(`${environment.apiUrl}departamento/cadastrar`, json);
   }
 
   Change(userId, id, name): Observable<any> {
-    var json = { "UserId": userId, "Id": id, "Name": name };
+    var json = { "UserId": userId, "Id": id, "ds_departament": name };
     return this.http.patch(`${environment.apiUrl}v1/department/change`, json);
   }
 
   Remove(id, userId): Observable<any> {
-    var json = { "Id": id, "UserId": userId };
+    var paramters = `/${id}`;
 
-    return this.http.request('DELETE', `${environment.apiUrl}v1/department/remove`, { body: json });
+    return this.http.request('DELETE', `${environment.apiUrl}departamento${paramters}`);
   }
 
   Get(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}v1/department/get`);
+    return this.http.get(`${environment.apiUrl}departamento`);
   }
 
   InputRelationshipEvaluator(array: Array<OptionsInputElementsFinal>): Observable<any> {

@@ -72,11 +72,13 @@ export class DataControlWeightComponent implements OnInit {
 
     if (this.userInfo != null) {
       this.userInfo.permissions.forEach(element => {
-        switch (element) {
-          case 1012:  { this.statusDataNoteView = true;  }
-          case 1012:  { this.statusDataRelationshipEvaluatingDepartmentView = true;  }//add relationships
-          case 1012:  { this.statusDataQuestionDepartmentView = true; break; }//add quetions
-          default: {
+        switch (element.id) {
+          case 2: { 
+                    this.statusDataNoteView = true;  
+                    this.statusDataRelationshipEvaluatingDepartmentView = true; 
+                    this.statusDataQuestionDepartmentView = true; 
+                    break; 
+          }default: {
             break;
           }
         };

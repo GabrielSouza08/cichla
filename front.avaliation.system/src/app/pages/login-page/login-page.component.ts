@@ -40,31 +40,28 @@ export class LoginPageComponent implements OnInit {
 
       this.loading = false;
       this.userInfo = res.data;
-
-      sessionStorage.setItem('userInfo', JSON.stringify(this.userInfo));
-
-      this.router.navigateByUrl('/');
-
-      // if (res.success) {
-      //   this.loading = false;
-      //   this.userInfo = res.data;
+      
+      if (res.success) {
+        this.loading = false;
+        this.userInfo = res.data;
   
-      //   sessionStorage.setItem('userInfo', JSON.stringify(this.userInfo));
+        sessionStorage.setItem('userInfo', JSON.stringify(this.userInfo));
 
-      //   this.router.navigateByUrl('/');
-      // }
-      // else {
+        this.router.navigateByUrl('/');
+      }
+      else {
                
-      //   this.loading = false;
-      //   this.statusMessage = true;
+        this.loading = false;
+        this.statusMessage = true;
+        console.log('message',res)
 
-      //   res.data.forEach(data => { this.messages.push(data.message);});
+        res.msg.forEach(message => { this.messages.push(message.text);});
 
-      //   setTimeout(() => { 
-      //     this.statusMessage = false;
-      //     this.messages = Array<string>();
-      //   }, 10000);
-      // }
+        setTimeout(() => { 
+          this.statusMessage = false;
+          this.messages = Array<string>();
+        }, 10000);
+      }
     });
   }
 }

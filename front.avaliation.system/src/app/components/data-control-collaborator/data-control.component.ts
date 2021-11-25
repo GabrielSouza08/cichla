@@ -14,11 +14,11 @@ export class DataControlComponent implements OnInit {
   public statusShowWeight: boolean = false;
   public statusShowResponsability: boolean = false;
 
-  public statusDataCollaboratorView: boolean = false;
+  public statusDataCollaboratorView: boolean = true;
   public statusDataLocalView: boolean = false;
-  public statusDataDepartmentView: boolean = false;
-  public statusDataAreaView: boolean = false;
-  public statusDataResponsabilityView: boolean = false;
+  public statusDataDepartmentView: boolean = true;
+  public statusDataAreaView: boolean = true;
+  public statusDataResponsabilityView: boolean = true;
   public statusDataWeightView: boolean = false;
   public statusDataDecisionView: boolean = false;
 
@@ -39,7 +39,6 @@ export class DataControlComponent implements OnInit {
   getselection(name: string) {
     switch (name) {
       case 'Colaborador': { this.openCollaborator(); break; }
-      case 'Local': { this.openLocal(); break; }
       case 'Departamento': { this.openDepartment(); break; }
       case 'Área': { this.openArea(); break; }
       case 'Cargo': { this.openResponsability(); break; }
@@ -57,7 +56,6 @@ export class DataControlComponent implements OnInit {
     this.closeArea();
     this.closeResponsability();
     this.closeWeight();
-    this.closeLocal();
   }
   closeCollaborator() { this.statusShowCollaborator = false; }
 
@@ -67,7 +65,6 @@ export class DataControlComponent implements OnInit {
     this.closeArea();
     this.closeResponsability();
     this.closeWeight();
-    this.closeLocal();
   }
   closeDepartment() { this.statusShowDepartment = false; }
 
@@ -77,7 +74,6 @@ export class DataControlComponent implements OnInit {
     this.closeDepartment();
     this.closeResponsability();
     this.closeWeight();
-    this.closeLocal();
   }
   closeArea() { this.statusShowArea = false; }
 
@@ -87,7 +83,6 @@ export class DataControlComponent implements OnInit {
     this.closeDepartment();
     this.closeArea();
     this.closeWeight();
-    this.closeLocal();
   }
   closeResponsability() { this.statusShowResponsability = false; }
 
@@ -97,19 +92,8 @@ export class DataControlComponent implements OnInit {
     this.closeDepartment();
     this.closeArea();
     this.closeResponsability();
-    this.closeLocal();
   }
   closeWeight() { this.statusShowWeight = false; }
-
-  openLocal() {
-    this.statusShowLocal = true;
-    this.closeCollaborator();
-    this.closeDepartment();
-    this.closeArea();
-    this.closeResponsability();
-    this.closeWeight();
-  }
-  closeLocal() { this.statusShowLocal = false; }
 
   validationPermission() {
     this.userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
@@ -117,12 +101,14 @@ export class DataControlComponent implements OnInit {
     if (this.userInfo != null) {
       this.userInfo.permissions.forEach(element => {
         switch (element) {
-          case 1005:  { this.statusDataLocalView = true; break; }
-          case 1006: { this.statusDataDepartmentView = true; break; }
-          case 1007: { this.statusDataAreaView = true; break; }
-          case 1008: { this.statusDataResponsabilityView = true; break; }
-          case 1009: { this.statusDataWeightView = true;break; }
-          case 1010: { this.statusDataCollaboratorView = true; break; }
+          case 2: { 
+                    this.statusDataDepartmentView = true;
+                    this.statusDataAreaView = true;
+                    this.statusDataResponsabilityView = true;
+                    this.statusDataWeightView = true;
+                    this.statusDataCollaboratorView = true;
+                    break; 
+                  }
           default: {
             break;
           }

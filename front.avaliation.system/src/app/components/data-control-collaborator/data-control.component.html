@@ -1,7 +1,7 @@
 <div class="container">
     <div class="contents">
         <div id="center">
-            <h1> Controlar os dados dos colaboradores</h1>
+            <h1> Controle de dados complemetares</h1>
         </div>
 
         <div class="decision">
@@ -13,11 +13,11 @@
                 </div>
 
                 <div *ngIf="statusDataDecisionView">
-                    <div *ngIf="statusDataLocalView" (click)="getselection('Local')" class="data-decision"><a> Local</a></div>
+                    <!-- <div *ngIf="statusDataLocalView" (click)="getselection('Local')" class="data-decision"><a> Local</a></div> -->
                     <div *ngIf="statusDataDepartmentView" (click)="getselection('Departamento')" class="data-decision"><a> Departamento</a></div>
                     <div *ngIf="statusDataAreaView" (click)="getselection('Área')" class="data-decision"><a> Área</a></div>
                     <div *ngIf="statusDataResponsabilityView" (click)="getselection('Cargo')" class="data-decision"><a> Cargo</a></div>
-                    <div *ngIf="statusDataCollaboratorView" (click)="getselection('Colaborador')" class="data-decision"><a> Colaborador</a></div>
+                    <div *ngIf="statusDataCollaboratorView" (click)="getselection('Colaborador')" class="data-decision"><a> Usuário</a></div>
                 </div>
             </div>
         </div>
@@ -26,10 +26,6 @@
 
             <div *ngIf="statusShowCollaborator">
                 <app-collaborator></app-collaborator>
-            </div>
-
-            <div *ngIf="statusShowLocal">
-                <app-local></app-local>
             </div>
 
             <div *ngIf="statusShowDepartment">

@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 export class HomePageComponent implements OnInit {
 
   public statusDashboard: boolean = true;
-  public statusDashboardOpen: boolean = true;
+  public statusDashboardOpen: boolean = false;
   public statusEvaluation: boolean = true;
   public statusEvaluationCollaboratorOpen: boolean = false;
   public statusEvaluationDepartmentOpen: boolean = false;
@@ -18,7 +18,7 @@ export class HomePageComponent implements OnInit {
   public statusCRUDColaboratorOpen: boolean = false;
   public statusCRUDWeightOpen: boolean = false;
   public statusPersonalReport: boolean = false;
-  public statusPersonalReportOpen: boolean = true;
+  public statusPersonalReportOpen: boolean = false;
   public showNameUser: boolean = true;
   public viewHeader: boolean = true;
 
@@ -27,7 +27,7 @@ export class HomePageComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit() {
-    // this.validationPermission();
+    this.validationPermission();
     this.primaryScreen();
   }
 
@@ -43,14 +43,13 @@ export class HomePageComponent implements OnInit {
 
   validationPermission() {
     this.userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
-
     if (this.userInfo != null) {
       this.userInfo.permissions.forEach(element => {
-        switch (element) {
-          case 1002: { this.statusPersonalReport = true; break;}
-          case 1003: { this.statusEvaluation = true; break;}
-          case 1004: { this.statusCRUD = true; break;}
-          case 1011: { this.statusDashboard = true; break;}
+        switch (element.id) {
+          case 3: { this.statusPersonalReport = true; break;}
+          case 6: { this.statusEvaluation = true; break;}
+          case 2: { this.statusCRUD = true; break;}
+          case 1: { this.statusDashboard = true; break;}
           default: {
             break;
           }
@@ -60,10 +59,9 @@ export class HomePageComponent implements OnInit {
   }
   
   primaryScreen(){
-    if(this.statusDashboard == true || this.statusPersonalReport == true){ this.homeClose();}
+    // if(this.statusDashboard == true || this.statusPersonalReport == true){ this.homeClose();}
 
-    if(this.statusDashboard == true){ this.PersonalReportClose();}
-
+    // if(this.statusDashboard == true){ this.PersonalReportClose();}
   }
   
   homeClose() {

@@ -13,11 +13,20 @@ export interface DepartmentElements {
   statusCode: number;
 }
 
+let dataDepartment: Array<DepartmentElements> = [{
+  id: 1,
+  name: '',
+  registerDate: '',
+  changeDate: '',
+  statusCode:1 
+}] 
+
 @Component({
   selector: 'app-department',
   templateUrl: './department.component.html',
   styleUrls: ['./department.component.css']
 })
+
 export class DepartmentComponent implements OnInit {
 
   public statusShowTable: boolean = false;
@@ -30,7 +39,7 @@ export class DepartmentComponent implements OnInit {
   public statusConfirmAction: boolean = false;
 
   public dataSource = new MatTableDataSource<DepartmentElements>()
-  public displayedColumns: string[] = ["name", "registerDate", "changeDate", "update", "remove"];
+  public displayedColumns: string[] = ["name", "registerDate", "changeDate", "remove"];
   public rows: DepartmentElements[] = [];
   public messages: Array<string> = []
   public array: Array<any>;
@@ -164,8 +173,9 @@ export class DepartmentComponent implements OnInit {
         if (res.success == true) {
 
           this.showMessageSucceess('Departamento removido!');
-          this.getListDepartment();
-
+          setTimeout(() => {
+            this.getListDepartment();
+          }, 1000);
         } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
       });
     } else { this.showMessageSucceess('Ok!'); }
@@ -178,7 +188,10 @@ export class DepartmentComponent implements OnInit {
         if (res.success == true) {
 
           this.showMessageSucceess('Departamento atualizado!');
-          this.getListDepartment();
+          
+          setTimeout(() => {
+            this.getListDepartment();
+          }, 10000);
 
         } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
       });
@@ -192,7 +205,9 @@ export class DepartmentComponent implements OnInit {
         if (res.success == true) {
 
           this.showMessageSucceess('Departamento cadastrado!');
-          this.getListDepartment();
+          setTimeout(() => {
+            this.getListDepartment();
+          }, 1000);
 
         } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
       });

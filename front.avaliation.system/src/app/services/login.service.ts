@@ -13,11 +13,7 @@ export class LoginService {
   constructor(private http: HttpClient) { }
 
   postLogin(username, password): Observable<any>{
-
-    var a = this.http.get(`${environment.apiUrl}usuarios`);
-    a.subscribe(res => {console.table(res)});
-
-    var credemtials = { "email": username, "senha": password };
+    var credemtials = { "email": username, "password": password };
     return this.http.post(`${environment.apiUrl}usuarios/autenticar`, credemtials);
   }
 

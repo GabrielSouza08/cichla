@@ -43,12 +43,12 @@
                     <table mat-table [dataSource]="dataSourceDepartment">
 
                         <ng-container matColumnDef="departmentName">
-                            <th mat-header-cell *matHeaderCellDef> Departamento </th>
+                            <th mat-header-cell *matHeaderCellDef> Colaborador </th>
                             <td mat-cell *matCellDef="let element" (click)="ChangeOrInput(element)"> {{element.departmentName}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="statusEvaluation">
-                            <th mat-header-cell *matHeaderCellDef>Avaliação</th>
+                            <th mat-header-cell *matHeaderCellDef>Status</th>
                             <td mat-cell *matCellDef="let element" (click)="ChangeOrInput(element)">
                                 <i *ngIf="element.statusEvaluation" class="done"> Concluida</i>
                                 <i *ngIf="!element.statusEvaluation" class="pending"> Pendente</i>
@@ -95,7 +95,7 @@
             <div class="input" *ngIf="statusShowInput">
 
                 <h4> Avaliar</h4>
-                <h4>Departamento: {{departmentName}}</h4>
+                <h4>{{departmentName}}</h4>
                 <div class="register">
                     <form [formGroup]="formEvaluation" style="width: 100%; height: 100%;">
                         <div class="form-group" id="input-register">
@@ -148,7 +148,7 @@
             <div class="input" *ngIf="statusShowChange">
 
                 <h4> Avaliar de novo </h4>
-                <h4>Departamento: {{departmentName}}</h4>
+                <h4>{{departmentName}}</h4>
                 <div class="register">
                     <form [formGroup]="formEvaluation" style="width: 100%; height: 100%;">
                         <div class="form-group" id="input-register">
