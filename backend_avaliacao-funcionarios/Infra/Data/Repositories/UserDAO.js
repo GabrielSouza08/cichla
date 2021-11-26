@@ -84,8 +84,8 @@ UserDAO.prototype.Authenticator = async(email) => {
     });
 };
 
-UserDAO.prototype.Get = async(id) => {
-    let filter = (id == undefined) ? "" : `WHERE ID_USUARIO = '${id}'`;
+UserDAO.prototype.Get = async(id = '') => {
+    let filter = (id == '') ? "" : `WHERE ID_USUARIO = '${id}'`;
     let conn = new dbConn(true);
     let query = `SELECT 
                       USER.id_usuario      AS id,

@@ -1,15 +1,10 @@
 /* infra/data/creates/CreateTables*/
 
-module.exports = CreateTables = async () => {
-  var t = this;
-  let accessDb = require("../../../Shared/DbConnection");
-  t.DataBase = new accessDb(true);
+module.exports = CreateTables = async() => {
+    var t = this;
+    let accessDb = require("../../../Shared/DbConnection");
+    t.DataBase = new accessDb(true);
 
-<<<<<<< HEAD
-  t.scriptIncludeTableStatus = `
-                                    -- cria tabela status
-                                    CREATE TABLE IF NOT EXISTS tb_status (
-=======
     t.scriptCreateProc = `CREATE PROCEDURE CreateAllTables()
     BEGIN
     -- cria tabela status
@@ -41,7 +36,6 @@ module.exports = CreateTables = async () => {
                                     nota INT NOT NULL,
                                     dt_cadastro DATETIME NOT NULL,
                                     dt_alteracao DATETIME NOT NULL,
->>>>>>> af291f1d4854bae5e56707c2c5b1495200272b88
                                     id_status INT NOT NULL,
                                     PRIMARY KEY(id_escala),
                                     FOREIGN KEY (id_status) REFERENCES tb_status(id_status),
@@ -59,89 +53,6 @@ module.exports = CreateTables = async () => {
                                     FOREIGN KEY (id_status) REFERENCES tb_status(id_status),
                                     INDEX (ds_departamento(10))
                                     );
-<<<<<<< HEAD
-                                `;
-
-  t.scriptIncludeTableResponsibility = `
-                                          -- Cria tabela de cargos
-                                          CREATE TABLE IF NOT EXISTS tb_cargos (
-                                          id_cargo VARCHAR (50) NOT NULL,
-                                          ds_cargo VARCHAR (50) NOT NULL,
-                                          dt_cadastro DATETIME NOT NULL,
-                                          dt_alteracao DATETIME NOT NULL,
-                                          id_status int NOT NULL,
-                                          PRIMARY KEY(id_cargo),
-                                          INDEX (ds_cargo(10)),
-                                          FOREIGN KEY (id_status) REFERENCES tb_status(id_status)
-                                          );
-                                        `;
-
-  t.scriptIncludeTableArea = `
-                                -- cria tabela areas
-                                  CREATE TABLE IF NOT EXISTS tb_areas (
-                                  id_area VARCHAR (50) NOT NULL,
-                                  ds_area VARCHAR (50) NOT NULL,
-                                  id_departamento VARCHAR (50) NOT NULL,
-                                  dt_cadastro DATETIME NOT NULL,
-                                  dt_alteracao DATETIME NOT NULL,
-                                  id_status int NOT NULL,
-                                  PRIMARY KEY(id_area),
-                                  FOREIGN KEY (id_departamento) REFERENCES tb_departamentos(id_departamento),
-                                  FOREIGN KEY (id_status) REFERENCES tb_status(id_status),
-                                  INDEX (ds_area(10))
-                                  );
-                              `;
-
-  t.scriptIncludeTableDepartment = `
-                                        -- cria tabela departamentos
-                                        CREATE TABLE IF NOT EXISTS tb_departamentos (
-                                        id_departamento VARCHAR (50) NOT NULL,
-                                        ds_departamento VARCHAR (50) NOT NULL,
-                                        dt_cadastro DATETIME NOT NULL,
-                                        dt_alteracao DATETIME NOT NULL,
-                                        id_status int NOT NULL,
-                                        PRIMARY KEY(id_departamento),
-                                        FOREIGN KEY (id_status) REFERENCES tb_status(id_status),
-                                        INDEX (ds_departamento(10))
-                                        );
-                                    `;
-
-  t.scriptIncludeTablePermissions = `
-                                        -- cria tabela permissoes
-                                        CREATE TABLE IF NOT EXISTS tb_permissoes (
-                                        id_permissao INT NOT NULL,
-                                        ds_permissao VARCHAR (50) NOT NULL,
-                                        dt_cadastro DATETIME NOT NULL,
-                                        dt_alteracao DATETIME NOT NULL,
-                                        id_status int NOT NULL,
-                                        PRIMARY KEY(id_permissao),
-                                        FOREIGN KEY (id_status) REFERENCES tb_status(id_status)
-                                        );
-                                    `;
-
-  t.scriptIncludeTablePermissionsToResponsibilities = `
-                                -- cria tabela que relaciona cargos às permissões
-                                CREATE TABLE IF NOT EXISTS tb_cargos_permissoes (
-                                id_cargo_permissao VARCHAR(50) NOT NULL,
-                                id_cargo VARCHAR (50) NOT NULL,
-                                id_permissao VARCHAR (50) NOT NULL,
-                                dt_criacao VARCHAR (100) NOT NULL
-                                );
-                              `;
-
-  t.scriptIncludeTableresponsibilityToArea = `
-                                -- cria tabela que relaciona cargos às respctivas areas
-                                CREATE TABLE IF NOT EXISTS tb_cargos_area (
-                                id_cargo_area VARCHAR(50) NOT NULL,
-                                id_cargo VARCHAR (50) NOT NULL,
-                                id_area VARCHAR (50) NOT NULL,
-                                dt_criacao VARCHAR (100) NOT NULL
-                                );
-                              `;
-
-  t.scriptIncludeTableUsers = `
-                                -- cria tabela usuarios
-=======
     
     -- Cria tabela de cargos
                                       CREATE TABLE IF NOT EXISTS tb_cargos (
@@ -186,7 +97,6 @@ module.exports = CreateTables = async () => {
                                     );                                
                                     
     -- cria tabela usuarios
->>>>>>> af291f1d4854bae5e56707c2c5b1495200272b88
                                     CREATE TABLE IF NOT EXISTS tb_usuarios (
                                     id_usuario VARCHAR(50) NOT NULL,
                                     nome VARCHAR (70) NOT NULL,
@@ -204,113 +114,6 @@ module.exports = CreateTables = async () => {
                                     FOREIGN KEY (id_status) REFERENCES tb_status(id_status),
                                     INDEX (nome, email, senha(20))
                                     );
-<<<<<<< HEAD
-                            `;
-
-  t.scriptIncludeTableCriterion = `
-                                        -- cria tabela criterios
-                                        CREATE TABLE IF NOT EXISTS tb_criterios (
-                                        id_criterio VARCHAR(50) NOT NULL,
-                                        ds_criterio VARCHAR (70) NOT NULL,
-                                        dt_cadastro DATETIME NOT NULL,
-                                        dt_alteracao DATETIME NOT NULL,
-                                        id_status INT NOT NULL,
-                                        PRIMARY KEY(id_criterio),
-                                        FOREIGN KEY (id_status) REFERENCES tb_status(id_status),
-                                        INDEX (ds_criterio(20))
-                                        );`;
-
-  t.scriptIncludeTableAreaCriterion = `
-                                            -- cria tabela que relaciona criterios às area
-                                            CREATE TABLE IF NOT EXISTS tb_criterio_area (
-                                            id_criterio_area VARCHAR(50) NOT NULL,
-                                            id_criterio VARCHAR (50) NOT NULL,
-                                            id_area VARCHAR (50) NOT NULL,
-                                            peso INT NOT NULL,
-                                            dt_criacao VARCHAR (100) NOT NULL,
-                                            PRIMARY KEY(id_criterio_area),
-                                            FOREIGN KEY (id_criterio) REFERENCES tb_criterios(id_criterio),
-                                            FOREIGN KEY (id_area) REFERENCES tb_areas(id_area),
-                                            INDEX (peso, dt_criacao)
-                                            );`;
-
-  t.scriptIncludeTableQuestion = `
-                                        -- cria tabela de questoes
-                                        CREATE TABLE IF NOT EXISTS tb_questoes(
-                                        id_questao VARCHAR(50) NOT NULL,
-                                        ds_questao DATETIME NOT NULL,
-                                        id_criterio VARCHAR(50) NOT NULL,
-                                        dt_cadastro DATETIME NOT NULL,
-                                        dt_alteracao DATETIME NOT NULL,
-                                        id_status INT NOT NULL,
-                                        PRIMARY KEY(id_questao),
-                                        FOREIGN KEY (id_status) REFERENCES tb_status(id_status),
-                                        FOREIGN KEY (id_criterio_area) REFERENCES tb_criterio_area(id_criterio_area),
-                                        INDEX (ds_questao)
-                                    );`;
-
-  t.scriptIncludeTableControlMacators = `
-                                            -- cria tabela de controle avaliativo
-                                            CREATE TABLE IF NOT EXISTS tb_marcadores_avaliativos (
-                                            id_marcador VARCHAR(50) NOT NULL,
-                                            ds_marcador VARCHAR(50) NOT NULL,
-                                            periodo INT NOT NULL,
-                                            dt_inicio DATETIME NOT NULL,
-                                            dt_fim DATETIME NOT NULL,
-                                            dt_limite DATETIME NOT NULL,
-                                            dt_cadastro DATETIME NOT NULL,
-                                            dt_alteracao DATETIME NOT NULL,
-                                            id_status INT NOT NULL,
-                                            PRIMARY KEY(id_marcador),
-                                            FOREIGN KEY (id_status) REFERENCES tb_status(id_status),
-                                            INDEX (ds_marcador, dt_inicio, dt_fim, dt_limite, periodo)
-                                            );`;
-
-  t.start = async () => {
-    return await t.DataBase.query(t.scriptIncludeTableStatus)
-      .then(() => {
-        t.DataBase.query(t.scriptIncludeTableDepartment);
-        t.DataBase.query(t.scriptIncludeTablePermissions);
-        t.DataBase.query(t.scriptIncludeTableCriterion);
-        t.DataBase.query(t.scriptIncludeTableControlMacators);
-      })
-      .then(() => {
-        t.DataBase.query(t.scriptIncludeTableResponsibility);
-        t.DataBase.query(t.scriptIncludeTablePermissionsToResponsibilities);
-        t.DataBase.query(t.scriptIncludeTableArea);
-      })
-      .then(() => {
-        t.DataBase.query(t.scriptIncludeTableAreaCriterion);
-        t.DataBase.query(t.scriptIncludeTableUsers);
-        t.DataBase.query(t.scriptIncludeTableresponsibilityToArea);
-      })
-      .then(
-        () => {
-          t.DataBase.query(t.scriptIncludeTableQuestion);
-        },
-        (err) => {
-          return t.DataBase.close().then(() => {
-            throw `$Create Tables: ${err}`;
-          });
-        }
-      )
-      .then(() => {
-        return true;
-      })
-      .catch((err) => {
-        console.log(`Create Tables - MESSAGE: ${err.message}`);
-      });
-  };
-
-  var execute = async () => {
-    let status = await t.start();
-    t.DataBase.close();
-    return status;
-  };
-
-  return await execute();
-};
-=======
                                     
     -- cria tabela criterios
                                     CREATE TABLE IF NOT EXISTS tb_criterios (
@@ -397,4 +200,3 @@ module.exports = CreateTables = async () => {
 
     return await execute();
 };
->>>>>>> af291f1d4854bae5e56707c2c5b1495200272b88

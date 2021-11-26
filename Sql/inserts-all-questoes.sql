@@ -16,8 +16,8 @@ INSERT INTO tb_cargos_permissoes (id_cargo_permissao, id_cargo, id_permissao, dt
 INSERT INTO tb_cargos_permissoes (id_cargo_permissao, id_cargo, id_permissao, dt_criacao) values ('1','2','6', curtime());
 INSERT INTO tb_criterios (id_criterio,ds_criterio,dt_cadastro,dt_alteracao,id_status) values ('1','Habilidade',curtime(),curtime(),1);
 INSERT INTO tb_criterio_area (id_criterio_area,id_criterio,id_area,peso,dt_criacao) values ('1','1','1',10,curtime());
-INSERT INTO tb_questoes (id_questao,ds_questao,id_criterio_area,dt_cadastro,dt_alteracao,id_status) values ('1','Qual sua habilidade??','1',curtime(),curtime(),1);
-INSERT INTO tb_questoes (id_questao,ds_questao,id_criterio_area,dt_cadastro,dt_alteracao,id_status) values ('2','Qual sua habilidade 2??','1',curtime(),curtime(),1);
+INSERT INTO tb_questoes (id_questao,ds_questao,id_criterio,dt_cadastro,dt_alteracao,id_status) values ('1','Qual sua habilidade??','1',curtime(),curtime(),1);
+INSERT INTO tb_questoes (id_questao,ds_questao,id_criterio,dt_cadastro,dt_alteracao,id_status) values ('2','Qual sua habilidade 2??','1',curtime(),curtime(),1);
 INSERT INTO tb_usuarios (id_usuario, nome, email, senha, id_avaliador, id_cargo, id_area, dt_cadastro, dt_alteracao, id_status) values ('1','Giovanni Antoniolli','giovanni.antoniolli@gmail.com','81dc9bdb52d04dc20036dbd8313ed055', null,'2','1',curtime(),curtime(),1);
 INSERT INTO tb_usuarios (id_usuario, nome, email, senha, id_avaliador, id_cargo, id_area, dt_cadastro, dt_alteracao, id_status) values ('2','Gabriel Calixto','gabriel.calixto@gmail.com','81dc9bdb52d04dc20036dbd8313ed055', '1','1','1',curtime(),curtime(),1);
 INSERT INTO tb_usuarios (id_usuario, nome, email, senha, id_avaliador, id_cargo, id_area, dt_cadastro, dt_alteracao, id_status) values ('3','Willian Santos','willian.santos@gmail.com','81dc9bdb52d04dc20036dbd8313ed055', '1','1','1',curtime(),curtime(),1);
