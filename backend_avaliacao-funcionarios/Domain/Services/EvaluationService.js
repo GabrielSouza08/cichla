@@ -8,8 +8,6 @@ EvaluationService.prototype.Initialize = async(req, res, _repositories) => {
 
     data = await _questionRepository.Get(req.body.areaId)
 
-    console.log('dados da questão: ', data)
-
     res.json(NotificationTemplate(true, [], `Inicializado!`));
 };
 
