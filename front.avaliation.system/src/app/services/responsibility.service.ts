@@ -11,8 +11,8 @@ export class ResponsibilityService {
   constructor(private http: HttpClient) { }
 
   Input(userId, name): Observable<any> {
-    var json = { "UserId": userId, "Name": name };
-    return this.http.post(`${environment.apiUrl}v1/responsibility/register`, json);
+    var json = { "description": name };
+    return this.http.post(`${environment.apiUrl}cargo/cadastrar`, json);
   }
 
   Change(userId, id, name): Observable<any> {
@@ -21,12 +21,14 @@ export class ResponsibilityService {
   }
 
   Remove(id, userId): Observable<any> {
-    var json = { "Id": id , "UserId": userId};
-
-    return this.http.request('DELETE',`${environment.apiUrl}v1/responsibility/remove`,{body: json});
+    return this.http.request('DELETE',`${environment.apiUrl}cargo/${id}`);
   }
 
   Get(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}v1/responsibility/get`);
+    return this.http.get(`${environment.apiUrl}cargo`);
+  }
+
+  GetRelationshipResponsibilityArea(): Observable<any> {
+    return this.http.get(`${environment.apiUrl}cargo/relacao-area`);
   }
 }

@@ -13,11 +13,12 @@
                 </div>
 
                 <div *ngIf="statusDataDecisionView">
-                    <!-- <div *ngIf="statusDataLocalView" (click)="getselection('Local')" class="data-decision"><a> Local</a></div> -->
                     <div *ngIf="statusDataDepartmentView" (click)="getselection('Departamento')" class="data-decision"><a> Departamento</a></div>
                     <div *ngIf="statusDataAreaView" (click)="getselection('Área')" class="data-decision"><a> Área</a></div>
                     <div *ngIf="statusDataResponsabilityView" (click)="getselection('Cargo')" class="data-decision"><a> Cargo</a></div>
                     <div *ngIf="statusDataCollaboratorView" (click)="getselection('Colaborador')" class="data-decision"><a> Usuário</a></div>
+                    <div *ngIf="statusDataAreaResposibilitiesView" (click)="getselection('Área & Cargos')" class="data-decision"><a> Área & Cargos</a></div>
+                    <div *ngIf="statusDataResposibilityPermissionsView" (click)="getselection('Cargo & Permissões')" class="data-decision"><a> Cargo & Permissões</a></div>
                 </div>
             </div>
         </div>
@@ -40,8 +41,12 @@
                 <app-responsability></app-responsability>
             </div>
 
-            <div *ngIf="statusShowWeight">
-                <app-weight></app-weight>
+            <div *ngIf="statusShowAreaResposibilities">
+                <app-relationship-area-responsibility></app-relationship-area-responsibility>
+            </div>
+
+            <div *ngIf="statusShowResposibilityPermissions">
+                <app-relationship-responsibility-permission></app-relationship-responsibility-permission>
             </div>
         </div>
     </div>

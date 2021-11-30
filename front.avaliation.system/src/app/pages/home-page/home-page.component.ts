@@ -46,10 +46,10 @@ export class HomePageComponent implements OnInit {
     if (this.userInfo != null) {
       this.userInfo.permissions.forEach(element => {
         switch (element.id) {
-          case 3: { this.statusPersonalReport = true; break;}
-          case 6: { this.statusEvaluation = true; break;}
-          case 2: { this.statusCRUD = true; break;}
-          case 1: { this.statusDashboard = true; break;}
+          case '3': { this.statusPersonalReport = true; break;}
+          case '6': { this.statusEvaluation = true; break;}
+          case '2': { this.statusCRUD = true; break;}
+          case '1': { this.statusDashboard = true; break;}
           default: {
             break;
           }

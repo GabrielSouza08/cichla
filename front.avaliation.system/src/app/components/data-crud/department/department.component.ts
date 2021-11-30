@@ -39,7 +39,7 @@ export class DepartmentComponent implements OnInit {
   public statusConfirmAction: boolean = false;
 
   public dataSource = new MatTableDataSource<DepartmentElements>()
-  public displayedColumns: string[] = ["name", "registerDate", "changeDate", "remove"];
+  public displayedColumns: string[] = ["name", "registerDate", "remove"];
   public rows: DepartmentElements[] = [];
   public messages: Array<string> = []
   public array: Array<any>;

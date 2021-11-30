@@ -36,6 +36,7 @@
     display: grid;
     justify-items: center;
     min-block-size: max-content;
+    padding: 10px;
 }
 
 #select a {

@@ -8,10 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 export interface ResponsibilityElements {
   id: number;
   name: string;
-  departmentId: string;
-  departmentName: string;
   registerDate: string;
-  changeDate: string;
   statusCode: number;
 }
 
@@ -166,7 +163,7 @@ export class ResponsabilityComponent implements OnInit {
         if (res.success == true) {
 
           this.showMessageSucceess('Cargo removido!');
-          this.getListResponsibility();
+          setTimeout(() => { this.getListResponsibility();}, 1500);
 
         } else {
           this.openTable();
@@ -197,7 +194,7 @@ export class ResponsabilityComponent implements OnInit {
         if (res.success == true) {
 
           this.showMessageSucceess('Cargo cadastrado!');
-          this.getListResponsibility();
+          setTimeout(() => { this.getListResponsibility();}, 1500);
 
         } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
       });

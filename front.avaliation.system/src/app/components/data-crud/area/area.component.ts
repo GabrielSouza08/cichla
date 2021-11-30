@@ -1,24 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { AreaService } from 'src/app/services/area.service';
 import { DepartmentService } from 'src/app/services/department.service';
 import { MatTableDataSource } from '@angular/material/table';
-
+import { Observable} from "rxjs";
+import { map, startWith } from "rxjs/operators";
 
 export interface AreaElements {
   id: number;
   name: string;
+  departmentId: string;
+  departmentName: string;
   registerDate: string;
   changeDate: string;
   statusCode: number;
 }
 
-export interface DepartmentElements {
+export interface OptionsElements {
   id: number;
   name: string;
-  registerDate: string;
-  changeDate: string;
-  statusCode: number;
 }
 
 @Component({
@@ -27,6 +27,14 @@ export interface DepartmentElements {
   styleUrls: ['./area.component.css']
 })
 export class AreaComponent implements OnInit {
+
+  public myControl = new FormControl();
+
+  public departmentSet: Array<OptionsElements> = [];
+
+  public filteredDepartment: Observable<Array<OptionsElements>>;
+
+  public departmentFilterCtrl: FormControl = new FormControl();
 
   public statusShowTable: boolean = false;
   public statusShowChange: boolean = false;
@@ -38,7 +46,7 @@ export class AreaComponent implements OnInit {
   public statusConfirmAction: boolean = false;
 
   public dataSource = new MatTableDataSource<AreaElements>()
-  public displayedColumns: Array<string> = ["name", "registerDate", "changeDate", "remove"];
+  public displayedColumns: Array<string> = ["name", "registerDate", "remove"];
   public rows: Array<AreaElements> = [];
   public rowsDepartment: Array<AreaElements> = [];
   public messages: Array<string> = [];
@@ -67,6 +75,7 @@ export class AreaComponent implements OnInit {
     this.getListArea();
     this.formDeclaration();
     this.getDataUser();
+    this.startSearchOptions();
   }
 
   getListArea() {
@@ -88,12 +97,19 @@ export class AreaComponent implements OnInit {
   }
 
   getListDepartment() {
-    this.statusLoading = true;
+    let row: OptionsElements;
+    let list: Array<OptionsElements> = [];
 
     this.departmentService.Get().subscribe(res => {
-      if (res.success == true) { this.rowsDepartment = res.data; } 
-      else {
-        this.showMessageError('Falha na obteção dos dados complementares: Departamento');
+      if (res.success == true) {
+        res.data.forEach(function (element) {
+          row = {
+            name: element.name,
+            id: element.id
+          };
+          if (row) { list.push(row); }
+        });
+        this.departmentSet = list;
       }
     });
   }
@@ -177,7 +193,7 @@ export class AreaComponent implements OnInit {
     this.statusLoading = true;
 
     if (this.accessAction) {
-      this.areaService.Remove(value, this.dataUser.id).subscribe(res => {
+      this.areaService.Remove(value).subscribe(res => {
         this.statusLoading = false;
         if (res.success == true) {
 
@@ -208,8 +224,8 @@ export class AreaComponent implements OnInit {
 
   inputRegister() {
     this.statusLoading = true;
-    if (this.formInput.controls.Area.valid) {
-      this.areaService.Input(this.dataUser.id, this.formInput.controls.Area.value).subscribe(res => {
+    if (this.formInput.controls.Area.valid, this.formInput.controls.DepartmentId.valid) {
+      this.areaService.Input(this.formInput.controls.Area.value, this.formInput.controls.DepartmentId.value).subscribe(res => {
         if (res.success == true) {
 
           this.showMessageSucceess('Área cadastrada!');
@@ -233,6 +249,31 @@ export class AreaComponent implements OnInit {
     this.getListArea();
   }
 
+  startSearchOptions() {
+    this.filteredDepartment = this.departmentFilterCtrl.valueChanges.pipe(
+      startWith(""),
+      map(value => this.filterDepartment(value))
+    );
+
+    this.formInput.controls.DepartmentId.valueChanges.pipe(
+      startWith(""),
+      map(value => this.departmentFilterCtrl.setValue(value))
+    );
+
+    this.formInput.get("DepartmentId").valueChanges.subscribe(value => {
+
+      setTimeout(() => {
+        this.departmentFilterCtrl.setValue(value);  //shows the latest first name
+      })
+    });
+  }
+
+  filterDepartment(value: string = ''): Array<OptionsElements> {
+    const filterValue = value.toLowerCase();
+    return this.departmentSet.filter(
+      option => option.name.toLowerCase().indexOf(filterValue) === 0
+    );
+  }
 
   openTable() {
     this.statusShowTable = true;
@@ -280,7 +321,8 @@ export class AreaComponent implements OnInit {
 
 
     this.formInput = this.formBuilder.group({
-      Area: [null, Validators.required]
+        Area: [null, Validators.required]
+      , DepartmentId: [null, Validators.required]
     });
 
     this.formImport = this.formBuilder.group({

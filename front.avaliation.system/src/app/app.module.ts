@@ -72,6 +72,8 @@ import { RelationshipDepartmentComponent } from './components/data-crud/relation
 import { AnimationNotFoundComponent } from './components/animation-not-found/animation-not-found.component';
 import { AnimationBackgroundComponent } from './components/animation-background/animation-background.component';
 import { QuestionDepartmentComponent } from './components/data-crud/question-department/question-department.component';
+import { RelationshipAreaResponsibilityComponent } from './components/data-crud/relationship-area-responsibility/relationship-area-responsibility.component';
+import { RelationshipResponsibilityPermissionComponent } from './components/data-crud/relationship-responsibility-permission/relationship-responsibility-permission.component';
 
 @NgModule({
   declarations: [
@@ -95,6 +97,8 @@ import { QuestionDepartmentComponent } from './components/data-crud/question-dep
     AnimationNotFoundComponent,
     AnimationBackgroundComponent,
     QuestionDepartmentComponent,
+    RelationshipAreaResponsibilityComponent,
+    RelationshipResponsibilityPermissionComponent,
   ],
   imports: [
     BrowserModule,

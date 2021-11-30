@@ -10,9 +10,9 @@ export class AreaService {
 
   constructor(private http: HttpClient) { }
 
-  Input(userId, name): Observable<any> {
-    var json = { "UserId": userId, "Name": name };
-    return this.http.post(`${environment.apiUrl}v1/area/register`, json);
+  Input(name, idDepartment): Observable<any> {
+    var json = { "description": name,  "idDepartment": idDepartment};
+    return this.http.post(`${environment.apiUrl}area/cadastrar`, json);
   }
 
   Change(userId, id, name): Observable<any> {
@@ -20,14 +20,12 @@ export class AreaService {
     return this.http.patch(`${environment.apiUrl}v1/area/change`, json);
   }
 
-  Remove(id, userId): Observable<any> {
-    var json = { "Id": id, "UserId": userId };
-
-    return this.http.request('DELETE', `${environment.apiUrl}v1/area/remove`, { body: json });
+  Remove(id): Observable<any> {
+    return this.http.request('DELETE', `${environment.apiUrl}area/${id}`);
   }
 
   Get(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}v1/area/get`);
+    return this.http.get(`${environment.apiUrl}area`);
   }
 
 }
