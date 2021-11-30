@@ -4,7 +4,7 @@ const { DB_DATABASE } = process.env;
 
 module.exports = CreateDataBase = async() => {
     var t = this;
-    let accessDb = require("../../../Shared/DbConnection");
+    let accessDb = require("../../../Shared/DbConnectionMySQL");
     t.DataBase = new accessDb(false);
 
     t.scriptCreate = `CREATE DATABASE IF NOT EXISTS ${DB_DATABASE};`;

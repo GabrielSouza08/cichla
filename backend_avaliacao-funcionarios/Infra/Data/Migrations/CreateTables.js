@@ -2,7 +2,7 @@
 
 module.exports = CreateTables = async() => {
     var t = this;
-    let accessDb = require("../../../Shared/DbConnection");
+    let accessDb = require("../../../Shared/DbConnectionMySQL");
     t.DataBase = new accessDb(true);
 
     t.scriptCreateProc = `CREATE PROCEDURE CreateAllTables()

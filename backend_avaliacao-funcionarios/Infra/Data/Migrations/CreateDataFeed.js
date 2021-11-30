@@ -3,7 +3,7 @@ require("dotenv").config();
 
 module.exports = CreateDataBase = async() => {
     var t = this;
-    let accessDb = require("../../../Shared/DbConnection");
+    let accessDb = require("../../../Shared/DbConnectionMySQL");
     t.DataBase = new accessDb(true);
 
     t.scriptCreateDataFead = `CREATE PROCEDURE CreateDataFead()

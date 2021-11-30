@@ -1,4 +1,4 @@
-const dbConn = require("../../../Shared/DbConnection");
+const dbConn = require("../../../Shared/DbConnectionMySQL");
 const uuid = require("uuid");
 
 function AreaDAO() {}
