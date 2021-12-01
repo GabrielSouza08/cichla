@@ -10,6 +10,28 @@ EvaluationService.prototype.Initialize = async(req, res, _repositories) => {
 
     res.json(NotificationTemplate(true, [], `Inicializado!`));
 };
+//#endregion  métodos principais DAO
+
+//#region métodos logicos auxiliares
+var FinalGrade = function(data, _questionRepository) {
+    // Todo: nota maxima 
+    questionsSpotMax = self._questionRepository.questionsSpotMax()
+
+    gradeEvaluation = CalculatorSpot(data.questions)
+    gradeMax = CalculatorSpot(questionsSpotMax)
+
+    return (gradeEvaluation / gradeMax) * 100
+}
+
+var CalculatorSpot = function(questions) {
+    spot = 0
+
+    for (question in questions) {
+        spot += question.grade * question.weight
+    }
+
+    return spot
+}
 
 var NotificationTemplate = function(_status, _data, _message) {
     return {
@@ -18,6 +40,8 @@ var NotificationTemplate = function(_status, _data, _message) {
         msg: [{ text: _message }],
     };
 };
+
+//#endregion métodos auxiliares logicos
 
 module.exports = () => {
     return EvaluationService;
