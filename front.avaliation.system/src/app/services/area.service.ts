@@ -27,5 +27,4 @@ export class AreaService {
   Get(): Observable<any> {
     return this.http.get(`${environment.apiUrl}area`);
   }
-
 }

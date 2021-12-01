@@ -27,8 +27,8 @@ export interface Responsibility {
 }
 
 export interface ElementsFinal {
-  AreaId: number;
-  ResponsabilityId: number;
+  AreaId: string;
+  ResponsibilityId: string;
   Status: string;
 }
 
@@ -138,9 +138,8 @@ export class RelationshipAreaResponsibilityComponent implements OnInit {
           };
           if (row) { list.push(row); }
         });
-        this.areaSet = list;
+        this.areaSet = [...list];
         this.dataSourceArea = new MatTableDataSource([...this.areaSet]);
-        console.log([...this.areaSet])
       }
     });
   }
@@ -170,28 +169,98 @@ export class RelationshipAreaResponsibilityComponent implements OnInit {
     this.openRegister();
   }
 
-  remove(row?: Responsibility) {
+  remove(row?: AreaResposibilities) {
     this.filterRemoveResponsibility(row);
   }
 
-  filterRemoveResponsibility(data: Responsibility) {
+  filterRemoveResponsibility(data: AreaResposibilities) {
     this.dataSourceResposibility = new MatTableDataSource([...this.responsibilitySet]);
 
-    this.dataSourceResposibility = new MatTableDataSource(this.dataSourceResposibility.data.filter(option => option.id != this.formInput.controls.AreaId.value));
-    this.dataSourceAreaResposibility = new MatTableDataSource(this.dataSourceAreaResposibility.data.filter(option => option.id != data.id));
+    this.dataSourceAreaResposibility = new MatTableDataSource(this.dataSourceAreaResposibility.data.filter(option => option.responsibilityId != data.responsibilityId));
 
     if (this.dataSourceAreaResposibility.data.length > 0) {
       this.dataSourceAreaResposibility.data.forEach(element => {
-        this.dataSourceResposibility = new MatTableDataSource(this.dataSourceResposibility.data.filter(option => option.id != element.id));
+        this.dataSourceResposibility = new MatTableDataSource(this.dataSourceResposibility.data.filter(option => option.id != element.responsibilityId));
       });
     }
+    this.dataSourceResposibility._updateChangeSubscription();
+    this.dataSourceAreaResposibility._updateChangeSubscription();
   }
 
   add(row?: Responsibility) {
     this.filterAddResponsibility(row);
   }
   
-  filterAddResponsibility(data: Responsibility){}
+  filterAddResponsibility(data: Responsibility){
+    let areaId: string = this.formInput.controls.AreaId.value;
+    let areaName: string = this.formInput.controls.AreaName.value;
+
+    let object: AreaResposibilities = { id:'', responsibilityId: data.id, responsibilityName: data.name, areaId: areaId, areaName: areaName, registerDate: ''};
+    this.dataSourceAreaResposibility.data.push(object);
+
+    this.dataSourceAreaResposibility.data.forEach(element => {
+      this.dataSourceResposibility = new MatTableDataSource(this.dataSourceResposibility.data.filter(option => option.id != element.responsibilityId));
+    });
+
+    this.dataSourceAreaResposibility._updateChangeSubscription()
+    this.dataSourceResposibility._updateChangeSubscription()
+  }
+
+  inputRegister() {
+    this.analyzeDataRequest();
+    
+    if (this.relationshipCompletion.length == 0) { this.showMessageError('Para salvar altere algum dado!'); }
+    else {
+
+      this.responsibilityService.InputAreaResponsibility(this.relationshipCompletion).subscribe(res => {
+        if (res.success == true) {
+
+          this.showMessageSucceess('Alteração concluída!');
+          setTimeout(() => { this.openTable(); }, 2000);
+          
+        } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
+      });
+    }
+
+
+    this.relationshipCompletion = new Array<ElementsFinal>();
+    this.openTable();
+  }
+
+  analyzeDataRequest(){
+    let remove: Array<AreaResposibilities> = [];
+    let include: Array<AreaResposibilities> = [];
+    
+    this.dataSourceAreaResposibility.data.forEach(element => {
+      if(this.areaResponsibilitySet.filter( option => option.responsibilityId.toString().indexOf(element.responsibilityId) === 0).length == 0 || 
+      this.areaResponsibilitySet.filter(option => option.areaId.toString().indexOf(element.areaId) === 0).length == 0 ){
+        include.push(element);
+      }
+    });
+
+    this.areaResponsibilitySet.forEach(element => {
+      if(this.dataSourceAreaResposibility.data.filter(option => option.responsibilityId.toString().indexOf(element.responsibilityId) === 0 ).length == 0 && 
+      this.dataSourceAreaResposibility.data.filter(option => option.areaId.toString().indexOf(element.areaId) === 0 ).length > 0 ||
+      this.dataSourceAreaResposibility.data.length == 0 &&
+      this.areaResponsibilitySet.filter(option => option.areaId.toString().indexOf(this.formInput.controls.AreaId.value) === 0).length > 0 &&
+      element.areaId == this.formInput.controls.AreaId.value){
+        remove.push(element);
+      }
+    });
+
+    if (remove.length > 0) {
+      remove.forEach(element => {
+        this.relationshipCompletion.push({ AreaId: element.areaId, ResponsibilityId: element.responsibilityId, Status: 'Remove' });
+      });
+    }
+
+    if (include.length > 0) {
+      include.forEach(element => {
+        this.relationshipCompletion.push({ AreaId: element.areaId, ResponsibilityId: element.responsibilityId, Status: 'Include' });
+      });
+    }
+
+  }
   
   startSearchOptions() {
     this.filteredArea = this.areaFilterCtrl.valueChanges.pipe(
@@ -206,14 +275,6 @@ export class RelationshipAreaResponsibilityComponent implements OnInit {
     this.formInput.get("AreaName").valueChanges.subscribe(value => {
       this.areaFilterCtrl.setValue(value)
     });
-
-    // this.areaFilterCtrl.valueChanges.subscribe(value => {
-    //   this.filteredArea = this.areaFilterCtrl.valueChanges.pipe(
-    //     startWith(''),
-    //     map(value => this.filterArea(value))
-    //   );
-    //   console.log(this.filteredArea)
-    // });
   }
 
   startDatasources() {
@@ -231,6 +292,9 @@ export class RelationshipAreaResponsibilityComponent implements OnInit {
   filterAreaResponsibility(value: string = '0'){
     this.startDatasources();
 
+    let name = this.areaSet.filter(option => option.id.toString().indexOf(value) === 0)[0].name
+    this.formInput.controls.AreaName.setValue(name);
+
     const filterValue = value.toString();
 
     if (this.dataSourceAreaResposibility.data.filter(option => option.areaId.toString().indexOf(filterValue) === 0).length > 0) {
@@ -240,16 +304,11 @@ export class RelationshipAreaResponsibilityComponent implements OnInit {
       this.dataSourceAreaResposibility = new MatTableDataSource<AreaResposibilities>();
     }
 
-    // if (this.dataSourceResposibility.data.filter(option => option.id.toString().indexOf(filterValue) === 0).length > 0) {
-    //   this.dataSourceResposibility = new MatTableDataSource(this.dataSourceResposibility.data.filter(option => option.id != Number(filterValue)));
-    // }
-
     if (this.dataSourceAreaResposibility.data.length > 0) {
       this.dataSourceAreaResposibility.data.forEach(element => {
         this.dataSourceResposibility = new MatTableDataSource(this.dataSourceResposibility.data.filter(option => option.id != element.responsibilityId));
       });
     }
-    this.startSearchOptions();
   }
 
   formDeclaration() {
