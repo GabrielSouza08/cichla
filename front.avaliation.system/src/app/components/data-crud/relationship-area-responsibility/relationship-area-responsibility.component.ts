@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { ColaboratorService } from 'src/app/services/colaborator.service';
 import { AreaService } from 'src/app/services/area.service';
 import { ResponsibilityService } from 'src/app/services/responsibility.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -85,7 +84,7 @@ export class RelationshipAreaResponsibilityComponent implements OnInit {
   public accessCloseChange: boolean;
   public idRemove: number;
 
-  constructor(private formBuilder: FormBuilder, private collaboratorService: ColaboratorService, private areaService: AreaService, private responsibilityService: ResponsibilityService) { }
+  constructor(private formBuilder: FormBuilder, private areaService: AreaService, private responsibilityService: ResponsibilityService) { }
 
 
   ngOnInit() {
@@ -232,7 +231,8 @@ export class RelationshipAreaResponsibilityComponent implements OnInit {
     let include: Array<AreaResposibilities> = [];
     
     this.dataSourceAreaResposibility.data.forEach(element => {
-      if(this.areaResponsibilitySet.filter( option => option.responsibilityId.toString().indexOf(element.responsibilityId) === 0).length == 0 || 
+      if(this.areaResponsibilitySet.filter( option => option.responsibilityId.toString().indexOf(element.responsibilityId) === 0 && 
+      option.areaId.toString().indexOf(element.areaId) === 0).length == 0 || 
       this.areaResponsibilitySet.filter(option => option.areaId.toString().indexOf(element.areaId) === 0).length == 0 ){
         include.push(element);
       }
@@ -296,12 +296,14 @@ export class RelationshipAreaResponsibilityComponent implements OnInit {
     this.formInput.controls.AreaName.setValue(name);
 
     const filterValue = value.toString();
+    
+    if(this.dataSourceAreaResposibility.data.length > 0) {
+      if (this.dataSourceAreaResposibility.data.filter(option => option.areaId.toString().indexOf(filterValue) === 0).length > 0) {
+        this.dataSourceAreaResposibility = new MatTableDataSource(this.dataSourceAreaResposibility.data.filter(option => option.areaId.toString().indexOf(filterValue) === 0));
 
-    if (this.dataSourceAreaResposibility.data.filter(option => option.areaId.toString().indexOf(filterValue) === 0).length > 0) {
-      this.dataSourceAreaResposibility = new MatTableDataSource(this.dataSourceAreaResposibility.data.filter(option => option.areaId.toString().indexOf(filterValue) === 0));
-
-    } else {
-      this.dataSourceAreaResposibility = new MatTableDataSource<AreaResposibilities>();
+      } else {
+        this.dataSourceAreaResposibility = new MatTableDataSource<AreaResposibilities>();
+      }
     }
 
     if (this.dataSourceAreaResposibility.data.length > 0) {
