@@ -40,7 +40,7 @@ export class DataControlComponent implements OnInit {
 
   getselection(name: string) {
     switch (name) {
-      case 'Colaborador': { this.openCollaborator(); break; }
+      case 'Usuário': { this.openCollaborator(); break; }
       case 'Departamento': { this.openDepartment(); break; }
       case 'Área': { this.openArea(); break; }
       case 'Cargo': { this.openResponsability(); break; }

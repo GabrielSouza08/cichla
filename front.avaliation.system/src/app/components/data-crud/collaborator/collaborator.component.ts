@@ -9,38 +9,32 @@ import { Observable, ReplaySubject, Subject } from "rxjs";
 import { map, startWith, take, takeUntil } from "rxjs/operators";
 
 export interface CollaboratorElements {
-  id: number;
+  id: string;
   name: string;
   email: string;
-  userName: string;
+  password: string;
   evaluatorName: string;
-  evaluatorId: number;
-  profileName: string;
-  profileId: number;
-  localName: string;
-  localId: number;
-  departmentName: string;
-  departmentId: number;
+  evaluatorId: string;
   areaName: string;
-  areaId: number;
+  areaId: string;
   responsibilityName: string;
-  responsibilityId: number;
+  responsibilityId: string;
   registerDate: string;
   changeDate: string;
   statusCode: number;
 }
 
 export interface OptionsElements {
-  id: number;
+  id: string;
   name: string;
 }
 
 
 export interface OptionsEvaluatorElements {
-  id: number;
+  id: string;
   name: string;
   responsibilityName: string;
-  departmentId: number;
+  areaId: string;
 }
 
 @Component({
@@ -51,6 +45,9 @@ export interface OptionsEvaluatorElements {
 
 export class CollaboratorComponent implements OnInit {
   public myControl = new FormControl();
+
+  toppings: FormGroup;
+
 
   public filteredEvaluator: Observable<Array<OptionsEvaluatorElements>>;
   public filteredLocal: Observable<Array<OptionsElements>>;
@@ -77,14 +74,12 @@ export class CollaboratorComponent implements OnInit {
 
   public dataSource = new MatTableDataSource<CollaboratorElements>()
   // public displayedColumns: string[] = ["name", "userName", "email", "evaluatorName", "profileName", "localName", "departmentName", "areaName", "responsibilityName", "registerDate", "changeDate", "update", "remove"];
-  public displayedColumns: string[] = ["name", "userName", "evaluatorName", "localName", "departmentName", "update", "remove"];
+  public displayedColumns: string[] = ["name", "e-mail", "evaluatorName", "update", "remove"];
   public rowsCollaborator: CollaboratorElements[] = [];
 
-  public evaluatorSet: Array<OptionsEvaluatorElements> = [{ name: 'Indeterminado', id: 0, responsibilityName: 'Indeterminado', departmentId: 0 }];
-  public evaluatorBackupSet: Array<OptionsEvaluatorElements> = [{ name: 'Indeterminado', id: 0, responsibilityName: 'Indeterminado', departmentId: 0 }];
-  public listDepartments: Array<number> = [];
+  public evaluatorSet: Array<OptionsEvaluatorElements> = [{ name: 'Indeterminado', id: '0', responsibilityName: 'Indeterminado', areaId: '0' }];
+  public evaluatorBackupSet: Array<OptionsEvaluatorElements> = [{ name: 'Indeterminado', id: '0', responsibilityName: 'Indeterminado', areaId: '0' }];
   public localSet: Array<OptionsElements> = [];
-  public departmentSet: Array<OptionsElements> = [];
   public areaSet: Array<OptionsElements> = [];
   public responsibilitySet: Array<OptionsElements> = [];
   public profileSet: Array<OptionsElements> = [];
@@ -102,12 +97,14 @@ export class CollaboratorComponent implements OnInit {
 
   public dataUser: any;
 
+  //public isChangePassword: boolean = false;
+
   //Controle de ações(Sim ou não)
   public accessAction: boolean;
   public accessActionRemove: boolean;
-  public idRemove: number;
+  public idRemove: string;
 
-  constructor(private formBuilder: FormBuilder, private collaboratorService: ColaboratorService, private areaService: AreaService, private departmentService: DepartmentService, private responsibilityService: ResponsibilityService) { }
+  constructor(private formBuilder: FormBuilder, private collaboratorService: ColaboratorService, private areaService: AreaService, private responsibilityService: ResponsibilityService) { }
 
   ngOnInit() {
     this.getListCollaborator();
@@ -119,10 +116,8 @@ export class CollaboratorComponent implements OnInit {
 
   ListsUpdate() {
     this.getListEvaluator();
-    this.getListDepartment();
     this.getListArea();
     this.getListResponsibility();
-    this.getListProfile();
   }
 
   getListCollaborator() {
@@ -131,7 +126,7 @@ export class CollaboratorComponent implements OnInit {
       if (res.success == true) {
 
         this.rowsCollaborator = res.data;
-        this.dataSource = new MatTableDataSource(this.rowsCollaborator);
+        this.dataSource = new MatTableDataSource([...this.rowsCollaborator]);
 
         this.statusLoading = false;
         this.openTable();
@@ -147,14 +142,14 @@ export class CollaboratorComponent implements OnInit {
     var row: OptionsEvaluatorElements;
     var list: Array<OptionsEvaluatorElements> = [];
 
-    this.collaboratorService.GetEvaluator().subscribe(res => {
+    this.collaboratorService.Get().subscribe(res => {
       if (res.success == true) {
         res.data.forEach(element => {
           row = {
             id: element.id,
             name: element.name,
             responsibilityName: element.responsibilityName,
-            departmentId: element.departmentId
+            areaId: element.areaId
           };
           if (row != undefined) { list.push(row); }
         });
@@ -162,43 +157,6 @@ export class CollaboratorComponent implements OnInit {
         this.evaluatorBackupSet = list;
       }
     });
-  }
-
-  getListDepartment() {
-    let row: OptionsElements;
-    let list: Array<OptionsElements> = [];
-
-    this.departmentService.Get().subscribe(res => {
-      if (res.success == true) {
-        res.data.forEach(function (element) {
-          row = {
-            name: element.name,
-            id: element.id
-          };
-          if (row) { list.push(row); }
-        });
-        this.departmentSet = list;
-        this.listdepartmentSuccess();
-      }
-    });
-  }
-
-  listdepartmentSuccess() {
-    let list: Array<number> = [];
-    this.departmentSet.forEach(function (value) {
-      switch (value.name) {
-        case 'diretoria':
-        case 'Diretoria':
-        case 'superintendência':
-        case 'Superintendência':
-        case 'superintendencia':
-        case 'Superintendencia':
-          {
-            list.push(value.id)
-          }
-      };
-    });
-    this.listDepartments = list;
   }
 
   getListArea() {
@@ -235,23 +193,6 @@ export class CollaboratorComponent implements OnInit {
     });
   }
 
-  getListProfile() {
-    let row: OptionsElements;
-    let list: Array<OptionsElements> = [];
-    this.collaboratorService.GetProfile().subscribe(res => {
-      if (res.success == true) {
-        res.data.forEach(function (element) {
-          row = {
-            name: element.name,
-            id: element.id
-          };
-          if (row) { list.push(row); }
-        });
-        this.profileSet = list;
-      }
-    });
-  }
-
   getDataUser() {
     this.dataUser = JSON.parse(sessionStorage.getItem("userInfo"));
   }
@@ -261,18 +202,13 @@ export class CollaboratorComponent implements OnInit {
   }
 
   change(row?: CollaboratorElements) {
+    console.log(row)
     this.formChange.controls.ID.setValue(row.id);
     this.formChange.controls.Collaborator.setValue(row.name);
-    this.formChange.controls.UserName.setValue(row.userName);
+    this.formChange.controls.Password.setValue('');
     this.formChange.controls.Email.setValue(row.email);
     this.formChange.controls.EvaluatorId.setValue(row.evaluatorId);
     this.formChange.controls.EvaluatorName.setValue(row.evaluatorName);
-    this.formChange.controls.ProfileId.setValue(row.profileId);
-    this.formChange.controls.ProfileName.setValue(row.profileName);
-    this.formChange.controls.LocalId.setValue(row.localId);
-    this.formChange.controls.LocalName.setValue(row.localName);
-    this.formChange.controls.DepartmentId.setValue(row.departmentId);
-    this.formChange.controls.DepartmentName.setValue(row.departmentName);
     this.formChange.controls.AreaId.setValue(row.areaId);
     this.formChange.controls.AreaName.setValue(row.areaName);
     this.formChange.controls.ResponsibilityId.setValue(row.responsibilityId);
@@ -335,10 +271,10 @@ export class CollaboratorComponent implements OnInit {
     this.openConfirmAction();
   }
 
-  ActionRemove(value: number) {
+  ActionRemove(value: string) {
 
     this.accessActionRemove = false;
-    this.idRemove = 0;
+    this.idRemove ='0';
     this.messageAction = '';
     this.closeConfirmAction();
     this.statusLoading = true;
@@ -362,20 +298,18 @@ export class CollaboratorComponent implements OnInit {
 
   inputChange() {
     this.statusLoading = true;
-    if (this.formChange.controls.Collaborator.valid && this.formChange.controls.Email.valid && this.formChange.controls.ProfileId.valid && this.formChange.controls.LocalId.valid && this.formChange.controls.DepartmentId.valid && this.formChange.controls.AreaId.valid && this.formChange.controls.ResponsibilityId.valid) {
+    if (this.formChange.controls.Collaborator.valid && this.formChange.controls.Email.valid && this.formChange.controls.AreaId.valid && this.formChange.controls.ResponsibilityId.valid) {
       this.collaboratorService.
         Change(
           this.dataUser.id,
           this.formChange.controls.ID.value,
           this.formChange.controls.Collaborator.value,
           this.formChange.controls.Email.value,
-          this.formChange.controls.UserName.value,
+          this.formChange.controls.Password.value,
           this.formChange.controls.EvaluatorId.value,
-          this.formChange.controls.ProfileId.value,
-          this.formChange.controls.LocalId.value,
-          this.formChange.controls.DepartmentId.value,
           this.formChange.controls.AreaId.value,
           this.formChange.controls.ResponsibilityId.value,
+          this.toppings.controls.isChangePassword.value
         ).subscribe(res => {
           if (res.success == true) {
 
@@ -396,11 +330,8 @@ export class CollaboratorComponent implements OnInit {
           this.dataUser.id,
           this.formInput.controls.Collaborator.value,
           this.formInput.controls.Email.value,
-          this.formInput.controls.UserName.value,
+          this.formInput.controls.Password.value,
           this.formInput.controls.EvaluatorId.value,
-          this.formInput.controls.ProfileId.value,
-          this.formInput.controls.LocalId.value,
-          this.formInput.controls.DepartmentId.value,
           this.formInput.controls.AreaId.value,
           this.formInput.controls.ResponsibilityId.value,
         ).subscribe(res => {
@@ -422,35 +353,10 @@ export class CollaboratorComponent implements OnInit {
     console.log('dados de submição de importação', this.formImport.controls.File.value);
 
     this.showMessageSucceess('Importação solicitada!');
-    this.showMessageError('TESTEEEEEEE MESSAGEM DE ERRO!');
     this.getListCollaborator();
   }
 
   startSearchOptions() {
-
-    this.formChange.controls.DepartmentId.valueChanges.pipe(
-      startWith(""),
-      map(value => this.filterListEvaluator(value))
-    );
-
-    this.formChange.get("DepartmentId").valueChanges.subscribe(value => {
-
-      setTimeout(() => {
-        this.filterListEvaluator(value);  //shows the latest first name
-      })
-    });
-
-    this.formInput.controls.DepartmentId.valueChanges.pipe(
-      startWith(""),
-      map(value => this.filterListEvaluator(value))
-    );
-
-    this.formInput.get("DepartmentId").valueChanges.subscribe(value => {
-
-      setTimeout(() => {
-        this.filterListEvaluator(value);  //shows the latest first name
-      })
-    });
 
     this.formChange.controls.EvaluatorName.valueChanges.pipe(
       startWith(""),
@@ -460,26 +366,6 @@ export class CollaboratorComponent implements OnInit {
     this.filteredEvaluator = this.evaluatorFilterCtrl.valueChanges.pipe(
       startWith(""),
       map(value => this.filterEvaluator(value))
-    );
-
-    this.formChange.controls.LocalName.valueChanges.pipe(
-      startWith(""),
-      map(value => this.localFilterCtrl.setValue(value))
-    );
-
-    this.filteredLocal = this.localFilterCtrl.valueChanges.pipe(
-      startWith(""),
-      map(value => this.filterLocal(value))
-    );
-
-    this.formChange.controls.DepartmentName.valueChanges.pipe(
-      startWith(""),
-      map(value => this.departmentFilterCtrl.setValue(value))
-    );
-
-    this.filteredDepartment = this.departmentFilterCtrl.valueChanges.pipe(
-      startWith(""),
-      map(value => this.filterDepartment(value))
     );
 
     this.formChange.controls.AreaName.valueChanges.pipe(
@@ -501,94 +387,11 @@ export class CollaboratorComponent implements OnInit {
       startWith(""),
       map(value => this.filterResponsibility(value))
     );
-
-    this.formChange.controls.ProfileName.valueChanges.pipe(
-      startWith(""),
-      map(value => this.profileFilterCtrl.setValue(value))
-    );
-
-    this.filteredProfile = this.profileFilterCtrl.valueChanges.pipe(
-      startWith(""),
-      map(value => this.filterProfile(value))
-    );
-
-
-
-  }
-
-
-  // Filtro de avaliadores com base no departamento
-  // OBS: o padrão são os departamentos da diretoria e superintendência. 
-  filterListEvaluator(value: number = 0) {
-    this.restartArrayOptions();
-
-    const filterValue = value.toString();
-
-    if (this.evaluatorSet.filter(option => option.id.toString().indexOf(this.formChange.controls.ID.value) === 0).length == 0) {
-      this.evaluatorSet = this.evaluatorSet.filter(option => option.departmentId.toString().indexOf(filterValue) === 0);
-    } else {
-      let listEvaluatorsAll: Array<OptionsEvaluatorElements> = [];
-
-      listEvaluatorsAll = this.evaluatorSet.filter(option => option.departmentId.toString().indexOf(filterValue) === 0);
-
-      this.evaluatorSet = Array<OptionsEvaluatorElements>();
-
-      if (listEvaluatorsAll.length > 0) {
-        listEvaluatorsAll.forEach(element => {
-          if (element.id != this.formChange.controls.ID.value) {
-            this.evaluatorSet.push(element);
-          }
-        });
-      }
-    }
-
-    if (this.listDepartments.length > 0) {
-      let listEvaluators: Array<OptionsEvaluatorElements> = [];
-      this.listDepartments
-        .forEach(id => {
-          listEvaluators = this.evaluatorBackupSet.filter(option => option.departmentId.toString().indexOf(id.toString()) === 0);
-
-          if (listEvaluators.length > 0) {
-            listEvaluators.forEach(element => {
-              if (this.evaluatorSet.filter(option => option.name.indexOf(element.name) === 0).length == 0) {
-                this.evaluatorSet.push(element);
-              }
-            });
-          }
-        });
-    }
-    if(this.evaluatorSet.filter(op => op.id == this.formChange.controls.ID.value).length > 0){ this.evaluatorSet = this.evaluatorSet.filter(op => op.id != this.formChange.controls.ID.value); }
-
-
-    if(this.evaluatorSet.filter(op => op.id == 0).length == 0){ this.evaluatorSet.push({ name: 'Indeterminado', id: 0, responsibilityName: 'Indeterminado', departmentId: 0 }); }
-
-    this.startSearchOptions();
   }
 
   filterEvaluator(value: string = ''): Array<OptionsEvaluatorElements> {
     const filterValue = value.toLowerCase();
     return this.evaluatorSet.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
-  }
-
-  filterProfile(value: string = ''): Array<OptionsElements> {
-    const filterValue = value.toLowerCase();
-    return this.profileSet.filter(
-      option => option.name.toLowerCase().indexOf(filterValue) === 0
-    );
-  }
-
-  filterLocal(value: string = ''): Array<OptionsElements> {
-    const filterValue = value.toLowerCase();
-    return this.localSet.filter(
-      option => option.name.toLowerCase().indexOf(filterValue) === 0
-    );
-  }
-
-  filterDepartment(value: string = ''): Array<OptionsElements> {
-    const filterValue = value.toLowerCase();
-    return this.departmentSet.filter(
-      option => option.name.toLowerCase().indexOf(filterValue) === 0
-    );
   }
 
   filterArea(value: string = ''): Array<OptionsElements> {
@@ -658,44 +461,37 @@ export class CollaboratorComponent implements OnInit {
     this.formChange = this.formBuilder.group({
       ID: [null, Validators.required]
       , Collaborator: [null, Validators.required]
-      , UserName: [null, Validators.required]
+      , Password: [null, Validators.required]
       , Email: [null, Validators.required]
       , EvaluatorId: [null]
       , EvaluatorName: [null]
-      , LocalId: [null, Validators.required]
-      , LocalName: [null, Validators.required]
-      , DepartmentId: [null, Validators.required]
-      , DepartmentName: [null, Validators.required]
       , AreaId: [null, Validators.required]
       , AreaName: [null, Validators.required]
       , ResponsibilityId: [null, Validators.required]
       , ResponsibilityName: [null, Validators.required]
-      , ProfileId: [null, Validators.required]
-      , ProfileName: [null, Validators.required]
       , DateRegister: [null, Validators.required]
     });
 
     this.formInput = this.formBuilder.group({
       Collaborator: [null, Validators.required]
-      , UserName: [null, Validators.required]
+      , Password: [null, Validators.required]
       , Email: [null, Validators.required]
       , EvaluatorId: [null]
       , EvaluatorName: [null]
-      , LocalId: [null, Validators.required]
-      , LocalName: [null, Validators.required]
-      , DepartmentId: [null, Validators.required]
-      , DepartmentName: [null, Validators.required]
       , AreaId: [null, Validators.required]
       , AreaName: [null, Validators.required]
       , ResponsibilityId: [null, Validators.required]
       , ResponsibilityName: [null, Validators.required]
-      , ProfileId: [null, Validators.required]
-      , ProfileName: [null, Validators.required]
     });
 
     this.formImport = this.formBuilder.group({
       File: [null, Validators.required]
       , TypeImport: [null, Validators.required]
     });
+
+    this.toppings = this.formBuilder.group({
+      isChangePassword: false
+    });
+
   }
 }

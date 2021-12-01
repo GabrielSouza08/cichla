@@ -10,56 +10,25 @@ export class ColaboratorService {
 
   constructor(private http: HttpClient) { }
 
-  getColaborators(menagerId) {
-    return this.http.get(`${environment.apiUrl}v1/colaborator/list/${menagerId}`);
-  }
+  Input(userId, name, email, password, idEvaluator, areaId, responsibilityId): Observable<any> {
+    var json = { "userId": userId, "name": name, "email": email, "password": password, "evaluatorId": idEvaluator, "responsibilityId": responsibilityId, "areaId": areaId};
+    return this.http.post(`${environment.apiUrl}usuarios/cadastrar`, json);
+  } 
 
-  getColaboratorDetais(colaboratorId) {
-    return this.http.get(`${environment.apiUrl}v1/colaborator/details/${colaboratorId}`);
-  }
-
-  getBehavior(colaboratorId) {
-    return this.http.get(`${environment.apiUrl}v1/colaborator/comportamento/${colaboratorId}`);
-  }
-
-  getTechnique(colaboratorId) {
-    return this.http.get(`${environment.apiUrl}v1/colaborator/tecnica/${colaboratorId}`);
-  }
-
-  getChallenge(colaboratorName) {
-    return this.http.get(`${environment.apiUrl}v1/colaborator/desafios/${colaboratorName}`);
-  }
-
-
-  Input(userId, name, email, userName, idEvaluator, profileId, localId, departamentId, areaId, responsibilityId): Observable<any> {
-    var json = { "UserId": userId, "Name": name, "Email": email, "UserName": userName, "IdEvaluator": idEvaluator, "ProfileId": profileId, "LocalId": localId, "AreaId": areaId, "DepartamentId": departamentId, "ResponsibilityId": responsibilityId, };
-    return this.http.post(`${environment.apiUrl}v1/collaborator/register`, json);
-  }
-
-  Change(userId, id, name, email, userName, idEvaluator, profileId, localId, departamentId, areaId, responsibilityId): Observable<any> {
-    var json = { "UserId": userId, "Id": id, "Name": name, "Email": email, "UserName": userName, "IdEvaluator": idEvaluator, "ProfileId": profileId, "LocalId": localId, "AreaId": areaId, "DepartamentId": departamentId, "ResponsibilityId": responsibilityId, };
-    return this.http.patch(`${environment.apiUrl}v1/collaborator/change`, json);
+  Change(userId, id, name, email, password, idEvaluator, areaId, responsibilityId, isChangePassword): Observable<any> {
+    var json = { "userId": userId, "id": id, "name": name, "email": email, "password": password, "evaluatorId": idEvaluator, "areaId": areaId, "responsibilityId": responsibilityId,"isChangePassword":isChangePassword };
+    return this.http.put(`${environment.apiUrl}usuarios`, json);
   }
 
   Remove(id, userId): Observable<any> {
-    var json = { "Id": id, "UserId": userId };
-
-    return this.http.request('DELETE', `${environment.apiUrl}v1/collaborator/remove`, { body: json });
+    return this.http.request('DELETE', `${environment.apiUrl}usuarios/${id}`);
   }
 
   Get(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}v1/collaborator/get`);
-  }
-
-  GetProfile(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}v1/collaborator/get-profile`);
+    return this.http.get(`${environment.apiUrl}usuarios`);
   }
 
   GetEvaluator(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}v1/collaborator/get-evaluator`);
-  }
-
-  GetEvaluatorDefined(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}v1/collaborator/get-evaluator/defined`);
+    return this.http.get(`${environment.apiUrl}avaliadores`);
   }
 }

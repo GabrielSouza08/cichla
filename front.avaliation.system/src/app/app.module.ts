@@ -68,7 +68,6 @@ import { DataControlWeightComponent } from './components/data-control-weight/dat
 import { PipesSearchComponent } from './components/pipes/pipes-search/pipes-search.component';
 import { MatSelectSearchClearDirective } from './components/pipes/pipes-search/mat-select-search-clear.directive';
 import { NoteComponent } from './components/data-crud/note/note.component';
-import { RelationshipDepartmentComponent } from './components/data-crud/relationship-department/relationship-department.component';
 import { AnimationNotFoundComponent } from './components/animation-not-found/animation-not-found.component';
 import { AnimationBackgroundComponent } from './components/animation-background/animation-background.component';
 import { QuestionDepartmentComponent } from './components/data-crud/question-department/question-department.component';
@@ -93,7 +92,6 @@ import { RelationshipResponsibilityPermissionComponent } from './components/data
     PipesSearchComponent,
     MatSelectSearchClearDirective,
     NoteComponent,
-    RelationshipDepartmentComponent,
     AnimationNotFoundComponent,
     AnimationBackgroundComponent,
     QuestionDepartmentComponent,

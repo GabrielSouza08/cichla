@@ -120,6 +120,14 @@ th.mat-header-cell {
     text-align: center;
 }
 
+.mat-checkbox-frame {
+    background-color: white !important;
+    border: thin;
+    transition: border-color 90ms cubic-bezier(0, 0, .2, .1);
+    border-width: 2px;
+    border-style: solid;
+}
+
 @media screen and (max-width: 428px) {
     .mat-form-field {
         width: 50vw;

@@ -35,7 +35,7 @@
 
                 <div class="form-group" id="input-filter">
                     <label> Filtro </label>
-                    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Diretoria" #input>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Desenvolvimento" #input>
                 </div>
 
                 <div class="list" id="style-1">
@@ -61,6 +61,7 @@
             <div class="input" *ngIf="statusShowInput">
 
                 <h4> Modificar</h4>
+                <h4> {{formInput.controls.AreaName.value}}</h4>
 
                 <div class="register">
                     <form [formGroup]="formInput" style="width: 100%;">
