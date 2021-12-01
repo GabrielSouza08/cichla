@@ -23,7 +23,7 @@ module.exports = (application) => {
         let _responsabilityRepository =
             new application.Infra.Data.Repositories.ResponsabilityDAO();
         try {
-            _responsabilityServices.ControlRelationResponsabilityArea(
+            _responsabilityServices.ControlRelationResponsibilityArea(
                 req,
                 res,
                 _responsabilityRepository
@@ -41,25 +41,7 @@ module.exports = (application) => {
         let _responsabilityRepository =
             new application.Infra.Data.Repositories.ResponsabilityDAO();
         try {
-            _responsabilityServices.IncludeRelationResponsabilityPermission(
-                req,
-                res,
-                _responsabilityRepository
-            );
-        } catch (err) {
-            res = _notifier.NotificationTemplate(
-                false, [],
-                `Ocorreu uma exceção no processo de cadastro. error: ${err.message}`
-            );
-        }
-    });
-    application.post("/cargo/permissoes", (req, res) => {
-        let _responsabilityServices =
-            new application.Domain.Services.ResponsabilityServices(application);
-        let _responsabilityRepository =
-            new application.Infra.Data.Repositories.ResponsabilityDAO();
-        try {
-            _responsabilityServices.GetPermissions(
+            _responsabilityServices.ControlRelationResponsibilityPermission(
                 req,
                 res,
                 _responsabilityRepository
@@ -92,6 +74,34 @@ module.exports = (application) => {
             new application.Infra.Data.Repositories.ResponsabilityDAO();
         try {
             _responsabilityServices.GetRelationResponsibilityArea(res, _responsabilityRepository);
+        } catch (err) {
+            res = _notifier.NotificationTemplate(
+                false, [],
+                `Ocorreu uma exceção no processo consulta. error: ${err.message}`
+            );
+        }
+    });
+    application.get("/cargo/relacao-permissao", (req, res) => {
+        let _responsabilityServices =
+            new application.Domain.Services.ResponsabilityServices(application);
+        let _responsabilityRepository =
+            new application.Infra.Data.Repositories.ResponsabilityDAO();
+        try {
+            _responsabilityServices.GetResponsibilityPermission(res, _responsabilityRepository);
+        } catch (err) {
+            res = _notifier.NotificationTemplate(
+                false, [],
+                `Ocorreu uma exceção no processo consulta. error: ${err.message}`
+            );
+        }
+    });
+    application.get("/cargo/permissao", (req, res) => {
+        let _responsabilityServices =
+            new application.Domain.Services.ResponsabilityServices(application);
+        let _responsabilityRepository =
+            new application.Infra.Data.Repositories.ResponsabilityDAO();
+        try {
+            _responsabilityServices.GetPermission(res, _responsabilityRepository);
         } catch (err) {
             res = _notifier.NotificationTemplate(
                 false, [],

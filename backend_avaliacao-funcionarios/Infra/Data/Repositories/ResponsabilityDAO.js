@@ -51,34 +51,34 @@ ResponsabilityDAO.prototype.IncludeRelationResponsibilityArea = async function(
                         '${relation.ResponsibilityId}',
                         '${relation.AreaId}',
                         
-                        curtime()
+                        curdate()
                         
                     );`;
 
     conn.query(query).then(() => {});
 };
 
-ResponsabilityDAO.prototype.IncludeRelationResponsibilityPermission = async function(req) {
-    let relation = req.body;
+ResponsabilityDAO.prototype.IncludeRelationResponsibilityPermission = async function(element) {
+    let relation = element;
     let id = uuid.v1();
 
     let conn = new dbConn(true);
 
-    query = `INSERT INTO tb_cargos_permissoes
-                    (
-                      id_cargo_permissao,
-                      id_cargo,
-                      id_permissao,
-                      dt_criacao
-                      
+    query = `INSERT INTO TB_CARGOS_PERMISSOES
+    (
+                    ID_CARGO_PERMISSAO,
+                    ID_CARGO,
+                    ID_PERMISSAO,
+                    DT_CRIACAO
+      
                     )
                     VALUES 
                     (
                         '${id}',
-                        '${relation.id_responsability}',
-                        '${relation.id_permission}',
-                        
-                        curtime()
+                        '${relation.ResponsibilityId}',
+                        '${relation.PermissionId}',
+    
+                        curdate()
                         
                     );`;
 
@@ -93,6 +93,18 @@ ResponsabilityDAO.prototype.RemoveRelationResponsibilityArea = async function(el
     query = `DELETE FROM TB_CARGOS_AREA 
              WHERE ID_CARGO = '${relation.ResponsibilityId}'
              AND ID_AREA = '${relation.AreaId}';`;
+
+    conn.query(query).then(() => {});
+};
+
+ResponsabilityDAO.prototype.RemoveRelationResponsibilityPermission = async function(element) {
+    let relation = element;
+
+    let conn = new dbConn(true);
+
+    query = `DELETE FROM TB_CARGOS_PERMISSOES 
+             WHERE ID_CARGO = '${relation.ResponsibilityId}'
+             AND ID_PERMISSAO = '${relation.PermissionId}';`;
 
     conn.query(query).then(() => {});
 };
@@ -113,8 +125,10 @@ ResponsabilityDAO.prototype.Get = async() => {
 };
 ResponsabilityDAO.prototype.GetPermissions = async() => {
     let conn = new dbConn(true);
-    let query = `select * from tb_permissoes
-                `;
+    let query = ` SELECT 
+                  ID_PERMISSAO AS id,
+                  DS_PERMISSAO AS name
+                  FROM TB_PERMISSOES;`;
 
     return conn.query(query).then((result) => {
         return result;
@@ -135,6 +149,25 @@ ResponsabilityDAO.prototype.GetResponsibilityArea = async() => {
                 ON TGA.ID_AREA = TA.ID_AREA
                 LEFT JOIN TB_CARGOS TG
                 ON TGA.ID_CARGO = TG.ID_CARGO;`;
+
+    return conn.query(query).then((result) => {
+        return result;
+    });
+};
+ResponsabilityDAO.prototype.GetResponsibilityPermission = async() => {
+    let conn = new dbConn(true);
+    let query = `SELECT 
+                    ID_CARGO_PERMISSAO AS id,
+                    TG.ID_CARGO AS responsibilityId,
+                    TG.DS_CARGO AS responsibilityName,
+                    TP.ID_PERMISSAO AS permissionId,
+                    TP.DS_PERMISSAO AS permissionName,
+                    DATE_FORMAT(TGP.DT_CRIACAO ,'%d/%m/%Y') AS registerDate
+                FROM TB_CARGOS_PERMISSOES TGP
+                LEFT JOIN TB_PERMISSOES TP 
+                ON TGP.ID_PERMISSAO = TP.ID_PERMISSAO
+                LEFT JOIN TB_CARGOS TG
+                ON TGP.ID_CARGO = TG.ID_CARGO;`;
 
     return conn.query(query).then((result) => {
         return result;

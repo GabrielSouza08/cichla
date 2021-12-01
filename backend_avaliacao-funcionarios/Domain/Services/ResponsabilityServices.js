@@ -18,18 +18,16 @@ ResponsabilityServices.prototype.Include = async(
     } else res.json(NotificationTemplate(true, [], `Este cargo já existe!`));
 };
 
-ResponsabilityServices.prototype.ControlRelationResponsabilityArea = async(
+ResponsabilityServices.prototype.ControlRelationResponsibilityArea = async(
     req,
     res,
     _responsabilityRepository
 ) => {
     let list = req.body.relation
-    console.log(list)
 
     for (element in list) {
         element = list[element];
 
-        console.log(element)
         if (element.Status == 'Include') {
             await _responsabilityRepository.IncludeRelationResponsibilityArea(element);
         } else if (element.Status == 'Remove') {
@@ -48,16 +46,43 @@ ResponsabilityServices.prototype.GetRelationResponsibilityArea = async(
     res.json(NotificationTemplate(true, data, `Lista de relacões de área e cargo.`));
 };
 
-ResponsabilityServices.prototype.IncludeRelationResponsabilityPermission = async(
+ResponsabilityServices.prototype.ControlRelationResponsibilityPermission = async(
     req,
     res,
     _responsabilityRepository
 ) => {
-    await _responsabilityRepository.IncludeRelationResponsibilityPermission(
-        req
-    );
-    res.json(NotificationTemplate(true, [], `Dados cadastrados com sucesso!`));
+    let list = req.body.relation
+
+    for (element in list) {
+        element = list[element];
+
+        if (element.Status == 'Include') {
+            await _responsabilityRepository.IncludeRelationResponsibilityPermission(element);
+        } else if (element.Status == 'Remove') {
+            await _responsabilityRepository.RemoveRelationResponsibilityPermission(element);
+        }
+    }
+
+    res.json(NotificationTemplate(true, [], `Dados de relação entre permissão e cargo atualizados com sucesso!`));
 };
+
+
+ResponsabilityServices.prototype.GetResponsibilityPermission = async(
+    res,
+    _responsabilityRepository
+) => {
+    let data = await _responsabilityRepository.GetResponsibilityPermission();
+    res.json(NotificationTemplate(true, data, `Lista de relacões de permissão e cargo.`));
+};
+
+ResponsabilityServices.prototype.GetPermission = async(
+    res,
+    _responsabilityRepository
+) => {
+    let data = await _responsabilityRepository.GetPermissions();
+    res.json(NotificationTemplate(true, data, `Lista de permissão.`));
+};
+
 
 ResponsabilityServices.prototype.Get = async(
     res,
