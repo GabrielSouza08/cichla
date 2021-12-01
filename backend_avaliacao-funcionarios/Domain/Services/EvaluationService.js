@@ -9,7 +9,6 @@ EvaluationService.prototype.Initialize = async(req, res, _repositories) => {
     data = await _questionRepository.Get(req.body.areaId)
 
     res.json(NotificationTemplate(true, [], `Inicializado!`));
-    //test
 };
 
 var NotificationTemplate = function(_status, _data, _message) {
