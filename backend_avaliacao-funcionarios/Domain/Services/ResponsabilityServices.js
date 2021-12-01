@@ -18,13 +18,26 @@ ResponsabilityServices.prototype.Include = async(
     } else res.json(NotificationTemplate(true, [], `Este cargo já existe!`));
 };
 
-ResponsabilityServices.prototype.IncludeRelationResponsabilityArea = async(
+ResponsabilityServices.prototype.ControlRelationResponsabilityArea = async(
     req,
     res,
     _responsabilityRepository
 ) => {
-    await _responsabilityRepository.IncludeRelationResponsabilityArea(req);
-    res.json(NotificationTemplate(true, [], `Dados cadastrados com sucesso!`));
+    let list = req.body.relation
+    console.log(list)
+
+    for (element in list) {
+        element = list[element];
+
+        console.log(element)
+        if (element.Status == 'Include') {
+            await _responsabilityRepository.IncludeRelationResponsibilityArea(element);
+        } else if (element.Status == 'Remove') {
+            await _responsabilityRepository.RemoveRelationResponsibilityArea(element);
+        }
+    }
+
+    res.json(NotificationTemplate(true, [], `Dados de relação entre área e cargo atualizados com sucesso!`));
 };
 
 ResponsabilityServices.prototype.GetRelationResponsibilityArea = async(
@@ -35,13 +48,16 @@ ResponsabilityServices.prototype.GetRelationResponsibilityArea = async(
     res.json(NotificationTemplate(true, data, `Lista de relacões de área e cargo.`));
 };
 
-ResponsabilityServices.prototype.IncludeRelationResponsabilityPermission =
-    async(req, res, _responsabilityRepository) => {
-        await _responsabilityRepository.IncludeRelationResponsabilityPermission(
-            req
-        );
-        res.json(NotificationTemplate(true, [], `Dados cadastrados com sucesso!`));
-    };
+ResponsabilityServices.prototype.IncludeRelationResponsabilityPermission = async(
+    req,
+    res,
+    _responsabilityRepository
+) => {
+    await _responsabilityRepository.IncludeRelationResponsibilityPermission(
+        req
+    );
+    res.json(NotificationTemplate(true, [], `Dados cadastrados com sucesso!`));
+};
 
 ResponsabilityServices.prototype.Get = async(
     res,

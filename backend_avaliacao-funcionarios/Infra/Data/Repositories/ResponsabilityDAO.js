@@ -29,10 +29,10 @@ ResponsabilityDAO.prototype.Include = async function(req) {
 
     conn.query(query).then(() => {});
 };
-ResponsabilityDAO.prototype.IncludeRelationResponsabilityArea = async function(
-    req
+ResponsabilityDAO.prototype.IncludeRelationResponsibilityArea = async function(
+    element
 ) {
-    let relation = req.body;
+    let relation = element;
     relation.id = uuid.v1();
 
     let conn = new dbConn(true);
@@ -42,14 +42,14 @@ ResponsabilityDAO.prototype.IncludeRelationResponsabilityArea = async function(
                       id_cargo_area,
                       id_cargo,
                       id_area,
-                      dt_cadastro
+                      dt_criacao
                       
                     )
                     VALUES 
                     (
                         '${relation.id}',
-                        '${relation.id_responsability}',
-                        '${relation.id_area}',
+                        '${relation.ResponsibilityId}',
+                        '${relation.AreaId}',
                         
                         curtime()
                         
@@ -58,9 +58,9 @@ ResponsabilityDAO.prototype.IncludeRelationResponsabilityArea = async function(
     conn.query(query).then(() => {});
 };
 
-ResponsabilityDAO.prototype.IncludeRelationResponsabilityPermission = async function(req) {
+ResponsabilityDAO.prototype.IncludeRelationResponsibilityPermission = async function(req) {
     let relation = req.body;
-    relation.id = uuid.v1();
+    let id = uuid.v1();
 
     let conn = new dbConn(true);
 
@@ -69,18 +69,30 @@ ResponsabilityDAO.prototype.IncludeRelationResponsabilityPermission = async func
                       id_cargo_permissao,
                       id_cargo,
                       id_permissao,
-                      dt_cadastro
+                      dt_criacao
                       
                     )
                     VALUES 
                     (
-                        '${relation.id}',
+                        '${id}',
                         '${relation.id_responsability}',
                         '${relation.id_permission}',
                         
                         curtime()
                         
                     );`;
+
+    conn.query(query).then(() => {});
+};
+
+ResponsabilityDAO.prototype.RemoveRelationResponsibilityArea = async function(element) {
+    let relation = element;
+
+    let conn = new dbConn(true);
+
+    query = `DELETE FROM TB_CARGOS_AREA 
+             WHERE ID_CARGO = '${relation.ResponsibilityId}'
+             AND ID_AREA = '${relation.AreaId}';`;
 
     conn.query(query).then(() => {});
 };

@@ -63,8 +63,10 @@ var resultHandlerInclude = async function(req, res, data, _areaRepository) {
     else if (data.status == false && data.count == 1) {
         let id_sattus = 1;
         let id = await _areaRepository.GetIdByDescription(req.body.description);
+        id = id[0].id;
+
         console.log(id)
-            // await _areaRepository.UpdateStatus(id_sattus, id)
+        await _areaRepository.UpdateStatus(id_sattus, id)
 
         res.json(
             NotificationTemplate(true, [], "Área localizada, atualizada e ativada")

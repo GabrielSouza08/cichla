@@ -23,7 +23,7 @@ module.exports = (application) => {
         let _responsabilityRepository =
             new application.Infra.Data.Repositories.ResponsabilityDAO();
         try {
-            _responsabilityServices.GetRelationResponsibilityArea(
+            _responsabilityServices.ControlRelationResponsabilityArea(
                 req,
                 res,
                 _responsabilityRepository
