@@ -64,7 +64,7 @@ import { DepartmentComponent } from './components/data-crud/department/departmen
 import { ResponsabilityComponent } from './components/data-crud/responsability/responsability.component';
 import { AreaComponent } from './components/data-crud/area/area.component';
 import { WeightComponent } from './components/data-crud/weight/weight.component';
-import { DataControlWeightComponent } from './components/data-control-weight/data-control-weight.component';
+import { DataControlWeightComponent } from './components/data-control-evaluative/data-control-evaluative.component';
 import { PipesSearchComponent } from './components/pipes/pipes-search/pipes-search.component';
 import { MatSelectSearchClearDirective } from './components/pipes/pipes-search/mat-select-search-clear.directive';
 import { NoteComponent } from './components/data-crud/note/note.component';
@@ -73,6 +73,8 @@ import { AnimationBackgroundComponent } from './components/animation-background/
 import { QuestionDepartmentComponent } from './components/data-crud/question-department/question-department.component';
 import { RelationshipAreaResponsibilityComponent } from './components/data-crud/relationship-area-responsibility/relationship-area-responsibility.component';
 import { RelationshipResponsibilityPermissionComponent } from './components/data-crud/relationship-responsibility-permission/relationship-responsibility-permission.component';
+import { ScalesComponent } from './components/data-crud/scales/scales.component';
+import { CriterionComponent } from './components/data-crud/criterion/criterion.component';
 
 @NgModule({
   declarations: [
@@ -97,6 +99,8 @@ import { RelationshipResponsibilityPermissionComponent } from './components/data
     QuestionDepartmentComponent,
     RelationshipAreaResponsibilityComponent,
     RelationshipResponsibilityPermissionComponent,
+    ScalesComponent,
+    CriterionComponent,
   ],
   imports: [
     BrowserModule,

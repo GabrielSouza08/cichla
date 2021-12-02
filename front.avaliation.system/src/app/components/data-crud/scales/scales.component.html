@@ -1,0 +1,108 @@
+<div class="body-responsability">
+    <div *ngIf="statusLoading">
+        <div id="screen-protect" *ngIf="statusLoading"></div>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+
+    <div class="show-action" *ngIf="statusConfirmAction">
+        <div id="screen-protect-action"></div>
+        <div class="confirm-action">
+            <div id="mesage-action">
+                {{messageAction}}
+            </div>
+            <div id="buttons-confirm-action">
+                <a (click)="getValueAction(true)" id="buttons-action"> Sim </a>
+                <a (click)="getValueAction(false)" id="buttons-action"> Não </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-responsability">
+
+        <div class="navbar">
+
+            <a title="Editar ou remover" (click)="openTable()"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true" ></i></a>
+
+        </div>
+
+        <div class="contents">
+
+            <div class="message-success" *ngIf="statusSuccess">
+                {{messageSuccess}}
+            </div>
+
+            <div class="group-responsability" *ngIf="statusShowTable">
+
+                <h4> Escalas </h4>
+
+                <div class="form-group" id="input-filter">
+                    <label> Filtro </label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Gerente" #input>
+                </div>
+
+                <div class="list" id="style-1">
+                    <table mat-table [dataSource]="dataSource">
+
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef> Descrição </th>
+                            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="grade">
+                            <th mat-header-cell *matHeaderCellDef> Nota </th>
+                            <td mat-cell *matCellDef="let element"> {{element.grade}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="update">
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let row" id="update-button" (click)="change(row)">
+                                <a> Editar </a>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                    </table>
+                </div>
+                <span class="required" *ngIf="statusMessage">
+                    <div *ngFor="let message of messages">
+                        {{ message }}
+                    </div>
+                </span>
+            </div>
+
+            <div class="change" *ngIf="statusShowChange">
+
+                <h4> Editar </h4>
+
+                <div class="update">
+                    <form [formGroup]="formChange" (ngSubmit)="inputChange()">
+                        <div class="form-group" id="input-change">
+                            <label for="Name"> Descrição </label>
+                            <input type="text" class="form-control" placeholder="Nome do cargo" formControlName="Name">
+                            <span class="required" *ngIf="!formChange.controls.Name.valid && formChange.controls.Name.touched">Campo Obrigatório</span>
+                        </div>
+
+                        <div id="action-change">
+
+                            <button type="submit"> <a id="save-update" title="Salvar"><i class="fa fa-floppy-o fa-2x" aria-hidden="true"></i></a></button>
+                            <a (click)="openTable()" id="close-update"> Voltar </a>
+                        </div>
+                        <span class="required" *ngIf="statusMessage">
+                            <div *ngFor="let message of messages">
+                                {{ message }}
+                            </div>
+                        </span>
+                    </form>
+                </div>
+                <span class="required" *ngIf="statusMessage">
+                    <div *ngFor="let message of messages">
+                        {{ message }}
+                    </div>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

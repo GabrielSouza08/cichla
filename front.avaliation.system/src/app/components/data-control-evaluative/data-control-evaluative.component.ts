@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-data-control-weight',
-  templateUrl: './data-control-weight.component.html',
-  styleUrls: ['./data-control-weight.component.css']
+  selector: 'app-data-control-evaluative',
+  templateUrl: './data-control-evaluative.component.html',
+  styleUrls: ['./data-control-evaluative.component.css']
 })
 export class DataControlWeightComponent implements OnInit {
 
@@ -30,7 +30,7 @@ export class DataControlWeightComponent implements OnInit {
 
   getselection(name: string) {
     switch (name) {
-      case 'Notas': { this.openNote(); break; }
+      case 'Escalas': { this.openNote(); break; }
       case 'Dapartamento & Questões': { this.openQuestionDepartment(); break; }
     }
 
