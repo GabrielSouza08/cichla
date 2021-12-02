@@ -17,8 +17,8 @@ QuestionDAO.prototype.Include = async function(req) {
         '${question}',
         '${question}',
         '${question}',
-        curtime(),
-        curtime(),
+        curdate(),
+        curdate(),
         1
     );`;
 

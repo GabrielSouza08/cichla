@@ -21,8 +21,8 @@ DepartmentDAO.prototype.Include = async function(req) {
                     (
                         '${department.id}',
                         '${department.ds_departament}',
-                        curtime(),
-                        curtime(),
+                        curdate(),
+                        curdate(),
                         1
                     );`;
 

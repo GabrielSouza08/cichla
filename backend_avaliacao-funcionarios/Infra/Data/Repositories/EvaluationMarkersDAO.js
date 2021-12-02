@@ -21,8 +21,8 @@ EvaluationMarkersDAO.prototype.Include = async function(req) {
     (
         '${eMarker.id}',
         '${eMarker.description}',
-        curtime(),
-        curtime(),
+        curdate(),
+        curdate(),
         1
     );`;
 

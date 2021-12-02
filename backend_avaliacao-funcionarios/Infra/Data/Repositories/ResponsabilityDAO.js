@@ -22,8 +22,8 @@ ResponsabilityDAO.prototype.Include = async function(req) {
                         '${responsability.id}',
                         '${responsability.description}',
                         
-                        curtime(),
-                        curtime(),
+                        curdate(),
+                        curdate(),
                         1
                     );`;
 

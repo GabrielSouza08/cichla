@@ -31,8 +31,8 @@ UserDAO.prototype.Include = async function(req) {
                         '${user.evaluatorId}',
                         '${user.responsibilityId}',
                         '${user.areaId}',
-                        curtime(),
-                        curtime(),
+                        curdate(),
+                        curdate(),
                         1
                     );`;
 
@@ -156,7 +156,7 @@ UserDAO.prototype.Update = async function(req, isChangePassword) {
               id_avaliador = '${user.evaluatorId}',
               id_cargo = '${user.responsibilityId}',
               id_area = '${user.areaId}',
-              dt_alteracao = curtime()              
+              dt_alteracao = curdate()              
               WHERE ID_USUARIO = '${user.id}'
               `;
 

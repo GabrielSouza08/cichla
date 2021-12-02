@@ -23,8 +23,8 @@ AreaDAO.prototype.Include = async function(req) {
         '${area.id}',
         '${area.description}',
         '${area.idDepartment}',
-        curtime(),
-        curtime(),
+        curdate(),
+        curdate(),
         1
     );`;
 
@@ -64,7 +64,7 @@ AreaDAO.prototype.UpdateStatus = async(status, id) => {
     let conn = new dbConn(true);
     let query = `UPDATE TB_AREAS
                  SET ID_STATUS = ${status}, 
-                 DT_ALTERACAO =  curtime() 
+                 DT_ALTERACAO =  curdate() 
                  WHERE ID_AREA = '${id}'`;
     conn.query(query).then(() => {});
 };
