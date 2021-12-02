@@ -14,14 +14,19 @@ UserServices.prototype.Include = async(req, res, _userRepository) => {
     } else await resultHandlerInclude(req, res, data, _userRepository);
 };
 
-UserServices.prototype.Get = async(res, _userRepository) => {
-    let data = await _userRepository.Get();
+UserServices.prototype.Get = async(req, res, _userRepository) => {
+    let data = await _userRepository.Get(req.params.userActive);
     res.json(NotificationTemplate(true, data, "Lista de usuários cadastrados!"));
 };
 
+UserServices.prototype.GetEvaluator = async(res, _userRepository) => {
+    let data = await _userRepository.GetEvaluator();
+    res.json(NotificationTemplate(true, data, "Lista de avaliadores cadastrados!"));
+};
+
 UserServices.prototype.Update = async(req, res, _userRepository) => {
-    let isChangeEmail = req.body.changeEmail;
-    let isChangePassword = req.body.changePassword;
+    let isChangeEmail = req.body.isChangeEmail;
+    let isChangePassword = req.body.isChangePassword;
 
     //verifica a existencia do email
     var data = await _userRepository.ExistenceValidationByEmail(req.body.email);
@@ -42,6 +47,8 @@ UserServices.prototype.Update = async(req, res, _userRepository) => {
             `Usuário está desabilitado, ative-o para atualizar os dados.!` :
             data.count > 1 ?
             `Este usuário não pode ser edidato, contate RH. Dados dupliados!` :
+            data.status == true && data.count == 1 ?
+            `O ${req.body.email} já está cadastrado com outro usuário, tente outro e-mail!` :
             "";
 
         res.json(NotificationTemplate(false, [], message));
@@ -50,7 +57,7 @@ UserServices.prototype.Update = async(req, res, _userRepository) => {
 
 UserServices.prototype.Activate = async(req, res, _userRepository) => {
     let statusActivate = 1;
-    await UpdateStatus(statusActivate, req.body.id, _userRepository);
+    await UpdateStatus(statusActivate, req.params.id, _userRepository);
     res.json(NotificationTemplate(true, [], "Usuário ativado com sucesso!"));
 };
 

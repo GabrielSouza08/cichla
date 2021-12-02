@@ -15,13 +15,28 @@ module.exports = (application) => {
         }
     });
 
-    application.get("/usuarios", (req, res) => {
+    application.get("/usuarios/:userActive", (req, res) => {
         let _userServices = new application.Domain.Services.UserServices(
             application
         );
         let _userRepository = new application.Infra.Data.Repositories.UserDAO();
         try {
-            _userServices.Get(res, _userRepository);
+            _userServices.Get(req, res, _userRepository);
+        } catch (err) {
+            res = this.NotificationTemplate(
+                false, [],
+                `Ocorreu uma exceção no processo consulta. error: ${err.message}`
+            );
+        }
+    });
+
+    application.get("/avaliadores", (req, res) => {
+        let _userServices = new application.Domain.Services.UserServices(
+            application
+        );
+        let _userRepository = new application.Infra.Data.Repositories.UserDAO();
+        try {
+            _userServices.GetEvaluator(res, _userRepository);
         } catch (err) {
             res = this.NotificationTemplate(
                 false, [],

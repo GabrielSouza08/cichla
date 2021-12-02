@@ -28,8 +28,8 @@ UserDAO.prototype.Include = async function(req) {
                         '${user.name}',
                         '${user.email}',
                         '${user.password}',
-                        '${user.avaliatorId}',
-                        '${user.responsibilitId}',
+                        '${user.evaluatorId}',
+                        '${user.responsibilityId}',
                         '${user.areaId}',
                         curtime(),
                         curtime(),
@@ -84,8 +84,10 @@ UserDAO.prototype.Authenticator = async(email) => {
     });
 };
 
-UserDAO.prototype.Get = async(id = '') => {
-    let filter = (id == '') ? "" : `WHERE ID_USUARIO = '${id}'`;
+UserDAO.prototype.Get = async(userActive) => {
+
+    let filter = (userActive == 'true') ? `WHERE USER.id_status = 1` : `WHERE USER.id_status = 2`;
+
     let conn = new dbConn(true);
     let query = `SELECT 
                       USER.id_usuario      AS id,
@@ -115,7 +117,21 @@ UserDAO.prototype.Get = async(id = '') => {
                     ON AREA.id_departamento = DPT.id_departamento
                     LEFT JOIN tb_usuarios as AVALIATOR
                     ON USER.id_avaliador = AVALIATOR.id_usuario
-                    ${filter}`;
+                    ${filter};`;
+
+    return conn.query(query).then((result) => { return result; });
+};
+
+UserDAO.prototype.GetEvaluator = async() => {
+    let conn = new dbConn(true);
+
+    let query = `SELECT DISTINCT
+                    TA.ID_USUARIO AS id,
+                    TA.NOME AS name,
+                    TA.ID_AREA AS areaId
+                FROM TB_USUARIOS TU
+                INNER JOIN TB_USUARIOS TA
+                ON TU.ID_AVALIADOR = TA.ID_USUARIO;`;
 
     return conn.query(query).then((result) => { return result; });
 };
@@ -137,7 +153,7 @@ UserDAO.prototype.Update = async function(req, isChangePassword) {
               ${parameter}
               nome = '${user.name}',
               email = '${user.email}',
-              id_avaliador = '${user.avaliatorId}',
+              id_avaliador = '${user.evaluatorId}',
               id_cargo = '${user.responsibilityId}',
               id_area = '${user.areaId}',
               dt_alteracao = curtime()              
