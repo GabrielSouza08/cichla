@@ -37,7 +37,7 @@
 
             <div class="group-responsability" *ngIf="statusShowTable">
 
-                <h4> Editar ou remover</h4>
+                <h4> Cargos </h4>
 
                 <div class="form-group" id="input-filter">
                     <label> Filtro </label>
@@ -56,18 +56,6 @@
                         <ng-container matColumnDef="registerDate">
                             <th mat-header-cell *matHeaderCellDef> Data de cadastro </th>
                             <td mat-cell *matCellDef="let element"> {{element.registerDate}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="changeDate">
-                            <th mat-header-cell *matHeaderCellDef> Data de modificação </th>
-                            <td mat-cell *matCellDef="let element"> {{element.changeDate}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="update">
-                            <th mat-header-cell *matHeaderCellDef></th>
-                            <td mat-cell *matCellDef="let row" id="update-button" (click)="change(row)">
-                                <a> Editar </a>
-                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="remove">

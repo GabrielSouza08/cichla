@@ -30,7 +30,7 @@ export class ResponsabilityComponent implements OnInit {
 
 
   public dataSource = new MatTableDataSource<ResponsibilityElements>()
-  public displayedColumns: string[] = ["name", "registerDate", "changeDate", "update", "remove"];
+  public displayedColumns: string[] = ["name", "registerDate", "remove"];
   public rows: ResponsibilityElements[] = [];
   public messages: Array<string> = [];
   public messageSuccess: string;
@@ -72,7 +72,7 @@ export class ResponsabilityComponent implements OnInit {
 
       } else {
         this.openTable();
-        res.data.forEach(data => { this.showMessageError(data.message); });
+        res.msg.forEach(message => { this.showMessageError(message.text); });
       }
     });
   }
@@ -167,7 +167,7 @@ export class ResponsabilityComponent implements OnInit {
 
         } else {
           this.openTable();
-          res.data.forEach(data => { this.showMessageError(data.message); });
+          res.msg.forEach(message => { this.showMessageError(message.text); });
         }
       });
     } else { this.showMessageSucceess('Ok!'); }
@@ -182,7 +182,7 @@ export class ResponsabilityComponent implements OnInit {
           this.showMessageSucceess('Cargo atualizado!');
           this.getListResponsibility();
 
-        } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
+        } else { res.msg.forEach(message => { this.showMessageError(message.text); });}
       });
     } else { this.showMessageError('Preencha o campo obrigatório!'); }
   }
@@ -196,7 +196,7 @@ export class ResponsabilityComponent implements OnInit {
           this.showMessageSucceess('Cargo cadastrado!');
           setTimeout(() => { this.getListResponsibility();}, 1500);
 
-        } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
+        } else { res.msg.forEach(message => { this.showMessageError(message.text); }); }
       });
     } else { this.showMessageError('Preencha o campo obrigatório!'); }
   }

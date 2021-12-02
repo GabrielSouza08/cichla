@@ -74,7 +74,7 @@ export class NoteComponent implements OnInit {
 
       } else {
         this.openTable();
-        res.data.forEach(data => { this.showMessageError(data.message); });
+        res.msg.forEach(message => { this.showMessageError(message.text); });
       }
     });
   }
@@ -171,7 +171,7 @@ export class NoteComponent implements OnInit {
 
         } else {
           this.openTable();
-          res.data.forEach(data => { this.showMessageError(data.message); });
+          res.msg.forEach(message => { this.showMessageError(message.text); });
         }
       });
     } else { this.showMessageSucceess('Ok!'); }
@@ -193,7 +193,7 @@ export class NoteComponent implements OnInit {
             this.showMessageSucceess('Nota atualizada!');
             setTimeout(() => { this.getListNote(); }, 2000);
 
-          } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
+          } else { res.msg.forEach(message => { this.showMessageError(message.text); });}
         });
     } else { this.showMessageError('Preencha o campo obrigatório!'); }
   }
@@ -211,7 +211,7 @@ export class NoteComponent implements OnInit {
           this.showMessageSucceess('Nota cadastrada!');
           setTimeout(() => { this.getListNote(); }, 2000);
 
-        } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
+        } else { res.msg.forEach(message => { this.showMessageError(message.text); }); }
       });
     } else { this.showMessageError('Preencha o campo obrigatório!'); }
   }

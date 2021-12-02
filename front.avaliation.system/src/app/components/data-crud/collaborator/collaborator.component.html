@@ -25,6 +25,8 @@
 
             <a title="Cadastrar" (click)="openRegister()"><i  class="fa fa-plus fa-2x" aria-hidden="true"></i></a>
 
+            <a title="Usuários desabilitados" (click)="openTableUserDisabled()"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a>
+
             <a title="importar arquivo" (click)="openImport()"><i class="fa fa-upload fa-2x" aria-hidden="true" ></i></a>
 
         </div>
@@ -87,6 +89,51 @@
                 </span>
             </div>
 
+            <div class="group-collaborator" *ngIf="statusShowTableUserDisabled">
+                <h4> Usuários</h4>
+                <h4> Desabilitados</h4>
+
+                <div class="form-group" id="input-filter" *ngIf="rowsUserDisabled.length > 0">
+                    <label> Filtro </label>
+                    <input matInput (keyup)="applyFilterUserDisabled($event)" placeholder="Ex. Almeida" #input>
+                </div>
+
+                <h2 *ngIf="rowsUserDisabled.length == 0"> Não há usuários desabilitados. </h2>
+
+                <div class="list" id="style-1" *ngIf="rowsUserDisabled.length > 0">
+                    <table mat-table [dataSource]="dataSourceUserDisabled">
+
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef> Colaborador </th>
+                            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="e-mail">
+                            <th mat-header-cell *matHeaderCellDef> E-mail </th>
+                            <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+                        </ng-container>
+
+
+
+                        <ng-container matColumnDef="activate">
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let row" id="update-button" (click)="activate(row)">
+                                <a> Ativar </a>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsUserDisabled"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsUserDisabled;"></tr>
+                    </table>
+                </div>
+
+                <span class="required" *ngIf="statusMessage">
+                    <div *ngFor="let message of messages">
+                        {{ message }}
+                    </div>
+                </span>
+            </div>
+
             <div class="change" *ngIf="statusShowChange">
 
                 <h4> Editar</h4>
@@ -100,15 +147,20 @@
                                     <mat-checkbox formControlName="isChangePassword" color="primary"></mat-checkbox>
 
                                 </p>
+                                <p>
+                                    Atualizar e-mail
+                                    <mat-checkbox formControlName="isChangeEmail" color="primary"></mat-checkbox>
+
+                                </p>
                             </section>
 
                             <label for="Collaborator"> Colaborador </label>
                             <input type="text" class="form-control" placeholder="Nome do colaborador" formControlName="Collaborator">
                             <span class="required" *ngIf="!formChange.controls.Collaborator.valid && formChange.controls.Collaborator.touched">Campo Obrigatório</span>
 
-                            <label for="Email"> E-mail </label>
-                            <input type="email" class="form-control" placeholder="Nome@Dominio.com.br" formControlName="Email" required>
-                            <span class="required" *ngIf="!formChange.controls.Email.valid && formChange.controls.Email.touched">Campo Obrigatório</span>
+                            <label *ngIf="toppings.controls.isChangeEmail.value==true" for="Email"> E-mail </label>
+                            <input *ngIf="toppings.controls.isChangeEmail.value==true" type="email" class="form-control" placeholder="Nome@Dominio.com.br" formControlName="Email" required>
+                            <span class="required" *ngIf="!formChange.controls.Email.valid && formChange.controls.Email.touched && toppings.controls.isChangeEmail.value==true">Campo Obrigatório</span>
 
                             <label *ngIf="toppings.controls.isChangePassword.value==true" for="Collaborator"> Senha </label>
                             <input *ngIf="toppings.controls.isChangePassword.value==true" type="text" class="form-control" placeholder="Senha" formControlName="Password">

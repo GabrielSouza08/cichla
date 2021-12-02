@@ -10,9 +10,6 @@ export class DataControlWeightComponent implements OnInit {
   public statusShowNote: boolean = false;
   public statusDataNoteView: boolean = false;
 
-  public statusShowRelationshipEvaluatingDepartment: boolean = false;
-  public statusDataRelationshipEvaluatingDepartmentView: boolean = false;
-
   public statusShowQuestionDepartment: boolean = false;
   public statusDataQuestionDepartmentView: boolean = false;
 
@@ -34,7 +31,6 @@ export class DataControlWeightComponent implements OnInit {
   getselection(name: string) {
     switch (name) {
       case 'Notas': { this.openNote(); break; }
-      case 'Dapartamento & Avalidador': { this.openRelationship(); break; }
       case 'Dapartamento & Questões': { this.openQuestionDepartment(); break; }
     }
 
@@ -46,22 +42,12 @@ export class DataControlWeightComponent implements OnInit {
   openNote() {
     this.statusShowNote = true;
     this.closeQuestionDepartment();
-    this.closeRelationship();
   }
   closeNote() { this.statusShowNote = false; }
 
-  openRelationship() {
-    this.statusShowRelationshipEvaluatingDepartment = true;
-    this.closeNote();
-    this.closeQuestionDepartment();
-  }
-  closeRelationship() { this.statusShowRelationshipEvaluatingDepartment = false; }
-  
-  
   openQuestionDepartment() {
     this.statusShowQuestionDepartment = true;
     this.closeNote();
-    this.closeRelationship();
   }
   closeQuestionDepartment() { this.statusShowQuestionDepartment = false; }
 
@@ -75,7 +61,6 @@ export class DataControlWeightComponent implements OnInit {
         switch (element.id) {
           case '2': { 
                     this.statusDataNoteView = true;  
-                    this.statusDataRelationshipEvaluatingDepartmentView = true; 
                     this.statusDataQuestionDepartmentView = true; 
                     break; 
           }default: {

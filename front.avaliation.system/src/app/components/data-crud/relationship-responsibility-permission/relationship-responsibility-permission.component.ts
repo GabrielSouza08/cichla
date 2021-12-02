@@ -219,7 +219,7 @@ export class RelationshipResponsibilityPermissionComponent implements OnInit {
           this.showMessageSucceess('Alteração concluída!');
           setTimeout(() => { this.openTable(); }, 2000);
           
-        } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
+        } else { res.msg.forEach(message => { this.showMessageError(message.text); }); }
       });
     }
 

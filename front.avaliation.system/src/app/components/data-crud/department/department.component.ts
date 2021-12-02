@@ -82,7 +82,7 @@ export class DepartmentComponent implements OnInit {
 
       } else {
         this.openTable();
-        res.data.forEach(data => { this.showMessageError(data.message); });
+        res.msg.forEach(message => { this.showMessageError(message.text); });
       }
     });
   }
@@ -176,7 +176,7 @@ export class DepartmentComponent implements OnInit {
           setTimeout(() => {
             this.getListDepartment();
           }, 1000);
-        } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
+        } else { res.msg.forEach(message => { this.showMessageError(message.text); }); }
       });
     } else { this.showMessageSucceess('Ok!'); }
   }
@@ -193,7 +193,7 @@ export class DepartmentComponent implements OnInit {
             this.getListDepartment();
           }, 10000);
 
-        } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
+        } else { res.msg.forEach(message => { this.showMessageError(message.text); }); }
       });
     } else { this.showMessageError('Preencha o campo obrigatório!'); }
   }
@@ -209,7 +209,7 @@ export class DepartmentComponent implements OnInit {
             this.getListDepartment();
           }, 1000);
 
-        } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
+        } else { res.msg.forEach(message => { this.showMessageError(message.text); }); }
       });
     } else { this.showMessageError('Preencha o campo obrigatório!'); }
   }

@@ -64,6 +64,7 @@ export class CollaboratorComponent implements OnInit {
   public profileFilterCtrl: FormControl = new FormControl();
 
   public statusShowTable: boolean = false;
+  public statusShowTableUserDisabled: boolean = false;
   public statusShowChange: boolean = false;
   public statusShowInput: boolean = false;
   public statusShowImport: boolean = false;
@@ -73,9 +74,13 @@ export class CollaboratorComponent implements OnInit {
   public statusConfirmAction: boolean = false;
 
   public dataSource = new MatTableDataSource<CollaboratorElements>()
-  // public displayedColumns: string[] = ["name", "userName", "email", "evaluatorName", "profileName", "localName", "departmentName", "areaName", "responsibilityName", "registerDate", "changeDate", "update", "remove"];
+  public dataSourceUserDisabled = new MatTableDataSource<CollaboratorElements>()
+  
   public displayedColumns: string[] = ["name", "e-mail", "evaluatorName", "update", "remove"];
+  public displayedColumnsUserDisabled: string[] = ["name", "e-mail", "activate"];
+  
   public rowsCollaborator: CollaboratorElements[] = [];
+  public rowsUserDisabled: CollaboratorElements[] = [];
 
   public evaluatorSet: Array<OptionsEvaluatorElements> = [{ name: 'Indeterminado', id: '0', responsibilityName: 'Indeterminado', areaId: '0' }];
   public evaluatorBackupSet: Array<OptionsEvaluatorElements> = [{ name: 'Indeterminado', id: '0', responsibilityName: 'Indeterminado', areaId: '0' }];
@@ -96,8 +101,8 @@ export class CollaboratorComponent implements OnInit {
   public progress: number = 0;
 
   public dataUser: any;
-
-  //public isChangePassword: boolean = false;
+  
+  public oldEmail: string;
 
   //Controle de ações(Sim ou não)
   public accessAction: boolean;
@@ -118,11 +123,13 @@ export class CollaboratorComponent implements OnInit {
     this.getListEvaluator();
     this.getListArea();
     this.getListResponsibility();
+    this.getListUserDisabled();
   }
 
   getListCollaborator() {
     this.statusLoading = true;
-    this.collaboratorService.Get().subscribe(res => {
+    let userActive = true; 
+    this.collaboratorService.Get(userActive).subscribe(res => {
       if (res.success == true) {
 
         this.rowsCollaborator = res.data;
@@ -133,16 +140,24 @@ export class CollaboratorComponent implements OnInit {
 
       } else {
         this.openTable();
-        res.data.forEach(data => { this.showMessageError(data.message); });
+        res.msg.forEach(message => { this.showMessageError(message.text); });
       }
+    });
+  }
+ 
+  getListUserDisabled() {
+    let userActive = false; 
+    this.collaboratorService.Get(userActive).subscribe(res => {
+        this.rowsUserDisabled = res.data;
+        this.dataSourceUserDisabled = new MatTableDataSource([...this.rowsUserDisabled]);
     });
   }
 
   getListEvaluator() {
     var row: OptionsEvaluatorElements;
     var list: Array<OptionsEvaluatorElements> = [];
-
-    this.collaboratorService.Get().subscribe(res => {
+    let userActive = true; 
+    this.collaboratorService.Get(userActive).subscribe(res => {
       if (res.success == true) {
         res.data.forEach(element => {
           row = {
@@ -153,8 +168,8 @@ export class CollaboratorComponent implements OnInit {
           };
           if (row != undefined) { list.push(row); }
         });
-        this.evaluatorSet = list;
-        this.evaluatorBackupSet = list;
+        this.evaluatorSet = [...list];
+        this.evaluatorBackupSet = [...list];
       }
     });
   }
@@ -202,7 +217,10 @@ export class CollaboratorComponent implements OnInit {
   }
 
   change(row?: CollaboratorElements) {
-    console.log(row)
+    this.restartArrayOptions();
+
+    this.evaluatorSet = this.evaluatorSet.filter(option => option.id != row.id);
+    
     this.formChange.controls.ID.setValue(row.id);
     this.formChange.controls.Collaborator.setValue(row.name);
     this.formChange.controls.Password.setValue('');
@@ -215,7 +233,26 @@ export class CollaboratorComponent implements OnInit {
     this.formChange.controls.ResponsibilityName.setValue(row.responsibilityName);
     this.formChange.controls.DateRegister.setValue(row.registerDate);
 
+    this.oldEmail = row.email;
+
     this.openChange();
+  }
+  
+  activate(row?: CollaboratorElements) {
+    console.log(row)
+
+    this.collaboratorService.activate(row.id).subscribe(res => {
+      if (res.success == true) {
+
+        this.showMessageSucceess('Usuário Ativado!');
+
+        setTimeout(() => {
+          this.getListCollaborator();
+          this.ListsUpdate();
+        }, 1500);
+
+      } else { res.msg.forEach(message => { this.showMessageError(message.text); console.log(message); }); }
+    });
   }
 
   getFile(event) {
@@ -285,12 +322,15 @@ export class CollaboratorComponent implements OnInit {
         if (res.success == true) {
 
           this.showMessageSucceess('Remoção concluída!');
-          this.getListCollaborator();
-          this.ListsUpdate();
+          setTimeout(() => {
+            this.getListCollaborator();
+            this.ListsUpdate();
+          }, 1500);
 
         } else {
           this.openTable();
-          res.data.forEach(data => { this.showMessageError(data.message); });
+          
+          res.msg.forEach(message => { this.showMessageError(message.text); });
         }
       });
     } else { this.showMessageSucceess('Ok!'); }
@@ -298,7 +338,16 @@ export class CollaboratorComponent implements OnInit {
 
   inputChange() {
     this.statusLoading = true;
-    if (this.formChange.controls.Collaborator.valid && this.formChange.controls.Email.valid && this.formChange.controls.AreaId.valid && this.formChange.controls.ResponsibilityId.valid) {
+    let statusPassword = (this.toppings.controls.isChangePassword.value)? this.formChange.controls.Password.valid: true;
+    let statusEmail = (this.toppings.controls.isChangeEmail.value)? this.formChange.controls.Email.valid: true;
+
+    if(this.oldEmail == this.formChange.controls.Email.value && this.toppings.controls.isChangeEmail.value){
+      statusEmail = false;
+
+      this.showMessageError('É necessário atualizar o e-mail ou marcar a opção para não atualizar o e-mail');
+    }
+
+    if (this.formChange.controls.Collaborator.valid && this.formChange.controls.Email.valid && this.formChange.controls.AreaId.valid && this.formChange.controls.ResponsibilityId.valid && statusPassword && statusEmail) {
       this.collaboratorService.
         Change(
           this.dataUser.id,
@@ -309,22 +358,28 @@ export class CollaboratorComponent implements OnInit {
           this.formChange.controls.EvaluatorId.value,
           this.formChange.controls.AreaId.value,
           this.formChange.controls.ResponsibilityId.value,
-          this.toppings.controls.isChangePassword.value
+          this.toppings.controls.isChangePassword.value,
+          this.toppings.controls.isChangeEmail.value
+
         ).subscribe(res => {
           if (res.success == true) {
 
             this.showMessageSucceess('Aualização concluída!');
-            this.getListCollaborator();
-            this.ListsUpdate();
 
-          } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
+            setTimeout(() => {
+              this.getListCollaborator();
+              this.ListsUpdate();
+            }, 1500);
+
+          } else { res.msg.forEach(message => { this.showMessageError(message.text); console.log(message); }); }
         });
-    } else { this.showMessageError('Preencha os campos obrigatórios'); }
+    } else { this.showMessageError('Campos obrigatórios não estão válidos'); }
   }
 
   inputRegister() {
     this.statusLoading = true;
-    if (this.formInput.controls.Collaborator.valid && this.formInput.controls.Email.valid, this.formInput.controls.ProfileId.valid && this.formInput.controls.LocalId.valid && this.formInput.controls.DepartmentId.valid && this.formInput.controls.AreaId.valid && this.formInput.controls.ResponsibilityId.valid) {
+    
+    if (this.formInput.controls.Collaborator.valid && this.formInput.controls.Email.valid && this.formInput.controls.AreaId.valid && this.formInput.controls.ResponsibilityId.valid && this.toppings.controls.isChangePassword.valid) {
       this.collaboratorService.
         Input(
           this.dataUser.id,
@@ -338,10 +393,13 @@ export class CollaboratorComponent implements OnInit {
           if (res.success == true) {
 
             this.showMessageSucceess('Cadastro concluído!');
-            this.getListCollaborator();
-            this.ListsUpdate();
-
-          } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
+            
+            setTimeout(() => {
+              this.getListCollaborator();
+              this.ListsUpdate();
+            }, 1500);
+            
+          } else { res.msg.forEach(message => { this.showMessageError(message.text); }); }
         });
     } else { this.showMessageError('Preencha os campos obrigatórios'); }
   }
@@ -417,8 +475,18 @@ export class CollaboratorComponent implements OnInit {
     this.closeChange();
     this.closeRegister();
     this.closeImport();
+    this.closeTableUserDisabled();
   }
   closeTable() { this.statusShowTable = false; }
+ 
+  openTableUserDisabled() {
+    this.statusShowTableUserDisabled = true;
+    this.closeChange();
+    this.closeRegister();
+    this.closeImport();
+    this.closeTable();
+  }
+  closeTableUserDisabled() { this.statusShowTableUserDisabled = false; }
 
   openChange() {
     this.statusShowChange = true;
@@ -426,6 +494,7 @@ export class CollaboratorComponent implements OnInit {
     this.closeRegister();
     this.closeImport();
     this.startSearchOptions();
+    this.closeTableUserDisabled();
   }
   closeChange() { this.statusShowChange = false; }
 
@@ -436,6 +505,7 @@ export class CollaboratorComponent implements OnInit {
     this.closeImport();
     this.formDeclaration();
     this.startSearchOptions();
+    this.closeTableUserDisabled();
   }
   closeRegister() { this.statusShowInput = false; }
 
@@ -446,6 +516,7 @@ export class CollaboratorComponent implements OnInit {
     this.closeRegister();
     this.formDeclaration();
     this.restartArrayOptions();
+    this.closeTableUserDisabled();
   }
   closeImport() { this.statusShowImport = false; }
 
@@ -455,6 +526,11 @@ export class CollaboratorComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+ 
+  applyFilterUserDisabled(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSourceUserDisabled.filter = filterValue.trim().toLowerCase();
   }
 
   formDeclaration() {
@@ -490,7 +566,8 @@ export class CollaboratorComponent implements OnInit {
     });
 
     this.toppings = this.formBuilder.group({
-      isChangePassword: false
+      isChangePassword: false,
+      isChangeEmail: false
     });
 
   }

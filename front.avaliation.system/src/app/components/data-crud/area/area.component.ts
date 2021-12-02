@@ -231,7 +231,7 @@ export class AreaComponent implements OnInit {
           this.showMessageSucceess('Área cadastrada!');
           setTimeout(() => { this.getListArea();}, 1500);
 
-        } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
+        } else { res.msg.forEach(message => { this.showMessageError(message.text); }); }
       });
     } else { this.showMessageError('Preencha os campos obrigatórios!'); }
   }

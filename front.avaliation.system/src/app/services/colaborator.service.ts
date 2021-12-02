@@ -15,17 +15,22 @@ export class ColaboratorService {
     return this.http.post(`${environment.apiUrl}usuarios/cadastrar`, json);
   } 
 
-  Change(userId, id, name, email, password, idEvaluator, areaId, responsibilityId, isChangePassword): Observable<any> {
-    var json = { "userId": userId, "id": id, "name": name, "email": email, "password": password, "evaluatorId": idEvaluator, "areaId": areaId, "responsibilityId": responsibilityId,"isChangePassword":isChangePassword };
+  Change(userId, id, name, email, password, idEvaluator, areaId, responsibilityId, isChangePassword, isChangeEmail): Observable<any> {
+    var json = { "userId": userId, "id": id, "name": name, "email": email, "password": password, "evaluatorId": idEvaluator, "areaId": areaId, "responsibilityId": responsibilityId,"isChangePassword":isChangePassword, "isChangeEmail":isChangeEmail };
     return this.http.put(`${environment.apiUrl}usuarios`, json);
   }
+  
+  activate(id): Observable<any> {
+    return this.http.request('PUT', `${environment.apiUrl}usuarios/ativar/${id}`);
+  }
+
 
   Remove(id, userId): Observable<any> {
     return this.http.request('DELETE', `${environment.apiUrl}usuarios/${id}`);
   }
 
-  Get(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}usuarios`);
+  Get(userActive): Observable<any> {
+    return this.http.get(`${environment.apiUrl}usuarios/${userActive}`);
   }
 
   GetEvaluator(): Observable<any> {

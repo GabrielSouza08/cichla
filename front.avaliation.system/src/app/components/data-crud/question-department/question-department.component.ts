@@ -131,7 +131,7 @@ export class QuestionDepartmentComponent implements OnInit {
         this.dataSourceDepartment = new MatTableDataSource(this.departmentSet);
         this.statusLoading = false;
       } else {
-        res.data.forEach(data => { this.showMessageError(data.message); });
+        res.msg.forEach(message => { this.showMessageError(message.text); });
       }
     });
   }
@@ -142,7 +142,7 @@ export class QuestionDepartmentComponent implements OnInit {
         this.questionsQuantitySet = res.data;
         this.getListDepartment();
       } else {
-        res.data.forEach(data => { this.showMessageError(data.message); });
+        res.msg.forEach(message => { this.showMessageError(message.text); });
       }
     });
   }
@@ -157,7 +157,7 @@ export class QuestionDepartmentComponent implements OnInit {
         if (this.departmentId != undefined) { this.filterListRelationships(this.departmentId) }
       } else {
         this.openTable();
-        res.data.forEach(data => { this.showMessageError(data.message); });
+        res.msg.forEach(message => { this.showMessageError(message.text); });
       }
     });
   }
@@ -194,7 +194,7 @@ export class QuestionDepartmentComponent implements OnInit {
           this.openGroupContext();
         } else {
           this.openTable();
-          res.data.forEach(data => { this.showMessageError(data.message); });
+          res.msg.forEach(message => { this.showMessageError(message.text); });
         }
       });
     } else { this.showMessageSucceess('Ok!'); }
@@ -215,7 +215,7 @@ export class QuestionDepartmentComponent implements OnInit {
             this.getQuestionsDepartment();
             this.openGroupContext();
 
-          } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
+          } else { res.msg.forEach(message => { this.showMessageError(message.text); }); }
         });
     } else { this.showMessageError('Preencha os campos obrigatórios!'); }
   }
@@ -232,7 +232,7 @@ export class QuestionDepartmentComponent implements OnInit {
             this.showMessageSucceess('Questão cadastrada com sucesso!');
             this.getQuestionsDepartment();
             this.openGroupContext();
-          } else { res.data.forEach(data => { this.showMessageError(data.message); }); }
+          } else { res.msg.forEach(message => { this.showMessageError(message.text); }); }
         });
     } else { this.showMessageError('Preencha os campos obrigatórios!'); }
   }

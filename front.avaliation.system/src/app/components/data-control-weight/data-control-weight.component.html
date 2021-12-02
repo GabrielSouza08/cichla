@@ -16,9 +16,6 @@
                     <div *ngIf="statusDataNoteView" (click)="getselection('Notas')" class="data-decision"><a> Notas</a></div>
                 </div>
                 <div *ngIf="statusDataDecisionView">
-                    <div *ngIf="statusDataQuestionDepartmentView" (click)="getselection('Dapartamento & Avalidador')" class="data-decision"><a> Dapartamento & Avalidador</a></div>
-                </div>
-                <div *ngIf="statusDataDecisionView">
                     <div *ngIf="statusDataQuestionDepartmentView" (click)="getselection('Dapartamento & Questões')" class="data-decision"><a> Dapartamento & Questões</a></div>
                 </div>
             </div>
@@ -27,12 +24,6 @@
         <div class="data-space">
             <div *ngIf="statusShowNote">
                 <app-note></app-note>
-            </div>
-        </div>
-
-        <div class="data-space">
-            <div *ngIf="statusShowRelationshipEvaluatingDepartment">
-                <app-relationship-department></app-relationship-department>
             </div>
         </div>
 
