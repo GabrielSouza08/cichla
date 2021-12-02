@@ -10,6 +10,29 @@ EvaluationService.prototype.Initialize = async(req, res, _repositories) => {
 
     res.json(NotificationTemplate(true, [], `Inicializado!`));
 };
+
+
+EvaluationService.prototype.GetScales = async(req, res, _repositories) => {
+    _scaleRepository = new _repositories.ScaleDAO();
+
+    data = await _scaleRepository.Get()
+
+    res.json(NotificationTemplate(true, data, `Lista de escalas!`));
+};
+
+EvaluationService.prototype.UpdateScales = async(req, res, _repositories) => {
+    _scaleRepository = new _repositories.ScaleDAO();
+
+    var data = await _scaleRepository.ValidateByDescription(req.body.description);
+
+    if (data.status == false && data.count == 0) {
+        await _scaleRepository.Update(req.body.description, req.body.id);
+        res.json(NotificationTemplate(true, [], `Escala atualizada com sucesso!`));
+    } else res.json(NotificationTemplate(true, [], `Já existe uma escala com esse nome!`));
+
+
+};
+
 //#endregion  métodos principais DAO
 
 //#region métodos logicos auxiliares
