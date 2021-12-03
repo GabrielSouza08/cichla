@@ -5,6 +5,7 @@ import { CriterionService } from 'src/app/services/criterion.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
+import { SubscribeOnObservable } from 'rxjs/internal-compatibility';
 
 export interface OptionsElements {
   id: string;
@@ -257,8 +258,10 @@ export class QuestionCriterionComponent implements OnInit {
     this.startArrayOptions();
     const filterValue = value.toString();
 
-    if (this.questionCriterionSet.filter(option => option.criterionId.toString().indexOf(filterValue) === 0).length > 0) {
-      this.questionCriterionSet = this.questionCriterionSet.filter(option => option.criterionId.toString().indexOf(filterValue) === 0);
+    if (this.questionCriterionSet.filter(option => option.criterionId === value).length > 0) {
+    
+      this.questionCriterionSet = this.questionCriterionSet.filter(option => option.criterionId === value);
+
     } else {
       this.questionCriterionSet = Array<CriterionQuestionsElements>();
     }

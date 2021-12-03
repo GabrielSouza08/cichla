@@ -205,8 +205,6 @@
       this.statusLoading = true;
       this.formImport.controls.File.setValue(this.file)
   
-      console.log('dados de submição de importação', this.formImport.controls.File.value);
-  
       //  res.data.forEach(data => { this.showMessageError.push(data.message);});
   
       this.showMessageSucceess('Importação solicitada!');
