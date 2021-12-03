@@ -1,8 +1,8 @@
 /* Application/Controllers/AreaController.js */
 module.exports = (application) => {
-    application.post("/area/cadastrar", (req, res) => {
+    application.post("/questao/cadastrar", (req, res) => {
         let _questionServices = new application.Domain.Services.QuestionService();
-        let _questionRepository = new application.Infra.Data.Repositories.AreaDAO();
+        let _questionRepository = new application.Infra.Data.Repositories.QuestionDAO();
         try {
             _questionServices.Include(req, res, _questionRepository);
         } catch (err) {
@@ -13,11 +13,11 @@ module.exports = (application) => {
         }
     });
 
-    application.get("/area: areaId", (req, res) => {
+    application.get("/questao", (req, res) => {
         let _questionServices = new application.Domain.Services.QuestionService();
-        let _questionRepository = new application.Infra.Data.Repositories.AreaDAO();
+        let _questionRepository = new application.Infra.Data.Repositories.QuestionDAO();
         try {
-            _questionServices.Get(req, res, _questionRepository);
+            _questionServices.Get(res, _questionRepository);
         } catch (err) {
             res = this.NotificationTemplate(
                 false, [],
@@ -26,11 +26,37 @@ module.exports = (application) => {
         }
     });
 
-    application.put("/area", (req, res) => {
+    application.get("/questao/by-area/:areaId", (req, res) => {
+        let _questionServices = new application.Domain.Services.QuestionService();
+        let _questionRepository = new application.Infra.Data.Repositories.QuestionDAO();
+        try {
+            _questionServices.GetByAreaId(req, res, _questionRepository);
+        } catch (err) {
+            res = this.NotificationTemplate(
+                false, [],
+                `Ocorreu uma exceção no processo consulta. error: ${err.message}`
+            );
+        }
+    });
+
+    application.get("/questao/quantidade", (req, res) => {
+        let _questionServices = new application.Domain.Services.QuestionService();
+        let _questionRepository = new application.Infra.Data.Repositories.QuestionDAO();
+        try {
+            _questionServices.GetQuantity(res, _questionRepository);
+        } catch (err) {
+            res = this.NotificationTemplate(
+                false, [],
+                `Ocorreu uma exceção no processo consulta. error: ${err.message}`
+            );
+        }
+    });
+
+    application.put("/questao/editar", (req, res) => {
         let _questionServices = new application.Domain.Services.QuestionService(
             application
         );
-        let _questionRepository = new application.Infra.Data.Repositories.AreaDAO();
+        let _questionRepository = new application.Infra.Data.Repositories.QuestionDAO();
 
         try {
             _questionServices.Update(req, res, _questionRepository);
@@ -42,11 +68,11 @@ module.exports = (application) => {
         }
     });
 
-    application.delete("/area/:id", (req, res) => {
+    application.delete("/questao/:id", (req, res) => {
         let _questionServices = new application.Domain.Services.QuestionService(
             application
         );
-        let _questionRepository = new application.Infra.Data.Repositories.AreaDAO();
+        let _questionRepository = new application.Infra.Data.Repositories.QuestionDAO();
 
         try {
             _questionServices.Disable(req, res, _questionRepository);
@@ -58,11 +84,11 @@ module.exports = (application) => {
         }
     });
 
-    application.put("/area/ativar", (req, res) => {
+    application.put("/questao/ativar", (req, res) => {
         let _questionServices = new application.Domain.Services.QuestionService(
             application
         );
-        let _questionRepository = new application.Infra.Data.Repositories.AreaDAO();
+        let _questionRepository = new application.Infra.Data.Repositories.QuestionDAO();
 
         try {
             _questionServices.Activate(req, res, _questionRepository);

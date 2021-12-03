@@ -78,7 +78,7 @@ UserServices.prototype.Authenticator = async(req, res, _userRepository) => {
         permissions = permissions == undefined ? [] : permissions;
 
         result.permissions = permissions;
-        let accessPermissions = permissions.length > 1 ? true : false;
+        let accessPermissions = permissions.length >= 1 ? true : false;
 
         let accessValidation =
             result.password == EncryptCharacters(req.body.password);
