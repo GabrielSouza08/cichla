@@ -117,6 +117,7 @@ export class CollaboratorComponent implements OnInit {
     this.formDeclaration();
     this.getDataUser();
     this.startSearchOptions();
+    this.openTable();
   }
 
   ListsUpdate() {
@@ -136,10 +137,7 @@ export class CollaboratorComponent implements OnInit {
         this.dataSource = new MatTableDataSource([...this.rowsCollaborator]);
 
         this.statusLoading = false;
-        this.openTable();
-
       } else {
-        this.openTable();
         res.msg.forEach(message => { this.showMessageError(message.text); });
       }
     });
@@ -249,6 +247,7 @@ export class CollaboratorComponent implements OnInit {
         setTimeout(() => {
           this.getListCollaborator();
           this.ListsUpdate();
+          this.openTableUserDisabled();
         }, 1500);
 
       } else { res.msg.forEach(message => { this.showMessageError(message.text); console.log(message); }); }
@@ -325,6 +324,7 @@ export class CollaboratorComponent implements OnInit {
           setTimeout(() => {
             this.getListCollaborator();
             this.ListsUpdate();
+            this.openTable();
           }, 1500);
 
         } else {
@@ -369,6 +369,7 @@ export class CollaboratorComponent implements OnInit {
             setTimeout(() => {
               this.getListCollaborator();
               this.ListsUpdate();
+              this.openTable();
             }, 1500);
 
           } else { res.msg.forEach(message => { this.showMessageError(message.text); console.log(message); }); }
@@ -397,6 +398,7 @@ export class CollaboratorComponent implements OnInit {
             setTimeout(() => {
               this.getListCollaborator();
               this.ListsUpdate();
+              this.openTable();
             }, 1500);
             
           } else { res.msg.forEach(message => { this.showMessageError(message.text); }); }
@@ -412,6 +414,7 @@ export class CollaboratorComponent implements OnInit {
 
     this.showMessageSucceess('Importação solicitada!');
     this.getListCollaborator();
+    this.openTable();
   }
 
   startSearchOptions() {

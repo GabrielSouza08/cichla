@@ -8,12 +8,12 @@ import { Router } from '@angular/router';
 })
 export class HomePageComponent implements OnInit {
 
-  public statusDashboard: boolean = true;
+  public statusDashboard: boolean = false;
   public statusDashboardOpen: boolean = false;
-  public statusEvaluation: boolean = true;
+  public statusEvaluation: boolean = false;
   public statusEvaluationCollaboratorOpen: boolean = false;
   public statusEvaluationDepartmentOpen: boolean = false;
-  public statusCRUD: boolean = true;
+  public statusCRUD: boolean = false;
   public statusHomeOpen: boolean = true;
   public statusCRUDColaboratorOpen: boolean = false;
   public statusCRUDWeightOpen: boolean = false;
@@ -75,7 +75,7 @@ export class HomePageComponent implements OnInit {
     this.CRUDColaboratorClose();
     this.CRUDWeightClose();
     this.PersonalReportClose();
-
+    this.homeClose();
   }
   dashboardClose() {
     this.statusDashboardOpen = false;

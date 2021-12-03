@@ -10,8 +10,11 @@ export class DataControlWeightComponent implements OnInit {
   public statusShowNote: boolean = false;
   public statusDataNoteView: boolean = false;
 
-  public statusShowQuestionDepartment: boolean = false;
-  public statusDataQuestionDepartmentView: boolean = false;
+  public statusShowQuestion: boolean = false;
+  public statusDataQuestionView: boolean = false;
+
+  public statusShowCriterion: boolean = false;
+  public statusDataCriterionView: boolean = false;
 
   public statusDataDecisionView: boolean = false;
   public nameDataDecision: string = 'Selecione o dado';
@@ -31,7 +34,8 @@ export class DataControlWeightComponent implements OnInit {
   getselection(name: string) {
     switch (name) {
       case 'Escalas': { this.openNote(); break; }
-      case 'Dapartamento & Questões': { this.openQuestionDepartment(); break; }
+      case 'Critérios': { this.openCriterion(); break; }
+      case 'Questões': { this.openQuestion(); break; }
     }
 
     this.checkOptionsDecision();
@@ -41,15 +45,24 @@ export class DataControlWeightComponent implements OnInit {
 
   openNote() {
     this.statusShowNote = true;
-    this.closeQuestionDepartment();
+    this.closeQuestion();
+    this.closeCriterion();
   }
   closeNote() { this.statusShowNote = false; }
 
-  openQuestionDepartment() {
-    this.statusShowQuestionDepartment = true;
+  openQuestion() {
+    this.statusShowQuestion = true;
     this.closeNote();
+    this.closeCriterion();
   }
-  closeQuestionDepartment() { this.statusShowQuestionDepartment = false; }
+  closeQuestion() { this.statusShowQuestion = false; }
+
+  openCriterion() {
+    this.statusShowCriterion = true;
+    this.closeNote();
+    this.closeQuestion();
+  }
+  closeCriterion() { this.statusShowCriterion = false; }
 
 
 
@@ -61,7 +74,8 @@ export class DataControlWeightComponent implements OnInit {
         switch (element.id) {
           case '2': { 
                     this.statusDataNoteView = true;  
-                    this.statusDataQuestionDepartmentView = true; 
+                    this.statusDataQuestionView = true; 
+                    this.statusDataCriterionView = true; 
                     break; 
           }default: {
             break;

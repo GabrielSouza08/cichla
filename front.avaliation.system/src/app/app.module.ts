@@ -70,7 +70,7 @@ import { MatSelectSearchClearDirective } from './components/pipes/pipes-search/m
 import { NoteComponent } from './components/data-crud/note/note.component';
 import { AnimationNotFoundComponent } from './components/animation-not-found/animation-not-found.component';
 import { AnimationBackgroundComponent } from './components/animation-background/animation-background.component';
-import { QuestionDepartmentComponent } from './components/data-crud/question-department/question-department.component';
+import { QuestionCriterionComponent } from './components/data-crud/question/question.component';
 import { RelationshipAreaResponsibilityComponent } from './components/data-crud/relationship-area-responsibility/relationship-area-responsibility.component';
 import { RelationshipResponsibilityPermissionComponent } from './components/data-crud/relationship-responsibility-permission/relationship-responsibility-permission.component';
 import { ScalesComponent } from './components/data-crud/scales/scales.component';
@@ -96,7 +96,7 @@ import { CriterionComponent } from './components/data-crud/criterion/criterion.c
     NoteComponent,
     AnimationNotFoundComponent,
     AnimationBackgroundComponent,
-    QuestionDepartmentComponent,
+    QuestionCriterionComponent,
     RelationshipAreaResponsibilityComponent,
     RelationshipResponsibilityPermissionComponent,
     ScalesComponent,

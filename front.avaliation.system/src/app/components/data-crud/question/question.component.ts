@@ -1,52 +1,43 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { QuestionService } from 'src/app/services/question.service';
-import { DepartmentService } from 'src/app/services/department.service';
+import { CriterionService } from 'src/app/services/criterion.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
 
 export interface OptionsElements {
-  id: number;
+  id: string;
   name: string;
   quantity: number;
 }
 
 export interface QuestionsQuantityElements {
   descriptionQuantity: number;
-  departmentId: number;
+  criterionId: string;
   statusCode: number;
 }
 
-export interface DepartmentQuestionsElements {
-  id: number;
+export interface CriterionQuestionsElements {
+  id: string;
   description: string;
-  departmentId: number;
-  departmentName: string;
+  criterionId: string;
+  criterionName: string;
   registerDate: string;
   changeDate: string;
   statusCode: number;
 }
 
-export interface OptionsEvaluatorElements {
-  id: number;
-  name: string;
-  responsibilityName: string;
-  departmentId: number;
-  departmentName: string;
-  typeList: number;
-}
-
 @Component({
-  selector: 'app-question-department',
-  templateUrl: './question-department.component.html',
-  styleUrls: ['./question-department.component.css']
+  selector: 'app-question',
+  templateUrl: './question.component.html',
+  styleUrls: ['./question.component.css']
 })
-export class QuestionDepartmentComponent implements OnInit {
+export class QuestionCriterionComponent implements OnInit {
 
-  public filteredDepartment: Observable<Array<OptionsElements>>;
+  public filteredCriterion: Observable<Array<OptionsElements>>;
 
-  public departmentFilterCtrl: FormControl = new FormControl();
+  public criterionFilterCtrl: FormControl = new FormControl();
 
   public statusShowTable: boolean = false;
   public statusShowChange: boolean = false;
@@ -58,13 +49,13 @@ export class QuestionDepartmentComponent implements OnInit {
   public statusSuccess: boolean = false;
   public statusConfirmAction: boolean = false;
 
-  public dataSourceDepartment = new MatTableDataSource<OptionsElements>();
+  public dataSourceCriterion = new MatTableDataSource<OptionsElements>();
 
-  public displayedColumnsDepartment: string[] = ["name", "quantity"];
+  public displayedColumnsCriterion: string[] = ["name", "quantity"];
 
-  public departmentSet: Array<OptionsElements> = [];
+  public criterionSet: Array<OptionsElements> = [];
   public questionsQuantitySet: Array<QuestionsQuantityElements>;
-  public questionDepartmentSet: Array<DepartmentQuestionsElements>;
+  public questionCriterionSet: Array<CriterionQuestionsElements>;
 
   public messages: Array<string> = []
   public messageSuccess: string;
@@ -74,16 +65,16 @@ export class QuestionDepartmentComponent implements OnInit {
   public formChange: FormGroup;
 
   public dataUser: any;
-  public departmentName: string;
-  public departmentId: number = undefined;
+  public criterionName: string;
+  public criterionId: string = undefined;
 
   //Controle de ações(Sim ou não)
   public accessAction: boolean;
   public accessActionRemove: boolean;
   public accessCloseChange: boolean;
-  public idRemove: number;
+  public idRemove: string;
 
-  constructor(private formBuilder: FormBuilder, private questionService: QuestionService, private departmentService: DepartmentService) { }
+  constructor(private formBuilder: FormBuilder, private questionService: QuestionService, private criterionService: CriterionService) { }
 
   ngOnInit() {
     this.getDataUser();
@@ -95,27 +86,26 @@ export class QuestionDepartmentComponent implements OnInit {
 
   ListsUpdate() {
     this.getQuestionsQuantity();
-    this.getQuestionsDepartment();
+    this.getQuestionsCriterion();
   }
 
   getDataUser() {
     this.dataUser = JSON.parse(sessionStorage.getItem("userInfo"));
   }
 
-  getListDepartment() {
+  getListCriterion() {
     this.statusLoading = true;
     let list: Array<OptionsElements> = [];
 
     var questions: Array<QuestionsQuantityElements> = this.questionsQuantitySet;
-
-    this.departmentService.Get().subscribe(res => {
+    
+    this.criterionService.Get().subscribe(res => {
       if (res.success == true) {
-        this.questionsQuantitySet =
-          res.data.forEach(function (element) {
+        res.data.forEach(function (element) {
             let row: OptionsElements;
 
             questions.forEach(quantity => {
-              if (quantity.departmentId == element.id) { row = { id: element.id, name: element.name, quantity: quantity.descriptionQuantity }; }
+              if (quantity.criterionId == element.id) { row = { id: element.id, name: element.name, quantity: quantity.descriptionQuantity }; }
             });
 
             if (!row) 
@@ -127,8 +117,8 @@ export class QuestionDepartmentComponent implements OnInit {
             { list.push(row); }
 
           });
-        this.departmentSet = list;
-        this.dataSourceDepartment = new MatTableDataSource(this.departmentSet);
+        this.criterionSet = list;
+        this.dataSourceCriterion = new MatTableDataSource([...this.criterionSet]);
         this.statusLoading = false;
       } else {
         res.msg.forEach(message => { this.showMessageError(message.text); });
@@ -140,21 +130,21 @@ export class QuestionDepartmentComponent implements OnInit {
     this.questionService.GetQuantity().subscribe(res => {
       if (res.success == true) {
         this.questionsQuantitySet = res.data;
-        this.getListDepartment();
+        this.getListCriterion();
       } else {
         res.msg.forEach(message => { this.showMessageError(message.text); });
       }
     });
   }
 
-  getQuestionsDepartment() {
+  getQuestionsCriterion() {
     this.statusLoading = true;
     this.questionService.Get().subscribe(res => {
       if (res.success == true) {
-        this.questionDepartmentSet = res.data;
-        sessionStorage.setItem('questionDepartmentSet', JSON.stringify(this.questionDepartmentSet));
+        this.questionCriterionSet = res.data;
+        sessionStorage.setItem('questionCriterionSet', JSON.stringify(this.questionCriterionSet));
         this.statusLoading = false;
-        if (this.departmentId != undefined) { this.filterListRelationships(this.departmentId) }
+        if (this.criterionId != undefined) { this.filterListRelationships(this.criterionId) }
       } else {
         this.openTable();
         res.msg.forEach(message => { this.showMessageError(message.text); });
@@ -162,36 +152,39 @@ export class QuestionDepartmentComponent implements OnInit {
     });
   }
 
-  delete(row?: DepartmentQuestionsElements) {
+  delete(row?: CriterionQuestionsElements) {
     this.accessActionRemove = true;
     this.idRemove = row.id;
     this.messageAction = 'Realmente quer remover está descrição?';
     this.openConfirmAction();
   }
 
-  change(row?: DepartmentQuestionsElements) {
+  change(row?: CriterionQuestionsElements) {
     this.accessActionRemove = true;
     this.formChange.controls.ID.setValue(row.id);
     this.formChange.controls.Description.setValue(row.description);
     this.openChange();
   }
 
-  ActionRemove(value: number) {
+  ActionRemove(value: string) {
 
     this.accessActionRemove = false;
-    this.idRemove = 0;
+    this.idRemove = '0';
     this.messageAction = '';
     this.closeConfirmAction();
     this.statusLoading = true;
 
     if (this.accessAction) {
-      this.questionService.Remove(value, this.dataUser.id).subscribe(res => {
+      this.questionService.Remove(value).subscribe(res => {
         this.statusLoading = false;
         if (res.success == true) {
 
           this.showMessageSucceess('Questão removida!');
-          this.getQuestionsDepartment();
+
+          setTimeout(() => { 
+            this.getQuestionsCriterion();
           this.openGroupContext();
+          }, 1500); 
         } else {
           this.openTable();
           res.msg.forEach(message => { this.showMessageError(message.text); });
@@ -206,15 +199,17 @@ export class QuestionDepartmentComponent implements OnInit {
     if (this.formChange.controls.Description.valid) {
       this.questionService.Change(
         this.formChange.controls.ID.value,
-        this.dataUser.id,
         this.formChange.controls.Description.value,
-        this.formChange.controls.DepartmentId.value).subscribe(res => {
+        this.formChange.controls.CriterionId.value).subscribe(res => {
           if (res.success == true) {
 
             this.showMessageSucceess('Questão atualizada com sucesso!');
-            this.getQuestionsDepartment();
-            this.openGroupContext();
 
+            setTimeout(() => { 
+              this.getQuestionsCriterion();
+            this.openGroupContext();
+            }, 1500);
+        
           } else { res.msg.forEach(message => { this.showMessageError(message.text); }); }
         });
     } else { this.showMessageError('Preencha os campos obrigatórios!'); }
@@ -224,60 +219,61 @@ export class QuestionDepartmentComponent implements OnInit {
     this.statusLoading = true;
     if (this.formInput.controls.Description.valid) {
       this.questionService.Input(
-        this.dataUser.id,
         this.formInput.controls.Description.value,
-        this.formInput.controls.DepartmentId.value).subscribe(res => {
+        this.formInput.controls.CriterionId.value).subscribe(res => {
           if (res.success == true) {
 
             this.showMessageSucceess('Questão cadastrada com sucesso!');
-            this.getQuestionsDepartment();
+            setTimeout(() => { 
+              this.getQuestionsCriterion();
             this.openGroupContext();
+            }, 1500); 
           } else { res.msg.forEach(message => { this.showMessageError(message.text); }); }
         });
     } else { this.showMessageError('Preencha os campos obrigatórios!'); }
   }
 
   getLine(row?: OptionsElements) {
-    this.formInput.controls.DepartmentId.setValue(row.id);
-    this.formChange.controls.DepartmentId.setValue(row.id);
-    this.departmentName = row.name;
-    this.departmentId = row.id;
+    this.formInput.controls.CriterionId.setValue(row.id);
+    this.formChange.controls.CriterionId.setValue(row.id);
+    this.criterionName = row.name;
+    this.criterionId = row.id;
     if (row.quantity > 0) { this.openGroupContext(); }
     else { this.openRegister(); }
   }
 
   startArrayOptions() {
-    this.questionDepartmentSet = JSON.parse(sessionStorage.getItem("questionDepartmentSet"));
+    this.questionCriterionSet = JSON.parse(sessionStorage.getItem("questionCriterionSet"));
   }
 
   startSearchOptions() {
-    this.formInput.get("DepartmentId").valueChanges.subscribe(value => {
+    this.formInput.get("CriterionId").valueChanges.subscribe(value => {
       this.filterListRelationships(value);
     });
   }
 
   // Filtro das questões com base no departamento
-  filterListRelationships(value: number = 0) {
+  filterListRelationships(value: string = '0') {
     this.startArrayOptions();
     const filterValue = value.toString();
 
-    if (this.questionDepartmentSet.filter(option => option.departmentId.toString().indexOf(filterValue) === 0).length > 0) {
-      this.questionDepartmentSet = this.questionDepartmentSet.filter(option => option.departmentId.toString().indexOf(filterValue) === 0);
+    if (this.questionCriterionSet.filter(option => option.criterionId.toString().indexOf(filterValue) === 0).length > 0) {
+      this.questionCriterionSet = this.questionCriterionSet.filter(option => option.criterionId.toString().indexOf(filterValue) === 0);
     } else {
-      this.questionDepartmentSet = Array<DepartmentQuestionsElements>();
+      this.questionCriterionSet = Array<CriterionQuestionsElements>();
     }
   }
 
-  filterDepartment(value: string = ''): Array<OptionsElements> {
+  filterCriterion(value: string = ''): Array<OptionsElements> {
     const filterValue = value.toLowerCase();
-    return this.departmentSet.filter(
+    return this.criterionSet.filter(
       option => option.name.toLowerCase().indexOf(filterValue) === 0
     );
   }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSourceDepartment.filter = filterValue.trim().toLowerCase();
+    this.dataSourceCriterion.filter = filterValue.trim().toLowerCase();
   }
 
   getValueAction(value: boolean) {
@@ -323,7 +319,7 @@ export class QuestionDepartmentComponent implements OnInit {
     this.closeRegister();
     this.closeGroupContext();
     this.closeChange();
-    this.clearDataDepartment();
+    this.clearDataCriterion();
     this.formDeclaration();
     this.startArrayOptions();
     this.startSearchOptions();
@@ -359,9 +355,9 @@ export class QuestionDepartmentComponent implements OnInit {
   openConfirmAction() { this.statusConfirmAction = true; }
   closeConfirmAction() { this.statusConfirmAction = false; }
 
-  clearDataDepartment() {
-    this.departmentName = "";
-    this.departmentId = undefined;
+  clearDataCriterion() {
+    this.criterionName = "";
+    this.criterionId = undefined;
   }
 
   clearDescripttionForminput() {
@@ -370,13 +366,13 @@ export class QuestionDepartmentComponent implements OnInit {
 
   formDeclaration() {
     this.formInput = this.formBuilder.group({
-      DepartmentId: [null, Validators.required]
+      CriterionId: [null, Validators.required]
       , Description: [null, Validators.required]
     });
 
     this.formChange = this.formBuilder.group({
       ID: [null, Validators.required]
-      , DepartmentId: [null, Validators.required]
+      , CriterionId: [null, Validators.required]
       , Description: [null, Validators.required]
     });
   }

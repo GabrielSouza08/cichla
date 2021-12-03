@@ -41,10 +41,10 @@
                 </div>
 
                 <div class="list" id="style-1">
-                    <table mat-table [dataSource]="dataSourceDepartment">
+                    <table mat-table [dataSource]="dataSourceCriterion">
 
                         <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef> Departamento </th>
+                            <th mat-header-cell *matHeaderCellDef> Critério </th>
                             <td mat-cell *matCellDef="let element" (click)="getLine(element)"> {{element.name}} </td>
                         </ng-container>
 
@@ -53,8 +53,8 @@
                             <td mat-cell *matCellDef="let element" (click)="getLine(element)"> {{element.quantity}} </td>
                         </ng-container>
 
-                        <tr mat-header-row *matHeaderRowDef="displayedColumnsDepartment"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumnsDepartment;"></tr>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsCriterion"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsCriterion;"></tr>
                     </table>
                 </div>
 
@@ -73,7 +73,7 @@
                 <div class="context-group">
                     <div class="form-group" id="input-context">
                         <div id="group-select">
-                            <div id="select" *ngFor="let question of questionDepartmentSet;">
+                            <div id="select" *ngFor="let question of questionCriterionSet;">
                                 <p>
                                     {{question.description}}
                                 </p>

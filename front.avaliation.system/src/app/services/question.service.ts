@@ -10,28 +10,26 @@ export class QuestionService {
 
   constructor(private http: HttpClient) { }
 
-  Input(userId:number, description: string, departmentId: number): Observable<any> {
-    var json = { "UserId": userId, "Description": description, "DepartmentId": departmentId };
-    return this.http.post(`${environment.apiUrl}v1/questionsDepartment/register`, json);
+  Input(description: string, criterionId: string, ): Observable<any> {
+    var json = { "description": description, "criterionId": criterionId };
+    return this.http.post(`${environment.apiUrl}questao/cadastrar`, json);
   }
 
-  Change(id: number,userId: number, description: string, departmentId: number): Observable<any> {
-    var json = {"Id": id, "UserId": userId, "Description": description, "DepartmentId": departmentId};
-    return this.http.patch(`${environment.apiUrl}v1/questionsDepartment/change`, json);
+  Change(id: number, description: string, criterionId: string): Observable<any> {
+    var json = { "id": id,"description": description, "criterionId": criterionId };
+    return this.http.put(`${environment.apiUrl}questao/editar`, json);
   }
 
-  Remove(id: number,userId: number): Observable<any> {
-    var json = { "Id": id, "UserId": userId };
-
-    return this.http.request('DELETE', `${environment.apiUrl}v1/questionsDepartment/remove`, { body: json });
+  Remove(id: string): Observable<any> {
+    return this.http.request('DELETE', `${environment.apiUrl}questao/${id}`);
   }
 
   Get(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}v1/questionsDepartment/get`);
+    return this.http.get(`${environment.apiUrl}questao`);
   }
 
   GetQuantity(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}v1/questionsDepartment/get/quantity`);
+    return this.http.get(`${environment.apiUrl}questao/quantidade`);
   }
 
 }

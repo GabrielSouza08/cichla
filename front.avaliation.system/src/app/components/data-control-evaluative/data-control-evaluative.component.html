@@ -16,7 +16,10 @@
                     <div *ngIf="statusDataNoteView" (click)="getselection('Escalas')" class="data-decision"><a>Escalas</a></div>
                 </div>
                 <div *ngIf="statusDataDecisionView">
-                    <div *ngIf="statusDataQuestionDepartmentView" (click)="getselection('Dapartamento & Questões')" class="data-decision"><a> Dapartamento & Questões</a></div>
+                    <div *ngIf="statusDataCriterionView" (click)="getselection('Critérios')" class="data-decision"><a>Critérios</a></div>
+                </div>
+                <div *ngIf="statusDataDecisionView">
+                    <div *ngIf="statusDataQuestionView" (click)="getselection('Questões')" class="data-decision"><a>Questões</a></div>
                 </div>
             </div>
         </div>
@@ -28,8 +31,14 @@
         </div>
 
         <div class="data-space">
-            <div *ngIf="statusShowQuestionDepartment">
-                <app-question-department></app-question-department>
+            <div *ngIf="statusShowQuestion">
+                <app-question></app-question>
+            </div>
+        </div>
+
+        <div class="data-space">
+            <div *ngIf="statusShowCriterion">
+                <app-criterion></app-criterion>
             </div>
         </div>
     </div>
