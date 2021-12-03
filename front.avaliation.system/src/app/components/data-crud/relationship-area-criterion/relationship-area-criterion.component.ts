@@ -211,7 +211,6 @@
       let areaId: string = this.formInput.controls.AreaId.value;
       let areaName: string = this.formInput.controls.AreaName.value;
   
-      console.log('row  add', data)
       let object: AreaCriterion = { id:'', criterionId: data.id, criterionName: data.name, areaId: areaId, areaName: areaName, weight: this.valueWeight, registerDate: '', isChange: false};
       this.dataSourceAreaCriterion.data.push(object);
   
@@ -237,9 +236,7 @@
       this.dataSourceAreaCriterion.data = this.dataSourceAreaCriterion.data.filter(options => options.criterionId != data.criterionId)
 
       let status = (this.areaCriterionSet.filter(option => option.criterionId == data.criterionId).length > 0)
-      console.log(status)
-      let object: AreaCriterion = { id:'', criterionId: data.id, criterionName: data.criterionName, areaId: data.areaId, areaName: data.areaName, weight: this.valueWeight, registerDate: '', isChange: status };
-      console.log('object: ', object)
+      let object: AreaCriterion = { id:'', criterionId: data.criterionId, criterionName: data.criterionName, areaId: data.areaId, areaName: data.areaName, weight: this.valueWeight, registerDate: '', isChange: status };
       this.dataSourceAreaCriterion.data.push(object);
   
       this.dataSourceAreaCriterion._updateChangeSubscription()
@@ -249,7 +246,6 @@
     inputRegister() {
       this.analyzeDataRequest();
       
-      console.log('relacao', this.relationshipCompletion)
       if (this.relationshipCompletion.length == 0) { this.showMessageError('Para salvar altere algum dado!'); }
       else {
   
@@ -426,7 +422,6 @@
     ActionIncludeWeight(){
       this.closeConfirmActionWeight();
 
-      console.log('peso:', this.valueWeight)
       this.filterAddCriterion(this.dataCriterionInclude);
 
       this.dataCriterionInclude = undefined;
@@ -437,7 +432,6 @@
     ActionChangeWeight(){
       this.closeConfirmActionWeight();
 
-      console.log('peso:', this.valueWeight)
       this.filterChangeCriterion(this.dataCriterionChange);
 
       this.dataCriterionInclude = undefined;
