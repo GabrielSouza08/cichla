@@ -16,6 +16,9 @@ export class DataControlWeightComponent implements OnInit {
   public statusShowCriterion: boolean = false;
   public statusDataCriterionView: boolean = false;
 
+  public statusShowAreaCriterion: boolean = false;
+  public statusDataAreaCriterionView: boolean = false;
+
   public statusDataDecisionView: boolean = false;
   public nameDataDecision: string = 'Selecione o dado';
   public userInfo: any;
@@ -35,6 +38,7 @@ export class DataControlWeightComponent implements OnInit {
     switch (name) {
       case 'Escalas': { this.openNote(); break; }
       case 'Critérios': { this.openCriterion(); break; }
+      case 'Área & Critério': { this.openAreaCriterion(); break; }
       case 'Questões': { this.openQuestion(); break; }
     }
 
@@ -42,11 +46,11 @@ export class DataControlWeightComponent implements OnInit {
     this.nameDataDecision = name;
   }
 
-
   openNote() {
     this.statusShowNote = true;
     this.closeQuestion();
     this.closeCriterion();
+    this.closeAreaCriterion();
   }
   closeNote() { this.statusShowNote = false; }
 
@@ -54,6 +58,7 @@ export class DataControlWeightComponent implements OnInit {
     this.statusShowQuestion = true;
     this.closeNote();
     this.closeCriterion();
+    this.closeAreaCriterion();
   }
   closeQuestion() { this.statusShowQuestion = false; }
 
@@ -61,8 +66,17 @@ export class DataControlWeightComponent implements OnInit {
     this.statusShowCriterion = true;
     this.closeNote();
     this.closeQuestion();
+    this.closeAreaCriterion();
   }
   closeCriterion() { this.statusShowCriterion = false; }
+
+  openAreaCriterion() {
+    this.statusShowAreaCriterion = true;
+    this.closeNote();
+    this.closeQuestion();
+    this.closeCriterion();
+  }
+  closeAreaCriterion() { this.statusShowAreaCriterion = false; }
 
 
 
@@ -76,6 +90,7 @@ export class DataControlWeightComponent implements OnInit {
                     this.statusDataNoteView = true;  
                     this.statusDataQuestionView = true; 
                     this.statusDataCriterionView = true; 
+                    this.statusDataAreaCriterionView = true; 
                     break; 
           }default: {
             break;

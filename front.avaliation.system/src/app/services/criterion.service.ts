@@ -15,6 +15,11 @@ export class CriterionService {
     return this.http.post(`${environment.apiUrl}criterio/cadastrar`, json);
   }
 
+  InputAreaCriterion(data): Observable<any> {
+    var json = { "relationship": data };
+    return this.http.post(`${environment.apiUrl}criterio/relacao-area`, json);
+  }
+
   Change(id, name): Observable<any> {
     var json = { "id": id, "description": name };
     return this.http.put(`${environment.apiUrl}criterio`, json);
@@ -26,5 +31,9 @@ export class CriterionService {
 
   Get(): Observable<any> {
     return this.http.get(`${environment.apiUrl}criterio`);
+  }
+
+  GetRelationshipCriterionArea(): Observable<any> {
+    return this.http.get(`${environment.apiUrl}criterio/relacao-area`);
   }
 }

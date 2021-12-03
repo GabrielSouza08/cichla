@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
+import { FormsModule } from '@angular/forms';
 
 import { Ng5SliderModule } from 'ng5-slider';
 
@@ -75,6 +76,7 @@ import { RelationshipAreaResponsibilityComponent } from './components/data-crud/
 import { RelationshipResponsibilityPermissionComponent } from './components/data-crud/relationship-responsibility-permission/relationship-responsibility-permission.component';
 import { ScalesComponent } from './components/data-crud/scales/scales.component';
 import { CriterionComponent } from './components/data-crud/criterion/criterion.component';
+import { RelationshipAreaCriterionComponent } from './components/data-crud/relationship-area-criterion/relationship-area-criterion.component';
 
 @NgModule({
   declarations: [
@@ -101,11 +103,13 @@ import { CriterionComponent } from './components/data-crud/criterion/criterion.c
     RelationshipResponsibilityPermissionComponent,
     ScalesComponent,
     CriterionComponent,
+    RelationshipAreaCriterionComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     ReactiveFormsModule,
+    FormsModule,
     Ng5SliderModule,
     Routing,
     BrowserAnimationsModule,

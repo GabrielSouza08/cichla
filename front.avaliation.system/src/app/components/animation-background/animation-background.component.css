@@ -42,6 +42,15 @@ body {
     font-size: 5vh;
 }
 
+.area h3 {
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    text-shadow: #1dc5e727;
+    font-weight: 700;
+    font-size: 4vh;
+}
+
 .circles {
     position: absolute;
     top: 0;
