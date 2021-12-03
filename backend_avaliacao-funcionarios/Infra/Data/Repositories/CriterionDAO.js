@@ -29,8 +29,8 @@ CriterionDAO.prototype.Include = async function(req) {
     conn.query(query).then(() => {});
 };
 
-CriterionDAO.prototype.IncludeRelationshipAreaCriterion = async function(req) {
-    let relationship = req.body;
+CriterionDAO.prototype.IncludeRelationshipAreaCriterion = async function(element) {
+    let relationship = element;
     relationship.id = uuid.v1();
 
     let conn = new dbConn(true);
@@ -46,9 +46,9 @@ CriterionDAO.prototype.IncludeRelationshipAreaCriterion = async function(req) {
     VALUES 
     (
         '${relationship.id}',
-        '${relationship.criterionId}',
-        '${relationship.areaId}',
-        '${relationship.weight}',
+        '${relationship.CriterionId}',
+        '${relationship.AreaId}',
+        ${relationship.Weight},
         curdate()
     );`;
 
@@ -79,6 +79,7 @@ CriterionDAO.prototype.GetRelationshipAreaCriterion = async() => {
                     TC.DS_CRITERIO AS criterionName,
                     TA.ID_AREA AS areaId,
                     TA.DS_AREA AS areaName,
+                    TCA.PESO AS weight,
                     DATE_FORMAT(TCA.DT_CRIACAO,'%d/%m/%Y') AS registerDate
                 FROM TB_CRITERIO_AREA AS TCA
                 INNER JOIN TB_AREAS AS TA
@@ -106,6 +107,19 @@ CriterionDAO.prototype.UpdateStatus = async(status, id) => {
                  SET ID_STATUS = ${status}, 
                  DT_ALTERACAO =  curdate() 
                  WHERE ID_CRITERIO = '${id}'`;
+    conn.query(query).then(() => {});
+};
+
+CriterionDAO.prototype.ChangeRelationshipAreaCriterion = async function(element) {
+    let relation = element;
+
+    let conn = new dbConn(true);
+
+    query = `UPDATE TB_CRITERIO_AREA 
+             SET PESO = ${relation.Weight}
+             WHERE ID_AREA = '${relation.AreaId}'
+             AND ID_CRITERIO = '${relation.CriterionId}';`;
+
     conn.query(query).then(() => {});
 };
 

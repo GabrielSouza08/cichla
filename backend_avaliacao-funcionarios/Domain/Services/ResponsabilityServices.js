@@ -24,6 +24,7 @@ ResponsabilityServices.prototype.ControlRelationResponsibilityArea = async(
     _responsabilityRepository
 ) => {
     let list = req.body.relation
+    console.log('relacao: ', req.body.relation)
 
     for (element in list) {
         element = list[element];

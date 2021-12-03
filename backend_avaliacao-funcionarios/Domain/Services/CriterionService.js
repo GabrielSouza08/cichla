@@ -13,12 +13,21 @@ CriterionService.prototype.Include = async(req, res, _criterionRepository) => {
 };
 
 CriterionService.prototype.ControlRelationshipAreaCriterion = async(req, res, _criterionRepository) => {
-    var data = await _criterionRepository.ValidateByName(req.body.description);
+    let list = req.body.relationship
 
-    if (data.status == false && data.count == 0) {
-        await _criterionRepository.IncludeRelationshipAreaCriterion(req);
-        res.json(NotificationTemplate(true, [], `Dados cadastrados com sucesso!`));
-    } else await resultHandlerInclude(req, res, data, _criterionRepository);
+    for (element in list) {
+        element = list[element];
+
+        if (element.Status == 'Include') {
+            await _criterionRepository.IncludeRelationshipAreaCriterion(element);
+        } else if (element.Status == 'Remove') {
+            await _criterionRepository.RemoveRelationshipAreaCriterion(element);
+        } else if (element.Status == 'Change') {
+            await _criterionRepository.ChangeRelationshipAreaCriterion(element);
+        }
+    }
+
+    res.json(NotificationTemplate(true, [], `Dados atualizados!`));
 };
 
 CriterionService.prototype.Get = async(res, _criterionRepository) => {
