@@ -199,7 +199,7 @@ ResponsabilityDAO.prototype.ValidateByName = async(description) => {
     });
 
     conn.close();
-    return AnalyzeResult(data);
+    return _shared.AnalyzeResults(data);
 };
 
 ResponsabilityDAO.prototype.UpdateStatus = async(status, id) => {
@@ -210,27 +210,6 @@ ResponsabilityDAO.prototype.UpdateStatus = async(status, id) => {
     conn.query(query).then(() => {});
     conn.close();
 };
-
-//#region Metodos Auxiliares
-var AnalyzeResult = function(array) {
-    /* 
-      verifica o resultado em quantidade e status.
-      qt:0  - id_status:indefinido -> false -> inexistente
-      qt:1  - id_status:2          -> false -> inativo
-      qt:1  - id_status:1          -> true  -> ativo
-      qt:>1 - id_status:1ou2       -> false -> multiplos
-      */
-    let index = array[0] == undefined ? 0 : array.length;
-
-    if (index == 0) return { status: false, count: index };
-
-    return {
-        status: index == 1 && array[index - 1].status == 1 ? true : false,
-        count: index,
-    };
-};
-
-//#endregion
 
 module.exports = () => {
     return ResponsabilityDAO;

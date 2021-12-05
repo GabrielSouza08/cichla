@@ -1,4 +1,6 @@
-var crypto = require("crypto");
+var shared = require('../../Shared/Constants.js');
+
+var _shared = new shared();
 
 function ResponsabilityServices() {}
 
@@ -14,8 +16,8 @@ ResponsabilityServices.prototype.Include = async(
 
     if (data.status == false && data.count == 0) {
         await _responsabilityRepository.Include(req);
-        res.json(NotificationTemplate(true, [], `Dados cadastrados com sucesso!`));
-    } else res.json(NotificationTemplate(true, [], `Este cargo já existe!`));
+        res.json(_shared.NotificationTemplate(true, [], `Dados cadastrados com sucesso!`));
+    } else res.json(_shared.NotificationTemplate(true, [], `Este cargo já existe!`));
 };
 
 ResponsabilityServices.prototype.ControlRelationResponsibilityArea = async(
@@ -36,7 +38,7 @@ ResponsabilityServices.prototype.ControlRelationResponsibilityArea = async(
         }
     }
 
-    res.json(NotificationTemplate(true, [], `Dados de relação entre área e cargo atualizados com sucesso!`));
+    res.json(_shared.NotificationTemplate(true, [], `Dados de relação entre área e cargo atualizados com sucesso!`));
 };
 
 ResponsabilityServices.prototype.GetRelationResponsibilityArea = async(
@@ -44,7 +46,7 @@ ResponsabilityServices.prototype.GetRelationResponsibilityArea = async(
     _responsabilityRepository
 ) => {
     let data = await _responsabilityRepository.GetResponsibilityArea();
-    res.json(NotificationTemplate(true, data, `Lista de relacões de área e cargo.`));
+    res.json(_shared.NotificationTemplate(true, data, `Lista de relacões de área e cargo.`));
 };
 
 ResponsabilityServices.prototype.ControlRelationResponsibilityPermission = async(
@@ -64,7 +66,7 @@ ResponsabilityServices.prototype.ControlRelationResponsibilityPermission = async
         }
     }
 
-    res.json(NotificationTemplate(true, [], `Dados de relação entre permissão e cargo atualizados com sucesso!`));
+    res.json(_shared.NotificationTemplate(true, [], `Dados de relação entre permissão e cargo atualizados com sucesso!`));
 };
 
 
@@ -73,7 +75,7 @@ ResponsabilityServices.prototype.GetResponsibilityPermission = async(
     _responsabilityRepository
 ) => {
     let data = await _responsabilityRepository.GetResponsibilityPermission();
-    res.json(NotificationTemplate(true, data, `Lista de relacões de permissão e cargo.`));
+    res.json(_shared.NotificationTemplate(true, data, `Lista de relacões de permissão e cargo.`));
 };
 
 ResponsabilityServices.prototype.GetPermission = async(
@@ -81,7 +83,7 @@ ResponsabilityServices.prototype.GetPermission = async(
     _responsabilityRepository
 ) => {
     let data = await _responsabilityRepository.GetPermissions();
-    res.json(NotificationTemplate(true, data, `Lista de permissão.`));
+    res.json(_shared.NotificationTemplate(true, data, `Lista de permissão.`));
 };
 
 
@@ -90,7 +92,7 @@ ResponsabilityServices.prototype.Get = async(
     _responsabilityRepository
 ) => {
     let data = await _responsabilityRepository.Get();
-    res.json(NotificationTemplate(true, data, "Lista de cargos cadastrados!"));
+    res.json(_shared.NotificationTemplate(true, data, "Lista de cargos cadastrados!"));
 };
 
 ResponsabilityServices.prototype.Activate = async(
@@ -100,7 +102,7 @@ ResponsabilityServices.prototype.Activate = async(
 ) => {
     let statusActivate = 1;
     await UpdateStatus(statusActivate, req.body.id, _responsabilityRepository);
-    res.json(NotificationTemplate(true, [], "Cargo ativado com sucesso!"));
+    res.json(_shared.NotificationTemplate(true, [], "Cargo ativado com sucesso!"));
 };
 
 ResponsabilityServices.prototype.Disable = async(
@@ -110,7 +112,7 @@ ResponsabilityServices.prototype.Disable = async(
 ) => {
     let statusDisable = 2;
     await UpdateStatus(statusDisable, req.params.id, _responsabilityRepository);
-    res.json(NotificationTemplate(true, [], "Cargo desabilitado com sucesso!"));
+    res.json(_shared.NotificationTemplate(true, [], "Cargo desabilitado com sucesso!"));
 };
 
 //#endregion métodos principais DAO
@@ -123,17 +125,6 @@ var UpdateStatus = async function(status, id, _responsabilityRepository) {
 
 //#endregion métodos de acesso ao banco auxiliares
 
-//#region métodos logicos auxiliares
-
-var NotificationTemplate = function(_status, _data, _message) {
-    return {
-        success: _status,
-        data: _data,
-        msg: [{ text: _message }],
-    };
-};
-
-//#endregion métodos auxiliares logicos
 module.exports = () => {
     return ResponsabilityServices;
 };

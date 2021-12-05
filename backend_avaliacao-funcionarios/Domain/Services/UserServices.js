@@ -1,3 +1,6 @@
+var shared = require('../../Shared/Constants.js');
+
+var _shared = new shared();
 var crypto = require("crypto");
 
 function UserServices() {}
@@ -10,18 +13,18 @@ UserServices.prototype.Include = async(req, res, _userRepository) => {
         req.body.password = EncryptCharacters(req.body.password);
 
         await _userRepository.Include(req);
-        res.json(NotificationTemplate(true, [], `Dados cadastrados com sucesso!`));
+        res.json(_shared.NotificationTemplate(true, [], `Dados cadastrados com sucesso!`));
     } else await resultHandlerInclude(req, res, data, _userRepository);
 };
 
 UserServices.prototype.Get = async(req, res, _userRepository) => {
     let data = await _userRepository.Get(req.params.userActive);
-    res.json(NotificationTemplate(true, data, "Lista de usuários cadastrados!"));
+    res.json(_shared.NotificationTemplate(true, data, "Lista de usuários cadastrados!"));
 };
 
 UserServices.prototype.GetEvaluator = async(res, _userRepository) => {
     let data = await _userRepository.GetEvaluator();
-    res.json(NotificationTemplate(true, data, "Lista de avaliadores cadastrados!"));
+    res.json(_shared.NotificationTemplate(true, data, "Lista de avaliadores cadastrados!"));
 };
 
 UserServices.prototype.Update = async(req, res, _userRepository) => {
@@ -40,7 +43,7 @@ UserServices.prototype.Update = async(req, res, _userRepository) => {
 
     if (status) {
         Update(req, isChangePassword, _userRepository);
-        res.json(NotificationTemplate(true, {}, "Usuário atualizado."));
+        res.json(_shared.NotificationTemplate(true, {}, "Usuário atualizado."));
     } else {
         let message =
             data.status == false && data.count == 1 ?
@@ -51,20 +54,20 @@ UserServices.prototype.Update = async(req, res, _userRepository) => {
             `O ${req.body.email} já está cadastrado com outro usuário, tente outro e-mail!` :
             "";
 
-        res.json(NotificationTemplate(false, [], message));
+        res.json(_shared.NotificationTemplate(false, [], message));
     }
 };
 
 UserServices.prototype.Activate = async(req, res, _userRepository) => {
     let statusActivate = 1;
     await UpdateStatus(statusActivate, req.params.id, _userRepository);
-    res.json(NotificationTemplate(true, [], "Usuário ativado com sucesso!"));
+    res.json(_shared.NotificationTemplate(true, [], "Usuário ativado com sucesso!"));
 };
 
 UserServices.prototype.Disable = async(req, res, _userRepository) => {
     let statusDisable = 2;
     await UpdateStatus(statusDisable, req.params.id, _userRepository);
-    res.json(NotificationTemplate(true, [], "Usuário desabilitado com sucesso!"));
+    res.json(_shared.NotificationTemplate(true, [], "Usuário desabilitado com sucesso!"));
 };
 
 UserServices.prototype.Authenticator = async(req, res, _userRepository) => {
@@ -95,7 +98,7 @@ UserServices.prototype.Authenticator = async(req, res, _userRepository) => {
             `Atenticação concluída, usuário não possui privilegios para acesso!` :
             "";
 
-        res.json(NotificationTemplate(status, object, message));
+        res.json(_shared.NotificationTemplate(status, object, message));
     } else {
         let message =
             data.analysis.status == false && data.analysis.count == 1 ?
@@ -106,7 +109,7 @@ UserServices.prototype.Authenticator = async(req, res, _userRepository) => {
             `Não foi possivel autenticar, usuário inexistente!` :
             "";
 
-        res.json(NotificationTemplate(false, [], message));
+        res.json(_shared.NotificationTemplate(false, [], message));
     }
 };
 
@@ -135,19 +138,11 @@ var EncryptCharacters = function(value) {
     return encrypt;
 };
 
-var NotificationTemplate = function(_status, _data, _message) {
-    return {
-        success: _status,
-        data: _data,
-        msg: [{ text: _message }],
-    };
-};
-
 var resultHandlerInclude = async function(req, res, data, _userRepository) {
     //usuário localizado, distinto e ativo
     if (data.status && data.count == 1) {
         res.json(
-            NotificationTemplate(
+            _shared.NotificationTemplate(
                 false, [],
                 `Não é possivel cadastrar o usuário, pois o email: ${req.body.email.toUpperCase()} já é existente.`
             )
@@ -156,7 +151,7 @@ var resultHandlerInclude = async function(req, res, data, _userRepository) {
     //usuário localizado, multiplo e status indefinido.
     else if (data.count == 2) {
         res.json(
-            NotificationTemplate(
+            _shared.NotificationTemplate(
                 false, [],
                 `O email: ${req.body.email.toUpperCase()} está duplicado. Entre em contato com o RH para para melhor solução.`
             )
@@ -171,7 +166,7 @@ var resultHandlerInclude = async function(req, res, data, _userRepository) {
         await Update(req, isChangePassword, _userRepository);
 
         res.json(
-            NotificationTemplate(true, [], "Usuário localizado, atualizado e ativado")
+            _shared.NotificationTemplate(true, [], "Usuário localizado, atualizado e ativado")
         );
     }
 };

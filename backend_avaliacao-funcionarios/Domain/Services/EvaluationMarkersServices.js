@@ -1,3 +1,7 @@
+var shared = require('../../Shared/Constants.js');
+
+var _shared = new shared();
+
 function EvaluationMarkersServices() {}
 
 //#region  métodos principais DAO
@@ -10,10 +14,10 @@ EvaluationMarkersServices.prototype.Include = async(
 
     if (data.status == false && data.count == 0) {
         await _evaluationRepository.Include(req);
-        res.json(NotificationTemplate(true, [], `Dados cadastrados com sucesso!`));
+        res.json(_shared.NotificationTemplate(true, [], `Dados cadastrados com sucesso!`));
     } else
         res.json(
-            NotificationTemplate(true, [], `Este marcador avaliativo já existe!`)
+            _shared.NotificationTemplate(true, [], `Este marcador avaliativo já existe!`)
         );
 };
 EvaluationMarkersServices.prototype.Get = async(
@@ -22,7 +26,7 @@ EvaluationMarkersServices.prototype.Get = async(
 ) => {
     let data = await _evaluationRepository.Get();
     res.json(
-        NotificationTemplate(
+        _shared.NotificationTemplate(
             true,
             data,
             "Lista de marcadores avaliativos cadastrados!"
@@ -38,7 +42,7 @@ EvaluationMarkersServices.prototype.Activate = async(
     let statusActivate = 1;
     await UpdateStatus(statusActivate, req.body.id, _evaluationRepository);
     res.json(
-        NotificationTemplate(true, [], "Marcador avaliativo ativado com sucesso!")
+        _shared.NotificationTemplate(true, [], "Marcador avaliativo ativado com sucesso!")
     );
 };
 
@@ -50,7 +54,7 @@ EvaluationMarkersServices.prototype.Disable = async(
     let statusDisable = 2;
     await UpdateStatus(statusDisable, req.params.id, _evaluationRepository);
     res.json(
-        NotificationTemplate(
+        _shared.NotificationTemplate(
             true, [],
             "Marcador avaliativo desabilitado com sucesso!"
         )
@@ -65,17 +69,6 @@ var UpdateStatus = async function(status, id, _evaluationRepository) {
 
 //#endregion métodos de acesso ao banco auxiliares
 
-//#region métodos logicos auxiliares
-
-var NotificationTemplate = function(_status, _data, _message) {
-    return {
-        success: _status,
-        data: _data,
-        msg: [{ text: _message }],
-    };
-};
-
-//#endregion métodos auxiliares logicos
 module.exports = () => {
     return EvaluationMarkersServices;
 };

@@ -1,3 +1,7 @@
+var shared = require('../../Shared/Constants.js');
+
+var _shared = new shared();
+
 function DepartmentServices() {}
 
 //#region  métodos principais DAO
@@ -10,14 +14,14 @@ DepartmentServices.prototype.Include = async(
 
     if (data.status == false && data.count == 0) {
         await _departmentRepository.Include(req);
-        res.json(NotificationTemplate(true, [], `Dados cadastrados com sucesso!`));
-    } else res.json(NotificationTemplate(false, [], `Departamento já existe!`));
+        res.json(_shared.NotificationTemplate(true, [], `Dados cadastrados com sucesso!`));
+    } else res.json(_shared.NotificationTemplate(false, [], `Departamento já existe!`));
 };
 
 DepartmentServices.prototype.Get = async(res, _departmentRepository) => {
     let data = await _departmentRepository.Get();
     res.json(
-        NotificationTemplate(true, data, "Lista de departamentos cadastrados!")
+        _shared.NotificationTemplate(true, data, "Lista de departamentos cadastrados!")
     );
 };
 
@@ -28,7 +32,7 @@ DepartmentServices.prototype.Activate = async(
 ) => {
     let statusActivate = 1;
     await UpdateStatus(statusActivate, req.body.id, _departmentRepository);
-    res.json(NotificationTemplate(true, [], "Departamento ativado com sucesso!"));
+    res.json(_shared.NotificationTemplate(true, [], "Departamento ativado com sucesso!"));
 };
 
 DepartmentServices.prototype.Disable = async(
@@ -39,7 +43,7 @@ DepartmentServices.prototype.Disable = async(
     let statusDisable = 2;
     await UpdateStatus(statusDisable, req.params.id, _departmentRepository);
     res.json(
-        NotificationTemplate(true, [], "Departamento desabilitado com sucesso!")
+        _shared.NotificationTemplate(true, [], "Departamento desabilitado com sucesso!")
     );
 };
 
@@ -53,17 +57,6 @@ var UpdateStatus = async function(status, id, _departmentRepository) {
 
 //#endregion métodos de acesso ao banco auxiliares
 
-//#region métodos logicos auxiliares
-
-var NotificationTemplate = function(_status, _data, _message) {
-    return {
-        success: _status,
-        data: _data,
-        msg: [{ text: _message }],
-    };
-};
-
-//#endregion métodos auxiliares logicos
 module.exports = () => {
     return DepartmentServices;
 };

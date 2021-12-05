@@ -8,7 +8,7 @@ EvaluationService.prototype.Initialize = async(req, res, _repositories) => {
 
     data = await _questionRepository.Get(req.body.areaId)
 
-    res.json(NotificationTemplate(true, [], `Inicializado!`));
+    res.json(_shared.NotificationTemplate(true, [], `Inicializado!`));
 };
 
 EvaluationService.prototype.GetQuestions = async(req, res, _repositories) => {
@@ -16,7 +16,7 @@ EvaluationService.prototype.GetQuestions = async(req, res, _repositories) => {
 
     data = await _evaluationRepository.GetQuestions(req.params.evaluatorId)
 
-    res.json(NotificationTemplate(true, data, `Lista de questoes!`));
+    res.json(_shared.NotificationTemplate(true, data, `Lista de questoes!`));
 };
 
 EvaluationService.prototype.GetScales = async(req, res, _repositories) => {
@@ -24,7 +24,7 @@ EvaluationService.prototype.GetScales = async(req, res, _repositories) => {
 
     data = await _scaleRepository.Get()
 
-    res.json(NotificationTemplate(true, data, `Lista de escalas!`));
+    res.json(_shared.NotificationTemplate(true, data, `Lista de escalas!`));
 };
 
 EvaluationService.prototype.UpdateScales = async(req, res, _repositories) => {
@@ -34,8 +34,8 @@ EvaluationService.prototype.UpdateScales = async(req, res, _repositories) => {
 
     if (data.status == false && data.count == 0) {
         await _scaleRepository.Update(req.body.description, req.body.id);
-        res.json(NotificationTemplate(true, [], `Escala atualizada com sucesso!`));
-    } else res.json(NotificationTemplate(true, [], `Já existe uma escala com esse nome!`));
+        res.json(_shared.NotificationTemplate(true, [], `Escala atualizada com sucesso!`));
+    } else res.json(_shared.NotificationTemplate(true, [], `Já existe uma escala com esse nome!`));
 
 
 };
@@ -62,16 +62,6 @@ var CalculatorSpot = function(questions) {
 
     return spot
 }
-
-var NotificationTemplate = function(_status, _data, _message) {
-    return {
-        success: _status,
-        data: _data,
-        msg: [{ text: _message }],
-    };
-};
-
-//#endregion métodos auxiliares logicos
 
 module.exports = () => {
     return EvaluationService;

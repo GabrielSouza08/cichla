@@ -1,6 +1,7 @@
 /* Application/Controllers/ResponsabilityController.js */
-const notifier = require('../../Shared/Notifier');
-const _notifier = new notifier()
+var shared = require('../../Shared/Constants.js');
+
+var _shared = new shared();
 
 module.exports = (application) => {
     application.post("/cargo/cadastrar", (req, res) => {
@@ -11,7 +12,7 @@ module.exports = (application) => {
         try {
             _responsabilityServices.Include(req, res, _responsabilityRepository);
         } catch (err) {
-            res = _notifier.NotificationTemplate(
+            res = _shared.NotificationTemplate(
                 false, [],
                 `Ocorreu uma exceção no processo de cadastro. error: ${err.message}`
             );
@@ -29,7 +30,7 @@ module.exports = (application) => {
                 _responsabilityRepository
             );
         } catch (err) {
-            res = _notifier.NotificationTemplate(
+            res = _shared.NotificationTemplate(
                 false, [],
                 `Ocorreu uma exceção no processo de cadastro. error: ${err.message}`
             );
@@ -47,7 +48,7 @@ module.exports = (application) => {
                 _responsabilityRepository
             );
         } catch (err) {
-            res = _notifier.NotificationTemplate(
+            res = _shared.NotificationTemplate(
                 false, [],
                 `Ocorreu uma exceção no processo de cadastro. error: ${err.message}`
             );
@@ -61,7 +62,7 @@ module.exports = (application) => {
         try {
             _responsabilityServices.Get(res, _responsabilityRepository);
         } catch (err) {
-            res = _notifier.NotificationTemplate(
+            res = _shared.NotificationTemplate(
                 false, [],
                 `Ocorreu uma exceção no processo consulta. error: ${err.message}`
             );
@@ -75,7 +76,7 @@ module.exports = (application) => {
         try {
             _responsabilityServices.GetRelationResponsibilityArea(res, _responsabilityRepository);
         } catch (err) {
-            res = _notifier.NotificationTemplate(
+            res = _shared.NotificationTemplate(
                 false, [],
                 `Ocorreu uma exceção no processo consulta. error: ${err.message}`
             );
@@ -89,7 +90,7 @@ module.exports = (application) => {
         try {
             _responsabilityServices.GetResponsibilityPermission(res, _responsabilityRepository);
         } catch (err) {
-            res = _notifier.NotificationTemplate(
+            res = _shared.NotificationTemplate(
                 false, [],
                 `Ocorreu uma exceção no processo consulta. error: ${err.message}`
             );
@@ -103,7 +104,7 @@ module.exports = (application) => {
         try {
             _responsabilityServices.GetPermission(res, _responsabilityRepository);
         } catch (err) {
-            res = _notifier.NotificationTemplate(
+            res = _shared.NotificationTemplate(
                 false, [],
                 `Ocorreu uma exceção no processo consulta. error: ${err.message}`
             );
@@ -118,7 +119,7 @@ module.exports = (application) => {
         try {
             _responsabilityServices.Disable(req, res, _responsabilityRepository);
         } catch (err) {
-            res = _notifier.NotificationTemplate(
+            res = _shared.NotificationTemplate(
                 false, [],
                 `Ocorreu uma exceção no processo de desabilitação. error: ${err.message}`
             );
@@ -133,7 +134,7 @@ module.exports = (application) => {
         try {
             _responsabilityServices.Activate(req, res, _responsabilityRepository);
         } catch (err) {
-            res = _notifier.NotificationTemplate(
+            res = _shared.NotificationTemplate(
                 false, [],
                 `Ocorreu uma exceção no processo de ativação. error: ${err.message}`
             );
