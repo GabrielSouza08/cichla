@@ -3,46 +3,72 @@ const uuid = require("uuid");
 
 function EvaluationMarkersDAO() {}
 
-EvaluationMarkersDAO.prototype.Include = async function(req) {
-    let eMarker = req.body;
+EvaluationMarkersDAO.prototype.Include = async function(element) {
+    let eMarker = element;
     eMarker.id = uuid.v1();
 
     let conn = new dbConn(true);
 
     query = `INSERT INTO TB_MARCADORES_AVALIATIVOS   
     (
-      id_marcador,
-      ds_marcador,
-      dt_cadastro,
-      dt_alteracao,
-      id_status
+        ID_MARCADOR,
+        DS_MARCADOR,
+        PERIODO,
+        DT_INICIO,
+        DT_FIM,
+        DT_LIMITE,
+        DT_CADASTRO,
+        DT_ALTERACAO,
+        ID_STATUS
     )
     VALUES 
     (
         '${eMarker.id}',
         '${eMarker.description}',
+        ${eMarker.period},
+        '${eMarker.initialDate}',
+        '${eMarker.endDate}',
+        '${eMarker.limiteDate}',
         curdate(),
         curdate(),
-        1
+        5
     );`;
 
     conn.query(query).then(() => {});
 };
-EvaluationMarkersDAO.prototype.Get = async() => {
+
+EvaluationMarkersDAO.prototype.Get = async(statusId) => {
     let conn = new dbConn(true);
     let query = `SELECT 
-                      * FROM TB_MARCADORES_AVALIATIVOS`;
+                ID_MARCADOR AS id,
+                DS_MARCADOR AS  description,
+                PERIODO AS period,
+                DATE_FORMAT(DT_INICIO,'%d/%m/%Y') AS initialDate,
+                DATE_FORMAT(DT_FIM,'%d/%m/%Y') AS endDate,
+                DATE_FORMAT(DT_LIMITE,'%d/%m/%Y') AS limiteDate,
+                DATE_FORMAT(DT_CADASTRO,'%d/%m/%Y') AS registerDate,
+                DATE_FORMAT(DT_ALTERACAO,'%d/%m/%Y') AS changeDate,
+                ID_STATUS AS statusCode
+                FROM TB_MARCADORES_AVALIATIVOS
+                WHERE ID_STATUS = ${statusId}`;
 
-    return conn.query(query).then((result) => {
+    let data = await conn.query(query).then((result) => {
         return result;
     });
+
+    conn.close();
+    return data;
 };
-EvaluationMarkersDAO.prototype.ValidateByName = async(description) => {
+
+EvaluationMarkersDAO.prototype.ValidateByDescription = async(description) => {
     let conn = new dbConn(true);
-    let query = `  SELECT * FROM TB_MARCADORES_AVALIATIVOS  WHERE ds_marcador = '${description}'`;
-    return await conn.query(query).then(async(result) => {
-        return AnalyzeResult(result);
+    let query = `  SELECT ID_STATUS AS status FROM TB_MARCADORES_AVALIATIVOS  WHERE ds_marcador = '${description}'`;
+    let data = await conn.query(query).then((result) => {
+        return result;
     });
+
+    conn.close();
+    return AnalyzeResult(data);
 };
 
 EvaluationMarkersDAO.prototype.UpdateStatus = async(status, id) => {

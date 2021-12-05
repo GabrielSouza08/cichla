@@ -13,6 +13,19 @@ module.exports = (application) => {
         }
     });
 
+    application.get("/questoes-avalicao/:evaluatorId", (req, res) => {
+        let _evaluationServices = new application.Domain.Services.EvaluationService();
+        let _repositories = application.Infra.Data.Repositories;
+        try {
+            _evaluationServices.GetQuestions(req, res, _repositories);
+        } catch (err) {
+            res = this.NotificationTemplate(
+                false, [],
+                `Ocorreu uma exceção no processo de cadastro. error: ${err.message}`
+            );
+        }
+    });
+
     application.get("/escalas", (req, res) => {
         let _evaluationServices = new application.Domain.Services.EvaluationService();
         let _repositories = application.Infra.Data.Repositories;

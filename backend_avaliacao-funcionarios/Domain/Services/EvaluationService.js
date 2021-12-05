@@ -11,6 +11,13 @@ EvaluationService.prototype.Initialize = async(req, res, _repositories) => {
     res.json(NotificationTemplate(true, [], `Inicializado!`));
 };
 
+EvaluationService.prototype.GetQuestions = async(req, res, _repositories) => {
+    _evaluationRepository = new _repositories.EvaluationDAO();
+
+    data = await _evaluationRepository.GetQuestions(req.params.evaluatorId)
+
+    res.json(NotificationTemplate(true, data, `Lista de questoes!`));
+};
 
 EvaluationService.prototype.GetScales = async(req, res, _repositories) => {
     _scaleRepository = new _repositories.ScaleDAO();

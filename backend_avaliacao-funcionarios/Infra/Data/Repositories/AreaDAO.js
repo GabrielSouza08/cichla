@@ -29,6 +29,7 @@ AreaDAO.prototype.Include = async function(req) {
     );`;
 
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 AreaDAO.prototype.Get = async() => {
@@ -46,18 +47,26 @@ AreaDAO.prototype.Get = async() => {
                   ON TA.ID_DEPARTAMENTO = TD.ID_DEPARTAMENTO 
                   WHERE TA.ID_STATUS = 1;`;
 
-    return conn.query(query).then((result) => {
+    let data = await conn.query(query).then((result) => {
         return result;
     });
+
+    conn.close();
+
+    return data;
 };
 
 AreaDAO.prototype.GetIdByDescription = async(name = '') => {
     let conn = new dbConn(true);
     let query = `SELECT ID_AREA AS id FROM TB_AREAS WHERE DS_AREA = '${name}';`;
 
-    return conn.query(query).then((result) => {
+    let data = await conn.query(query).then((result) => {
         return result;
     });
+
+    conn.close();
+
+    return data;
 };
 
 AreaDAO.prototype.UpdateStatus = async(status, id) => {
@@ -67,15 +76,20 @@ AreaDAO.prototype.UpdateStatus = async(status, id) => {
                  DT_ALTERACAO =  curdate() 
                  WHERE ID_AREA = '${id}'`;
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 //#region Metodos Auxiliares
 AreaDAO.prototype.ValidateByName = async(description) => {
     let conn = new dbConn(true);
     let query = `  SELECT ID_STATUS AS status FROM TB_AREAS  WHERE ds_area = '${description}'`;
-    return await conn.query(query).then(async(result) => {
-        return AnalyzeResult(result);
+
+    let data = await conn.query(query).then((result) => {
+        return result;
     });
+
+    conn.close();
+    return AnalyzeResult(data);
 };
 
 var AnalyzeResult = function(array) {

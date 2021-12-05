@@ -21,7 +21,7 @@ module.exports = CreateDataBase = async() => {
                                               (2,"Desabilitado",curtime(),curtime(),1),
                                               (3,"Avaliado",curtime(),curtime(),1),
                                               (4,"Pendente",curtime(),curtime(),1),
-                                              (5,"Habilitado",curtime(),curtime(),1);
+                                              (5,"Em aguardo",curtime(),curtime(),1);
                                                                               
                                               INSERT INTO tb_permissoes
                                               (

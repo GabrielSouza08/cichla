@@ -39,6 +39,28 @@ UserDAO.prototype.Include = async function(req) {
     conn.query(query).then(() => {});
 };
 
+UserDAO.prototype.IncludeUserEvaluation = async function(req) {
+    let user = req.body;
+    user.id = uuid.v1();
+
+    let conn = new dbConn(true);
+
+    query = `INSERT TB_AVALIACAO 
+    (
+    ID_AVALIACAO
+    ,ID_MARCADOR
+    ,ID_USUARIO
+    ,ID_AVALIADOR
+    ,DT_CADASTRO
+    ,DT_ALTERACAO
+    ,ID_STATUS
+    ) 
+    VALUES 
+    ('1','1','2','1',CURDATE(), CURDATE(),4);`;
+
+    conn.query(query).then(() => {});
+};
+
 UserDAO.prototype.GetIdByEmail = async function(email) {
     let conn = new dbConn(true);
 

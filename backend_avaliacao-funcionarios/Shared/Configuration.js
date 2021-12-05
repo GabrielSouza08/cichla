@@ -20,6 +20,7 @@ consign()
     .include("Infra/Data/Migrations/StartMigration.js")
     .then("App/Controllers")
     .then("Domain/Services")
+    .then("Domain/Scheduler")
     .then("Infra/Data/Repositories")
     .into(build);
 

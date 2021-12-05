@@ -169,8 +169,32 @@ module.exports = CreateTables = async() => {
                                     FOREIGN KEY (id_status) REFERENCES tb_status(id_status),
                                     INDEX (ds_marcador, dt_inicio, dt_fim, dt_limite, periodo)
                                     );
+
+-- cria tabela avalicao
+                                    CREATE TABLE IF NOT EXISTS tb_avaliacao (
+                                    id_avaliacao VARCHAR(50) NOT NULL,
+                                    id_marcador VARCHAR(50) NOT NULL,
+                                    id_usuario VARCHAR(50) NOT NULL,
+                                    id_avaliador VARCHAR(50) NOT NULL,
+                                    dt_cadastro DATETIME NOT NULL,
+                                    dt_alteracao DATETIME NOT NULL,
+                                    id_status INT NOT NULL,
+                                    PRIMARY KEY(id_avaliacao),
+                                    FOREIGN KEY (id_status) REFERENCES tb_status(id_status)
+                                    );
                                     
-                                    
+-- cria tabela questoes avaliadas
+                                    CREATE TABLE IF NOT EXISTS tb_questoes_avaliadas (
+                                    id_questao_avaliada VARCHAR(50) NOT NULL,
+                                    id_marcador VARCHAR(50) NOT NULL,
+                                    id_usuario VARCHAR(50) NOT NULL,
+                                    id_questao VARCHAR(50) NOT NULL,
+                                    id_escala VARCHAR(50) NOT NULL,
+                                    dt_cadastro DATETIME NOT NULL,
+                                    id_status INT NOT NULL,
+                                    PRIMARY KEY(id_questao_avaliada),
+                                    FOREIGN KEY (id_status) REFERENCES tb_status(id_status)
+                                    );                                     
                                     END`;
 
     t.scriptExecute = `CALL CreateAllTables();`;
