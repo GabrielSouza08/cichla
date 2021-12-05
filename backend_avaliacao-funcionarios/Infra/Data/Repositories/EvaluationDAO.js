@@ -33,7 +33,12 @@ EvaluationDAO.prototype.GetQuestions = async function(evaluatorId) {
     where tu.id_avaliador = '${evaluatorId}'
     and tu.id_status = 1;`;
 
-    return conn.query(query).then((result) => { return result; });
+    let data = await conn.query(query).then((result) => {
+        return result;
+    });
+
+    conn.close();
+    return data;
 };
 
 module.exports = () => {

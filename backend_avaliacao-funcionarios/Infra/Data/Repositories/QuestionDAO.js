@@ -28,6 +28,7 @@ QuestionDAO.prototype.Include = async function(req) {
                 1);`;
 
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 QuestionDAO.prototype.Update = async function(req) {
@@ -42,6 +43,7 @@ QuestionDAO.prototype.Update = async function(req) {
 
     console.log(query);
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 QuestionDAO.prototype.UpdateStatus = async(status, id) => {
@@ -51,6 +53,7 @@ QuestionDAO.prototype.UpdateStatus = async(status, id) => {
                  DT_ALTERACAO =  curdate() 
                  WHERE id_questao = '${id}'`;
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 
@@ -69,9 +72,12 @@ QuestionDAO.prototype.Get = async() => {
                 ON TC.ID_CRITERIO = TQ.ID_CRITERIO
                 WHERE TQ.ID_STATUS = 1;`;
 
-    return conn.query(query).then((result) => {
+    let data = await conn.query(query).then((result) => {
         return result;
     });
+
+    conn.close();
+    return data;
 };
 
 QuestionDAO.prototype.GetByAreaId = async(areaId) => {
@@ -85,9 +91,12 @@ QuestionDAO.prototype.GetByAreaId = async(areaId) => {
                 ON TQ.ID_CRITERIO = TCA.ID_CRITERIO
                 WHERE TCA.ID_AREA = '${areaId}';`;
 
-    return conn.query(query).then((result) => {
+    let data = await conn.query(query).then((result) => {
         return result;
     });
+
+    conn.close();
+    return data;
 };
 
 QuestionDAO.prototype.GetQuantity = async() => {
@@ -100,26 +109,36 @@ QuestionDAO.prototype.GetQuantity = async() => {
                 WHERE ID_STATUS = 1
                 GROUP BY ID_CRITERIO, ID_STATUS;`;
 
-    return conn.query(query).then((result) => {
+    let data = await conn.query(query).then((result) => {
         return result;
     });
+
+    conn.close();
+    return data;
 };
 
 QuestionDAO.prototype.GetIdByDescription = async(name = '') => {
     let conn = new dbConn(true);
     let query = `SELECT ID_QUESTAO AS id FROM TB_QUESTOES WHERE DS_QUESTAO = '${name}';`;
 
-    return conn.query(query).then((result) => {
+    let data = await conn.query(query).then((result) => {
         return result;
     });
+
+    conn.close();
+    return data;
 };
 
 QuestionDAO.prototype.ValidateByDescription = async(description) => {
     let conn = new dbConn(true);
     let query = `  SELECT ID_STATUS AS status FROM TB_QUESTOES  WHERE DS_QUESTAO = '${description}'`;
-    return await conn.query(query).then(async(result) => {
-        return AnalyzeResult(result);
+
+    let data = await conn.query(query).then((result) => {
+        return result;
     });
+
+    conn.close();
+    return AnalyzeResult(data);
 };
 
 var AnalyzeResult = function(array) {

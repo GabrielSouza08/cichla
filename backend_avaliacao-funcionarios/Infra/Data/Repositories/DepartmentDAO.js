@@ -27,6 +27,7 @@ DepartmentDAO.prototype.Include = async function(req) {
                     );`;
 
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 DepartmentDAO.prototype.Get = async() => {
@@ -39,17 +40,23 @@ DepartmentDAO.prototype.Get = async() => {
                     ID_STATUS AS statusCode
                 FROM TB_DEPARTAMENTOS
                 WHERE ID_STATUS = 1;`;
-
-    return conn.query(query).then((result) => {
+    let data = await conn.query(query).then((result) => {
         return result;
     });
+
+    conn.close();
+    return data;
 };
 DepartmentDAO.prototype.ValidateByName = async(description) => {
     let conn = new dbConn(true);
     let query = `  SELECT * FROM TB_DEPARTAMENTOS  WHERE ds_departamento = '${description}' AND ID_STATUS = 1`;
-    return await conn.query(query).then(async(result) => {
-        return AnalyzeResult(result);
+
+    let data = await conn.query(query).then((result) => {
+        return result;
     });
+
+    conn.close();
+    return AnalyzeResult(data);
 };
 
 DepartmentDAO.prototype.UpdateStatus = async(status, id) => {
@@ -58,6 +65,7 @@ DepartmentDAO.prototype.UpdateStatus = async(status, id) => {
                  SET ID_STATUS = ${status} 
                  WHERE ID_departamento = '${id}'`;
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 //#region Metodos Auxiliares

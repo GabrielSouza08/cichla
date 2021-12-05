@@ -59,6 +59,7 @@ UserDAO.prototype.IncludeUserEvaluation = async function(req) {
     ('1','1','2','1',CURDATE(), CURDATE(),4);`;
 
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 UserDAO.prototype.GetIdByEmail = async function(email) {
@@ -68,7 +69,12 @@ UserDAO.prototype.GetIdByEmail = async function(email) {
              FROM TB_USUARIOS
              WHERE EMAIL = "${email}";`;
 
-    return conn.query(query).then((result) => { return result[0].id });
+    let data = await conn.query(query).then((result) => {
+        return result;
+    });
+
+    conn.close();
+    return data[0].id;
 };
 
 UserDAO.prototype.GetPermissions = async(id) => {
@@ -78,7 +84,12 @@ UserDAO.prototype.GetPermissions = async(id) => {
     FROM TB_CARGOS_PERMISSOES
     WHERE ID_CARGO = "${id}"`;
 
-    return conn.query(query).then((result) => { return result });
+    let data = await conn.query(query).then((result) => {
+        return result;
+    });
+
+    conn.close();
+    return data;
 };
 
 
@@ -98,12 +109,15 @@ UserDAO.prototype.Authenticator = async(email) => {
     ON RESPONSIBILITY.ID_CARGO = USER.ID_CARGO
     WHERE USER.EMAIL = "${email}";`;
 
-    return conn.query(query).then((result) => {
-        return {
-            result: [...result],
-            analysis: AnalyzeResult(result)
-        }
+    let data = await conn.query(query).then((result) => {
+        return result;
     });
+
+    conn.close();
+    return {
+        result: [...data],
+        analysis: AnalyzeResult(data)
+    };
 };
 
 UserDAO.prototype.Get = async(userActive) => {
@@ -141,7 +155,12 @@ UserDAO.prototype.Get = async(userActive) => {
                     ON USER.id_avaliador = AVALIATOR.id_usuario
                     ${filter};`;
 
-    return conn.query(query).then((result) => { return result; });
+    let data = await conn.query(query).then((result) => {
+        return result;
+    });
+
+    conn.close();
+    return data;
 };
 
 UserDAO.prototype.GetEvaluator = async() => {
@@ -154,8 +173,12 @@ UserDAO.prototype.GetEvaluator = async() => {
                 FROM TB_USUARIOS TU
                 INNER JOIN TB_USUARIOS TA
                 ON TU.ID_AVALIADOR = TA.ID_USUARIO;`;
+    let data = await conn.query(query).then((result) => {
+        return result;
+    });
 
-    return conn.query(query).then((result) => { return result; });
+    conn.close();
+    return data;
 };
 
 UserDAO.prototype.UpdateStatus = async(status, id) => {
@@ -164,6 +187,7 @@ UserDAO.prototype.UpdateStatus = async(status, id) => {
                  SET ID_STATUS = ${status} 
                  WHERE ID_USUARIO = '${id}'`;
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 UserDAO.prototype.Update = async function(req, isChangePassword) {
@@ -183,6 +207,7 @@ UserDAO.prototype.Update = async function(req, isChangePassword) {
               `;
 
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 UserDAO.prototype.ExistenceValidationByEmail = async function(email) {
@@ -193,10 +218,12 @@ UserDAO.prototype.ExistenceValidationByEmail = async function(email) {
                     FROM TB_USUARIOS
                     WHERE EMAIL = "${email}";`;
 
-    return await conn.query(query)
-        .then(async(result) => {
-            return AnalyzeResult(result);
-        });
+    let data = await conn.query(query).then((result) => {
+        return result;
+    });
+
+    conn.close();
+    return AnalyzeResult(data);
 };
 
 //#region Metodos Auxiliares

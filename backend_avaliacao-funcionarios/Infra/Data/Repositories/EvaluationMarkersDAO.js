@@ -35,6 +35,7 @@ EvaluationMarkersDAO.prototype.Include = async function(element) {
     );`;
 
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 EvaluationMarkersDAO.prototype.Get = async(statusId) => {
@@ -77,6 +78,7 @@ EvaluationMarkersDAO.prototype.UpdateStatus = async(status, id) => {
                  SET ID_STATUS = ${status} 
                  WHERE ID_MARCADOR = '${id}'`;
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 //#region Metodos Auxiliares

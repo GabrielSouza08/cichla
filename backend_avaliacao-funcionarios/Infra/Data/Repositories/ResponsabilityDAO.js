@@ -83,6 +83,7 @@ ResponsabilityDAO.prototype.IncludeRelationResponsibilityPermission = async func
                     );`;
 
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 ResponsabilityDAO.prototype.RemoveRelationResponsibilityArea = async function(element) {
@@ -95,6 +96,7 @@ ResponsabilityDAO.prototype.RemoveRelationResponsibilityArea = async function(el
              AND ID_AREA = '${relation.AreaId}';`;
 
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 ResponsabilityDAO.prototype.RemoveRelationResponsibilityPermission = async function(element) {
@@ -107,6 +109,7 @@ ResponsabilityDAO.prototype.RemoveRelationResponsibilityPermission = async funct
              AND ID_PERMISSAO = '${relation.PermissionId}';`;
 
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 ResponsabilityDAO.prototype.Get = async() => {
@@ -119,10 +122,14 @@ ResponsabilityDAO.prototype.Get = async() => {
                 FROM TB_CARGOS 
                 WHERE ID_STATUS = 1;`;
 
-    return conn.query(query).then((result) => {
+    let data = await conn.query(query).then((result) => {
         return result;
     });
+
+    conn.close();
+    return data;
 };
+
 ResponsabilityDAO.prototype.GetPermissions = async() => {
     let conn = new dbConn(true);
     let query = ` SELECT 
@@ -130,9 +137,12 @@ ResponsabilityDAO.prototype.GetPermissions = async() => {
                   DS_PERMISSAO AS name
                   FROM TB_PERMISSOES;`;
 
-    return conn.query(query).then((result) => {
+    let data = await conn.query(query).then((result) => {
         return result;
     });
+
+    conn.close();
+    return data;
 };
 
 ResponsabilityDAO.prototype.GetResponsibilityArea = async() => {
@@ -150,10 +160,14 @@ ResponsabilityDAO.prototype.GetResponsibilityArea = async() => {
                 LEFT JOIN TB_CARGOS TG
                 ON TGA.ID_CARGO = TG.ID_CARGO;`;
 
-    return conn.query(query).then((result) => {
+    let data = await conn.query(query).then((result) => {
         return result;
     });
+
+    conn.close();
+    return data;
 };
+
 ResponsabilityDAO.prototype.GetResponsibilityPermission = async() => {
     let conn = new dbConn(true);
     let query = `SELECT 
@@ -169,16 +183,23 @@ ResponsabilityDAO.prototype.GetResponsibilityPermission = async() => {
                 LEFT JOIN TB_CARGOS TG
                 ON TGP.ID_CARGO = TG.ID_CARGO;`;
 
-    return conn.query(query).then((result) => {
+    let data = await conn.query(query).then((result) => {
         return result;
     });
+
+    conn.close();
+    return data;
 };
 ResponsabilityDAO.prototype.ValidateByName = async(description) => {
     let conn = new dbConn(true);
     let query = `  SELECT ID_STATUS AS status FROM TB_CARGOS  WHERE ds_cargo = '${description}'`;
-    return await conn.query(query).then(async(result) => {
-        return AnalyzeResult(result);
+
+    let data = await conn.query(query).then((result) => {
+        return result;
     });
+
+    conn.close();
+    return AnalyzeResult(data);
 };
 
 ResponsabilityDAO.prototype.UpdateStatus = async(status, id) => {
@@ -187,6 +208,7 @@ ResponsabilityDAO.prototype.UpdateStatus = async(status, id) => {
                  SET ID_STATUS = ${status} 
                  WHERE ID_CARGO = '${id}'`;
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 //#region Metodos Auxiliares

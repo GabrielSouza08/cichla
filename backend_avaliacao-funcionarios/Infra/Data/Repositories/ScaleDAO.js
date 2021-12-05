@@ -11,9 +11,12 @@ ScaleDAO.prototype.Get = async() => {
                     NOTA AS grade 
                 FROM TB_ESCALAS`;
 
-    return conn.query(query).then((result) => {
+    let data = await conn.query(query).then((result) => {
         return result;
     });
+
+    conn.close();
+    return data;
 };
 
 
@@ -25,14 +28,18 @@ ScaleDAO.prototype.Update = async(description, id) => {
                  WHERE ID_ESCALA = '${id}'`;
 
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 ScaleDAO.prototype.ValidateByDescription = async(description) => {
     let conn = new dbConn(true);
     let query = `  SELECT ID_STATUS AS status FROM TB_ESCALAS  WHERE DS_ESCALA = '${description}'`;
-    return await conn.query(query).then(async(result) => {
-        return AnalyzeResult(result);
+    let data = await conn.query(query).then((result) => {
+        return result;
     });
+
+    conn.close();
+    return AnalyzeResult(data);
 };
 
 var AnalyzeResult = function(array) {

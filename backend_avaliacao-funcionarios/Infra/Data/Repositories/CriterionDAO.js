@@ -27,6 +27,7 @@ CriterionDAO.prototype.Include = async function(req) {
     );`;
 
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 CriterionDAO.prototype.IncludeRelationshipAreaCriterion = async function(element) {
@@ -53,6 +54,7 @@ CriterionDAO.prototype.IncludeRelationshipAreaCriterion = async function(element
     );`;
 
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 CriterionDAO.prototype.Get = async() => {
@@ -65,10 +67,12 @@ CriterionDAO.prototype.Get = async() => {
                       TA.ID_STATUS AS statusCode
                   FROM TB_CRITERIOS AS TA
                   WHERE TA.ID_STATUS = 1;`;
-
-    return conn.query(query).then((result) => {
+    let data = await conn.query(query).then((result) => {
         return result;
     });
+
+    conn.close();
+    return data;
 };
 
 CriterionDAO.prototype.GetRelationshipAreaCriterion = async() => {
@@ -87,18 +91,24 @@ CriterionDAO.prototype.GetRelationshipAreaCriterion = async() => {
                 INNER JOIN TB_CRITERIOS AS TC
                 ON TCA.ID_CRITERIO = TC.ID_CRITERIO;`;
 
-    return conn.query(query).then((result) => {
+    let data = await conn.query(query).then((result) => {
         return result;
     });
+
+    conn.close();
+    return data;
 };
 
 CriterionDAO.prototype.GetIdByDescription = async(name = '') => {
     let conn = new dbConn(true);
     let query = `SELECT ID_CRITERIO AS id FROM TB_CRITERIOS WHERE DS_CRITERIO = '${name}';`;
 
-    return conn.query(query).then((result) => {
+    let data = await conn.query(query).then((result) => {
         return result;
     });
+
+    conn.close();
+    return data;
 };
 
 CriterionDAO.prototype.UpdateStatus = async(status, id) => {
@@ -108,6 +118,7 @@ CriterionDAO.prototype.UpdateStatus = async(status, id) => {
                  DT_ALTERACAO =  curdate() 
                  WHERE ID_CRITERIO = '${id}'`;
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 CriterionDAO.prototype.ChangeRelationshipAreaCriterion = async function(element) {
@@ -121,6 +132,7 @@ CriterionDAO.prototype.ChangeRelationshipAreaCriterion = async function(element)
              AND ID_CRITERIO = '${relation.CriterionId}';`;
 
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 CriterionDAO.prototype.RemoveRelationshipAreaCriterion = async function(element) {
@@ -133,15 +145,20 @@ CriterionDAO.prototype.RemoveRelationshipAreaCriterion = async function(element)
              AND ID_CRITERIO = '${relation.CriterionId}';`;
 
     conn.query(query).then(() => {});
+    conn.close();
 };
 
 //#region Metodos Auxiliares
 CriterionDAO.prototype.ValidateByName = async(description) => {
     let conn = new dbConn(true);
     let query = `  SELECT ID_STATUS AS status FROM TB_CRITERIOS  WHERE ds_criterio = '${description}'`;
-    return await conn.query(query).then(async(result) => {
-        return AnalyzeResult(result);
+
+    let data = await conn.query(query).then((result) => {
+        return result;
     });
+
+    conn.close();
+    return AnalyzeResult(data);
 };
 
 var AnalyzeResult = function(array) {
