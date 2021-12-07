@@ -6,7 +6,7 @@ var _shared = new shared();
 
 function EvaluationMarkersDAO() {}
 
-EvaluationMarkersDAO.prototype.Include = async function(element) {
+EvaluationMarkersDAO.prototype.Include = async function(element, status) {
     let eMarker = element;
     eMarker.id = uuid.v1();
 
@@ -34,7 +34,7 @@ EvaluationMarkersDAO.prototype.Include = async function(element) {
         '${eMarker.limiteDate}',
         curdate(),
         curdate(),
-        5
+        ${status}
     );`;
 
     conn.query(query).then(() => {});
@@ -58,6 +58,18 @@ EvaluationMarkersDAO.prototype.Get = async(statusId) => {
 
     let data = await conn.query(query).then((result) => {
         return result;
+    });
+
+    conn.close();
+    return data;
+};
+
+EvaluationMarkersDAO.prototype.GetCount = async() => {
+    let conn = new dbConn(true);
+    let query = `SELECT COUNT(*) AS count FROM TB_MARCADORES_AVALIATIVOS  `;
+
+    let data = await conn.query(query).then((result) => {
+        return result[0].count;
     });
 
     conn.close();

@@ -191,6 +191,7 @@ module.exports = CreateTables = async() => {
                                     id_questao VARCHAR(50) NOT NULL,
                                     id_escala VARCHAR(50) NOT NULL,
                                     dt_cadastro DATETIME NOT NULL,
+                                    dt_alteracao DATETIME NOT NULL,
                                     id_status INT NOT NULL,
                                     PRIMARY KEY(id_questao_avaliada),
                                     FOREIGN KEY (id_status) REFERENCES tb_status(id_status)

@@ -24,9 +24,9 @@ module.exports = (application) => {
         let enumStatus = _shared.GetEnumStatus();
         let data = await _markersRepository.Get(enumStatus.enabled);
 
-        data = (data.length >= 1) ? data[0] : [];
+        data = (data.length >= 1) ? data[0] : undefined;
 
-        if (data != undefined || data.length > 0) {
+        if (data != undefined) {
             await DisableCurrentEvaluationMarker(data, _markersRepository)
         }
     }
@@ -46,14 +46,26 @@ module.exports = (application) => {
         let enumStatus = _shared.GetEnumStatus();
         let data = await _markersRepository.Get(enumStatus.enabled);
 
-        data = (data.length >= 1) ? data[0] : [];
-
-        if (data != undefined || data.length > 0) {
-            await IncludeNewEvaluationMarker(data, _markersRepository)
+        data = (data.length >= 1) ? data[0] : undefined;
+        if (data != undefined) {
+            await IncludeNewEvaluationMarker(data, _markersRepository);
+        } else {
+            let count = await _markersRepository.GetCount();
+            if (count == 0)
+                await FirstEvaluationMarker(_markersRepository)
         }
     }
 
+    var FirstEvaluationMarker = async function(_markersRepository) {
+        let _enumStatus = _shared.GetEnumStatus();
+
+        let object = await GetObjectFirstEvaluationMarker();
+
+        await _markersRepository.Include(object, _enumStatus.enabled);
+    }
+
     var IncludeNewEvaluationMarker = async function(data, _markersRepository) {
+        let _enumStatus = _shared.GetEnumStatus();
 
         let objectDescription = GetStatusAndDescription(data)
 
@@ -62,7 +74,7 @@ module.exports = (application) => {
 
             if (analisy.status == false && analisy.count == 0) {
                 let object = await GetObjectFinal(objectDescription.description, data, _markersRepository);
-                await _markersRepository.Include(object)
+                await _markersRepository.Include(object, _enumStatus.inWaiting)
             }
         }
     }
@@ -70,21 +82,16 @@ module.exports = (application) => {
     var ActivateNewEvaluationMarker = async function(data, _markersRepository) {
         if (AnalyzeTimeToActivateOrDisable(data.initialDate)) {
 
-            if (analisy.status == false && analisy.count == 0) {
-                let enumStatus = _shared.GetEnumStatus();
-                await _markersRepository.UpdateStatus(enumStatus.enabled, data.id)
-            }
+            let enumStatus = _shared.GetEnumStatus();
+            await _markersRepository.UpdateStatus(enumStatus.enabled, data.id)
         }
     }
 
     var DisableCurrentEvaluationMarker = async function(data, _markersRepository) {
-
         if (AnalyzeTimeToActivateOrDisable(data.endDate)) {
 
-            if (analisy.status == false && analisy.count == 0) {
-                let enumStatus = _shared.GetEnumStatus();
-                await _markersRepository.UpdateStatus(enumStatus.disabled, data.id);
-            }
+            let enumStatus = _shared.GetEnumStatus();
+            await _markersRepository.UpdateStatus(enumStatus.disabled, data.id);
         }
     }
 
@@ -123,7 +130,7 @@ module.exports = (application) => {
 
             let year = (period != 1) ? nowDates.dateYear : nowDates.dateYear + 1;
 
-            let descriptionMarker = `${period} periodo ${year}`;
+            let descriptionMarker = `${period}º periodo de ${year}`;
 
             data.description = descriptionMarker;
             data.status = true;
@@ -147,8 +154,9 @@ module.exports = (application) => {
 
     var GetObjectFinal = async function(description, data, _markersRepository) {
         let object = {};
+        let firstMarker = false;
 
-        let dates = GetPeriodDates(description, data);
+        let dates = GetPeriodDates(description, data, firstMarker);
 
         object.description = description;
         object.period = data.period;
@@ -159,7 +167,35 @@ module.exports = (application) => {
         return object;
     }
 
-    var GetPeriodDates = function(description, data) {
+    var GetObjectFirstEvaluationMarker = async function() {
+        datenow = moment().locale('pt-br');
+
+        let nowDates = GetMonthAndYearInIntegerValues(datenow.format('L'));
+        let _enumPeriod = _shared.GetEnumPeriod();
+
+        let midleCalendar = 6;
+        let firstMarker = true;
+
+        let referenceDate = { endDate: datenow.format('L'), period: _enumPeriod.semester }
+
+        let period = (midleCalendar > nowDates.dateMonth) ? 1 : 2;
+
+        let description = `${period}º periodo de ${nowDates.dateYear}`;
+
+        let dates = GetPeriodDates(description, referenceDate, firstMarker)
+
+        let object = {};
+
+        object.description = description;
+        object.period = _enumPeriod.semester;
+        object.initialDate = dates.initialDate;
+        object.limiteDate = dates.limiteDate;
+        object.endDate = dates.endDate;
+
+        return object;
+    }
+
+    var GetPeriodDates = function(description, data, firstMarker) {
         let enumPeriod = _shared.GetEnumPeriod();
         let enumDates = _shared.GetEnumMonth();
 
@@ -169,7 +205,7 @@ module.exports = (application) => {
 
         let endDates = GetMonthAndYearInIntegerValues(data.endDate)
 
-        let year = (period == '1') ? endDates.dateYear + 1 : endDates.dateYear;
+        let year = (period == '1' && firstMarker == false) ? endDates.dateYear + 1 : endDates.dateYear;
 
         if (data.period == enumPeriod.semester) {
             // para semestre no primeiro periodo
@@ -225,7 +261,7 @@ module.exports = (application) => {
     var GetDateFormtPatterMysql = function(day, month, year) {
         let newMonth = (month < 10) ? `0${month}` : month;
 
-        return `${year}-${newMonth}/${day}`;
+        return `${year}-${newMonth}-${day}`;
     }
 
     var GetMonthWithLastDay = function(month, year) {

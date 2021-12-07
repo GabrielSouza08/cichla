@@ -34,9 +34,54 @@ QuestionDAO.prototype.Include = async function(req) {
     conn.close();
 };
 
+QuestionDAO.prototype.IncludeEvaluationCompleted = async function(element) {
+    let evaluationCompleted = element;
+    evaluationCompleted.id = uuid.v1();
+
+    let conn = new dbConn(true);
+
+    query = `INSERT INTO TB_QUESTOES_AVALIADAS
+            (
+            id_questao_avaliada,
+            id_marcador,
+            id_usuario,
+            id_questao,
+            id_escala,
+            dt_cadastro,
+            dt_alteracao,
+            id_status
+            )
+            VALUES 
+            (
+            '${evaluationCompleted.id}',
+            '${evaluationCompleted.markerId}',
+            '${evaluationCompleted.appraiseeId}',
+            '${evaluationCompleted.questionId}',
+            '${evaluationCompleted.noteId}',
+            curdate(),
+            curdate(),
+            3);`;
+
+    conn.query(query).then(() => {});
+    conn.close();
+};
+
+QuestionDAO.prototype.UpdateStatusEvaluationCompleted = async function(object, status) {
+
+    let conn = new dbConn(true);
+
+    query = `UPDATE TB_QUESTOES_AVALIADAS
+    SET ID_STATUS = ${status}, 
+    DT_ALTERACAO =  curdate() 
+    WHERE ID_USUARIO = '${object.userId}'
+    AND ID_MARCADOR = '${object.markerId}';`;
+
+    conn.query(query).then(() => {});
+    conn.close();
+};
+
 QuestionDAO.prototype.Update = async function(req) {
     let question = req.body;
-    console.log(question);
     let conn = new dbConn(true);
 
     query = `UPDATE TB_QUESTOES SET
@@ -44,7 +89,6 @@ QuestionDAO.prototype.Update = async function(req) {
             dt_alteracao = curdate()              
             WHERE id_questao = '${question.id}'`;
 
-    console.log(query);
     conn.query(query).then(() => {});
     conn.close();
 };

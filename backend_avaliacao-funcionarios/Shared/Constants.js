@@ -67,6 +67,26 @@ class Constants {
         };
     };
 
+    AnalyzeResultEvaluation(array) {
+        /* 
+          verifica o resultado em quantidade e status.
+          qt:0  - id_status:indefinido -> false -> inexistente
+          qt:1  - id_status:2          -> false -> inativo
+          qt:1  - id_status:4          -> false  -> pendente
+          qt:1  - id_status:3          -> true  -> avaliado
+          qt:>1 - id_status:1ou2       -> false -> multiplos
+          */
+        let index = array[0] == undefined ? 0 : array.length;
+
+        if (index == 0) return { status: false, count: index };
+
+        return {
+            status: index == 1 && array[index - 1].status == 3 ? true : false,
+            count: index,
+            statusCode: array[index - 1].status
+        };
+    };
+
 }
 
 module.exports = Constants;

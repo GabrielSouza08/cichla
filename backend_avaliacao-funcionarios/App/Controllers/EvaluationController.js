@@ -4,7 +4,7 @@ module.exports = (application) => {
         let _evaluationServices = new application.Domain.Services.EvaluationService();
         let _repositories = application.Infra.Data.Repositories;
         try {
-            _evaluationServices.Initialize(req, res, _repositories);
+            _evaluationServices.RegisterOrChange(req, res, _repositories);
         } catch (err) {
             res = this.NotificationTemplate(
                 false, [],
@@ -18,6 +18,19 @@ module.exports = (application) => {
         let _repositories = application.Infra.Data.Repositories;
         try {
             _evaluationServices.GetQuestions(req, res, _repositories);
+        } catch (err) {
+            res = this.NotificationTemplate(
+                false, [],
+                `Ocorreu uma exceção no processo de cadastro. error: ${err.message}`
+            );
+        }
+    });
+
+    application.get("/avaliacao/relatorio/:evaluatorId", (req, res) => {
+        let _evaluationServices = new application.Domain.Services.EvaluationService();
+        let _repositories = application.Infra.Data.Repositories;
+        try {
+            _evaluationServices.GetEvaluationCompleted(req, res, _repositories);
         } catch (err) {
             res = this.NotificationTemplate(
                 false, [],
