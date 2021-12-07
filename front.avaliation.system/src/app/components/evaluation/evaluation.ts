@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { ColaboratorService } from 'src/app/services/colaborator.service';
 import { DepartmentService } from 'src/app/services/department.service';
+import { EvaluationService } from 'src/app/services/evaluation.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from "rxjs";
 
 export interface EvaluationElements {
-  relationshipId: number;
-  departmentId: number;
-  departmentName: string;
+  appraiseeId: number;
+  userId: number;
+  userName: string;
   questionId: number;
   questionName: string;
   statusCode: number;
@@ -25,24 +26,27 @@ export interface NoteElements {
 }
 
 export interface EvaluationCompletedElements {
-  id: number;
-  relationshipId: number;
-  questionId: number;
+  id: string;
+  appraiseeId: string;
+  questionId: string;
   questionName: string;
-  noteId: number;
+  noteId: string;
   noteName: string;
+  finalResult: number;
   statusCode: boolean;
 }
 
 export interface FinalDataEvaluationElements {
-  relationshipId: number;
-  questionId: number;
-  noteId: number;
+  appraiseeId: string;
+  questionId: string;
+  noteId: string;
+  evaluatorId: string;
 }
 
 export interface TransitionData {
   data: Array<FinalDataEvaluationElements>;
   status: boolean;
+  message: string;
 }
 
 @Component({
@@ -66,13 +70,13 @@ export class FormtEvaluation implements OnInit {
   public statusSuccess: boolean = false;
   public statusConfirmAction: boolean = false;
 
-  public dataSourceDepartment = new MatTableDataSource<EvaluationElements>();
+  public dataSourceUser = new MatTableDataSource<EvaluationElements>();
 
-  public displayedColumnsDepartment: string[] = ["departmentName", "statusEvaluation"];
+  public displayedColumnsDepartment: string[] = ["userName", "statusEvaluation"];
 
   public noteSet: Array<NoteElements> = [];
-  public departmentSet: Array<EvaluationElements> = [];
-  public evaluationDepartmentSet: Array<EvaluationElements> = [];
+  public userSet: Array<EvaluationElements> = [];
+  public evaluationUserSet: Array<EvaluationElements> = [];
   public evaluationCompletedSet: Array<EvaluationCompletedElements> = [];
 
   public messages: Array<string> = []
@@ -84,7 +88,7 @@ export class FormtEvaluation implements OnInit {
   public Evaluations: FormArray;
 
   public dataUser: any;
-  public departmentName: string = "";
+  public userName: string = "";
 
   //Controle de ações(Sim ou não)
   public accessAction: boolean;
@@ -92,7 +96,7 @@ export class FormtEvaluation implements OnInit {
   public accessCloseChange: boolean;
   public idRemove: number;
 
-  constructor(private formBuilder: FormBuilder, private collaboratorService: ColaboratorService, private departmentService: DepartmentService) { }
+  constructor(private formBuilder: FormBuilder, private departmentService: DepartmentService,  private evaluationService: EvaluationService) { }
 
   ngOnInit() {
     this.formDeclaration();
@@ -101,38 +105,8 @@ export class FormtEvaluation implements OnInit {
   }
 
   ListsUpdate() {
-
-    let data: Array<EvaluationElements> = [
-      {
-        relationshipId:1, 
-        departmentId:1, 
-        departmentName:'Bruno Souza', 
-        questionId:1, 
-        questionName:'Entrega resultados?', 
-        statusCode:1, 
-        statusEvaluation:false
-      },
-      {
-        relationshipId:2, 
-        departmentId:2, 
-        departmentName:'Marcos Almeida', 
-        questionId:1, 
-        questionName:'Qualidade de trabalho em equipe?', 
-        statusCode:1, 
-        statusEvaluation:false
-      },
-      {
-        relationshipId:3, 
-        departmentId:3, 
-        departmentName:'Fernando Marques', 
-        questionId:1, 
-        questionName:'qualidade de comunicação?', 
-        statusCode:1, 
-        statusEvaluation:false
-      }];
-
     this.getListNote();
-    this.getEvaluationDepartment(data);
+    this.getEvaluationCollaborator();
   }
 
   getDataUser() {
@@ -140,95 +114,40 @@ export class FormtEvaluation implements OnInit {
   }
 
   getListNote() {
-    this.statusLoading = false;
-    let data: Array<NoteElements> = [{
-      id: 1,
-      description: 'Distante do requerido',
-      value: 1,
-      type: '',
-      registerDate: '',
-      changeDate: '',
-      statusCode: 1
-    },
-    {
-      id: 2,
-      description: 'Próximo do requerido',
-      value: 1,
-      type: '',
-      registerDate: '',
-      changeDate: '',
-      statusCode: 1
-    },
-    {
-      id: 3,
-      description: 'Atende mas pode melhorar',
-      value: 2,
-      type: '',
-      registerDate: '',
-      changeDate: '',
-      statusCode: 1
-    },
-    {
-      id: 4,
-      description: 'Atende completamente o requerido',
-      value: 2,
-      type: '',
-      registerDate: '',
-      changeDate: '',
-      statusCode: 1
-    },
-    {
-      id: 5,
-      description: 'Supera o requerido',
-      value: 2,
-      type: '',
-      registerDate: '',
-      changeDate: '',
-      statusCode: 1
-    }
-    ];
+    this.statusLoading = true;
 
-    this.noteSet = data;
-
-
-//   } else {
-//   this.openTable();
-//   res.data.forEach(data => { this.showMessageError(data.message); });
-// }
-    //   this.noteService.Get("Departamento").subscribe(res => {
-    // });
+    this.evaluationService.GetScales().subscribe(res => {
+      this.statusLoading = false;
+      if (res.success == true) {
+        this.noteSet = res.data;
+      } else {
+        this.openTable();
+        res.data.forEach(data => { this.showMessageError(data.message); });
+      }
+    });
   }
 
-getEvaluationDepartment(data: Array<EvaluationElements>) {
-      this.departmentSet = [...data];
-      this.dataSourceDepartment = new MatTableDataSource(this.departmentSet);
-      this.evaluationDepartmentSet = data;
+getEvaluationCollaborator() {
+  this.evaluationService.GetEvaluatonById(this.dataUser.id).subscribe(res => {
+    if (res.success == true) {
+      this.userSet = res.data;
+      this.dataSourceUser = new MatTableDataSource(this.userSet);
+      this.evaluationUserSet = res.data;
 
-      sessionStorage.setItem('evaluationDepartmentSet', JSON.stringify(this.evaluationDepartmentSet));
+      sessionStorage.setItem('evaluationUserSet', JSON.stringify(this.evaluationUserSet));
 
-      this.filterList();
-      this.openTable();
-
-  // this.departmentService.GetEvaluatonById(this.dataUser.id).subscribe(res => {
-  //   if (res.success == true) {
-  //     this.departmentSet = res.data;
-  //     this.dataSourceDepartment = new MatTableDataSource(this.departmentSet);
-  //     this.evaluationDepartmentSet = res.data;
-
-  //     sessionStorage.setItem('evaluationDepartmentSet', JSON.stringify(this.evaluationDepartmentSet));
-
-  //     if (res.data.length > 0) {
-  //       this.filterList();
-  //       this.openTable();
-  //     } else { this.openNotFound(); }
-  //   }
-  // });
+      if (res.data.length > 0) {
+        this.filterList();
+        this.openTable();
+      } else { this.openNotFound(); }
+    }
+  });
 }
 
 GetEvaluationCompleted(relarionshipId: number) {
   this.statusLoading = true;
   this.departmentService.GetEvaluatonCompletedByRelationship(relarionshipId).subscribe(res => {
-    if (res.success == true) { this.evaluationCompletedSet = res.data; this.openView(); this.statusLoading = false; }
+    if (res.success == true) { this.evaluationCompletedSet = res.data;console.log(res.data); this.openView(); this.statusLoading = false; }
     else { this.openTable(); res.data.forEach(data => { this.showMessageError(data.message); }); }
   });
 }
@@ -237,51 +156,50 @@ filterList() {
   let arrayDepartmentList: Array<EvaluationElements> = [];
   let departmentsId: Array<number> = [];
 
-  this.dataSourceDepartment.data.forEach(element => {
-    if (arrayDepartmentList.filter(option => option.departmentId == element.departmentId && option.statusEvaluation == element.statusEvaluation).length === 0) {
+  this.dataSourceUser.data.forEach(element => {
+    if (arrayDepartmentList.filter(option => option.userId == element.userId && option.statusEvaluation == element.statusEvaluation).length === 0) {
       arrayDepartmentList.push(element);
     }
-    if (departmentsId.filter(option => option == element.departmentId).length === 0) {
-      departmentsId.push(element.departmentId);
+    if (departmentsId.filter(option => option == element.userId).length === 0) {
+      departmentsId.push(element.userId);
     }
   });
 
   departmentsId.forEach(id => {
-    if (arrayDepartmentList.filter(option => option.departmentId == id).length > 1) {
-      let data: EvaluationElements = arrayDepartmentList.filter(option => option.statusEvaluation == false && option.departmentId == id)[0];
+    if (arrayDepartmentList.filter(option => option.userId == id).length > 1) {
+      let data: EvaluationElements = arrayDepartmentList.filter(option => option.statusEvaluation == false && option.userId == id)[0];
 
-      arrayDepartmentList = arrayDepartmentList.filter(option => option.departmentId != id);
+      arrayDepartmentList = arrayDepartmentList.filter(option => option.userId != id);
       arrayDepartmentList.push(data);
     }
   });
 
-  this.dataSourceDepartment = new MatTableDataSource(arrayDepartmentList);
+  this.dataSourceUser = new MatTableDataSource(arrayDepartmentList);
 }
 
 // Obtem o elemento selecionado da lista de departamentos e verifica o status de avalição 
 // Determinando se irá para divisão de avaliação 
 // ou do relatório
 ChangeOrInput(row ?: EvaluationElements) {
-  console.log(row)
-  this.evaluationDepartmentSet = JSON.parse(sessionStorage.getItem("evaluationDepartmentSet"));
-  let data: Array<EvaluationElements> = this.evaluationDepartmentSet.filter(options => options.relationshipId == row.relationshipId);
-  this.departmentName = row.departmentName;
+  this.evaluationUserSet = JSON.parse(sessionStorage.getItem("evaluationUserSet"));
+  let data: Array<EvaluationElements> = this.evaluationUserSet.filter(options => options.appraiseeId == row.appraiseeId);
+  this.userName = row.userName;
 
   //Add na matriz de formpulario, para obter as questões dinamicamente 
   data.forEach(element => { this.addItem(element); });
 
   //Se o status de avaliacao for verdadeiro  
   //Então, obtem os dados avaliativos completos com base no id de relação e abre a view desses dados
-  if (row.statusEvaluation) { this.GetEvaluationCompleted(row.relationshipId); }
+  if (row.statusEvaluation) { this.GetEvaluationCompleted(row.appraiseeId); }
   //Caso contrario, direciona para tela de avaliação
   else { this.openRegister(); }
 }
 
 createItem(row ?: EvaluationElements): FormGroup {
   return this.formBuilder.group({
-    RelationshipId: [row.relationshipId, Validators.required]
-    , DepartmentId: [row.departmentId, Validators.required]
-    , DepartmentName: [row.departmentName]
+    RelationshipId: [row.appraiseeId, Validators.required]
+    , DepartmentId: [row.userId, Validators.required]
+    , DepartmentName: [row.userName]
     , QuestionId: [row.questionId, Validators.required]
     , QuestionName: [row.questionName]
     , NoteId: [null, Validators.required]
@@ -294,33 +212,39 @@ addItem(row ?: EvaluationElements): void {
 }
 
 DataEvaluation(): TransitionData {
-  var status = true;
-  this.Evaluations = this.formEvaluation.get('Evaluations') as FormArray;
+  var status: boolean = true;
+  var count: number = 1;
+  var message: string = '';
+  this.Evaluations = this.formEvaluation.get('Evaluations') as FormArray; 
 
   this.Evaluations.controls.forEach(form => {
     let data = form as FormGroup;
-    if (!data.controls.NoteId.valid) { status = false; }
+    if (!data.controls.NoteId.valid) { 
+      status = false; 
+      message += `A ${count}º questão não foi preenchida. `
+    }
+    count++;
   });
 
   var array = this.Evaluations.value;
   var final: Array<FinalDataEvaluationElements> = [];
 
   if (array.length > 0) {
-    console.log(array);
     var final: Array<FinalDataEvaluationElements> = [];
 
     array.forEach(element => {
       let row: FinalDataEvaluationElements;
       row = {
-        relationshipId: element.RelationshipId,
+        appraiseeId: element.RelationshipId,
         questionId: element.QuestionId,
-        noteId: element.NoteId
+        noteId: element.NoteId,
+        evaluatorId: this.dataUser.id
       };
       if (row) { final.push(row); }
     });
   }
 
-  let result: TransitionData = { data: final, status: status };
+  let result: TransitionData = { data: final, status: status, message: message};
   return result;
 }
 
@@ -330,92 +254,37 @@ inputRegister() {
   var all: TransitionData = this.DataEvaluation();
 
   if (all.status) {
+
+    console.log('all', all)
     this.statusLoading = true;
 
-    let data: Array<EvaluationElements> = [
-      {
-        relationshipId:1, 
-        departmentId:1, 
-        departmentName:'Bruno Souza', 
-        questionId:1, 
-        questionName:'Entrega resultados?', 
-        statusCode:1, 
-        statusEvaluation:true
-      },
-      {
-        relationshipId:2, 
-        departmentId:2, 
-        departmentName:'Marcos Almeida', 
-        questionId:1, 
-        questionName:'Qualidade de trabalho em equipe?', 
-        statusCode:1, 
-        statusEvaluation:false
-      },
-      {
-        relationshipId:3, 
-        departmentId:3, 
-        departmentName:'Fernando Marques', 
-        questionId:1, 
-        questionName:'qualidade de comunicação?', 
-        statusCode:1, 
-        statusEvaluation:false
-      }];
+    this.evaluationService.Evaluation(all.data, "Register").subscribe(res => {
 
-    this.showMessageSucceess(this.departmentName + ' avaliado(a) com sucesso!');
-    setTimeout(() => { this.getEvaluationDepartment(data); }, 3000);
+      if (res.success == true) {
+        this.showMessageSucceess(this.userName + ' avaliado(a) com sucesso!');
+        setTimeout(() => { this.getEvaluationCollaborator(); }, 3000);
+      }
 
-    // this.departmentService.Evaluation(all.data, "Register").subscribe(res => {
+      else { this.openTable(); res.data.forEach(data => { this.showMessageError(data.message); }); }
 
-    //   if (res.success == true) {
-    //     this.showMessageSucceess(this.departmentName + ' avaliado(a) com sucesso!');
-    //     setTimeout(() => { this.getEvaluationDepartment(); }, 3000);
-    //   }
-
-    //   else { this.openTable(); res.data.forEach(data => { this.showMessageError(data.message); }); }
-
-    // });
+    });
   }
-  else { this.showMessageError('Preencha os campos obrigatórios!'); }
+  else { 
+    this.showMessageError('Preencha os campos obrigatórios!'); 
+    this.showMessageError(all.message); 
+  }
 }
 
 inputChange() {
   var all: TransitionData = this.DataEvaluation();
-  let data: Array<EvaluationElements> = [
-    {
-      relationshipId:1, 
-      departmentId:1, 
-      departmentName:'Bruno Souza', 
-      questionId:1, 
-      questionName:'Entrega resultados?', 
-      statusCode:1, 
-      statusEvaluation:false
-    },
-    {
-      relationshipId:2, 
-      departmentId:2, 
-      departmentName:'Marcos Almeida', 
-      questionId:1, 
-      questionName:'Qualidade de trabalho em equipe?', 
-      statusCode:1, 
-      statusEvaluation:false
-    },
-    {
-      relationshipId:3, 
-      departmentId:3, 
-      departmentName:'Fernando Marques', 
-      questionId:1, 
-      questionName:'qualidade de comunicação?', 
-      statusCode:1, 
-      statusEvaluation:false
-    }];
-
   if (all.status) {
     this.statusLoading = true;
-    this.departmentService.Evaluation(all.data, "Change").subscribe(res => {
+    this.evaluationService.Evaluation(all.data, "Change").subscribe(res => {
+      console.log('retorno', res.success)
 
       if (res.success == true) {
-        this.showMessageSucceess('A nova avaliação do(a)' + this.departmentName + ' foi concluída com sucesso!');
-        setTimeout(() => { this.getEvaluationDepartment(data); }, 3000);
+        this.showMessageSucceess('A nova avaliação do(a)' + this.userName + ' foi concluída com sucesso!');
+        setTimeout(() => { this.getEvaluationCollaborator(); }, 3000);
       }
 
       else { this.openTable(); res.data.forEach(data => { this.showMessageError(data.message); }); }
@@ -427,7 +296,7 @@ inputChange() {
 
 applyFilter(event: Event) {
   const filterValue = (event.target as HTMLInputElement).value;
-  this.dataSourceDepartment.filter = filterValue.trim().toLowerCase();
+  this.dataSourceUser.filter = filterValue.trim().toLowerCase();
 }
 
 getValueAction(value: boolean) {
@@ -536,7 +405,7 @@ openConfirmAction() { this.statusConfirmAction = true; }
 closeConfirmAction() { this.statusConfirmAction = false; }
 
 claerDataDepartment() {
-  this.departmentName = "";
+  this.userName = "";
 }
 formDeclaration() {
   this.formEvaluation = this.formBuilder.group({

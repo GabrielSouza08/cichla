@@ -270,9 +270,9 @@
       let change: Array<AreaCriterion> = [];
       
       this.dataSourceAreaCriterion.data.forEach(element => {
-        if(this.areaCriterionSet.filter( option => option.criterionId.toString().indexOf(element.criterionId) === 0 && 
-        option.areaId.toString().indexOf(element.areaId) === 0).length == 0 || 
-        this.areaCriterionSet.filter(option => option.areaId.toString().indexOf(element.areaId) === 0).length == 0 ){
+        if(this.areaCriterionSet.filter( option => option.criterionId == element.criterionId && 
+        option.areaId == element.areaId).length == 0 || 
+        this.areaCriterionSet.filter(option => option.areaId == element.areaId).length == 0){
           include.push(element);
         }
       });
@@ -284,10 +284,10 @@
       });
   
       this.areaCriterionSet.forEach(element => {
-        if(this.dataSourceAreaCriterion.data.filter(option => option.criterionId.toString().indexOf(element.criterionId) === 0 ).length == 0 && 
-        this.dataSourceAreaCriterion.data.filter(option => option.areaId.toString().indexOf(element.areaId) === 0 ).length > 0 ||
+        if(this.dataSourceAreaCriterion.data.filter(option => option.criterionId == element.criterionId).length == 0 && 
+        this.dataSourceAreaCriterion.data.filter(option => option.areaId == element.areaId ).length > 0 ||
         this.dataSourceAreaCriterion.data.length == 0 &&
-        this.areaCriterionSet.filter(option => option.areaId.toString().indexOf(this.formInput.controls.AreaId.value) === 0).length > 0 &&
+        this.areaCriterionSet.filter(option => option.areaId == this.formInput.controls.AreaId.value).length > 0 &&
         element.areaId == this.formInput.controls.AreaId.value){
           remove.push(element);
         }

@@ -10,7 +10,7 @@ export interface OptionsInputElementsFinal {
 }
 
 export interface FinalDataEvaluationElements {
-  relationshipId: number;
+  appraiseeId: number;
   questionId: number;
   noteId: number;
 }
@@ -57,11 +57,11 @@ export class DepartmentService {
   }
 
   GetEvaluatonById(id): Observable<any> {
-    return this.http.get(`${environment.apiUrl}v1/departmentEvaluation/getById/${id}`);
+    return this.http.get(`${environment.apiUrl}questoes-avalicao/${id}`);
   }
 
   GetEvaluatonCompletedByRelationship(id: number): Observable<any> {
-    return this.http.get(`${environment.apiUrl}v1/departmentEvaluation/getByRelationship/${id}`);
+    return this.http.get(`${environment.apiUrl}avaliacao/relatorio/${id}`);
   }
 
   Evaluation(array: Array<FinalDataEvaluationElements>, type: string): Observable<any> {
