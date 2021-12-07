@@ -208,9 +208,7 @@ export class RelationshipResponsibilityPermissionComponent implements OnInit {
   inputRegister() {
     this.analyzeDataRequest();
     
-    console.log(this.relationshipCompletion)
-
-    if (this.relationshipCompletion.length == 0) { this.showMessageError('Para salvar altere algum dado!'); }
+    if (this.relationshipCompletion.length == 0) { this.showMessageError('Para salvar altere algum dado!');}
     else {
 
       this.responsibilityService.InputPermissionResponsibility(this.relationshipCompletion).subscribe(res => {
@@ -219,13 +217,10 @@ export class RelationshipResponsibilityPermissionComponent implements OnInit {
           this.showMessageSucceess('Alteração concluída!');
           setTimeout(() => { this.openTable(); }, 2000);
           
-        } else { res.msg.forEach(message => { this.showMessageError(message.text); }); }
+        } else { this.openTable(); res.msg.forEach(message => { this.showMessageError(message.text); }); }
       });
     }
-
-
     this.relationshipCompletion = new Array<ElementsFinal>();
-    this.openTable();
   }
 
   analyzeDataRequest(){

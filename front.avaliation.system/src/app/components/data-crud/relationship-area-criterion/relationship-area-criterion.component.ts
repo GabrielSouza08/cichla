@@ -255,13 +255,11 @@
             this.showMessageSucceess('Alteração concluída!');
             setTimeout(() => { this.openTable(); }, 1500);
             
-          } else { res.msg.forEach(message => { this.showMessageError(message.text); }); }
+          } else { this.openTable(); res.msg.forEach(message => { this.showMessageError(message.text); }); }
         });
       }
   
-  
       this.relationshipCompletion = new Array<ElementsFinal>();
-      this.openTable();
     }
   
     analyzeDataRequest(){
