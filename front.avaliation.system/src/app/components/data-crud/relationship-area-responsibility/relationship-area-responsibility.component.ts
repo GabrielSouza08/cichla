@@ -231,18 +231,18 @@ export class RelationshipAreaResponsibilityComponent implements OnInit {
     let include: Array<AreaResposibilities> = [];
     
     this.dataSourceAreaResposibility.data.forEach(element => {
-      if(this.areaResponsibilitySet.filter( option => option.responsibilityId.toString().indexOf(element.responsibilityId) === 0 && 
-      option.areaId.toString().indexOf(element.areaId) === 0).length == 0 || 
-      this.areaResponsibilitySet.filter(option => option.areaId.toString().indexOf(element.areaId) === 0).length == 0 ){
+      if(this.areaResponsibilitySet.filter( option => option.responsibilityId == element.responsibilityId && 
+      option.areaId == element.areaId).length == 0 || 
+      this.areaResponsibilitySet.filter(option => option.areaId == element.areaId).length == 0 ){
         include.push(element);
       }
     });
 
     this.areaResponsibilitySet.forEach(element => {
-      if(this.dataSourceAreaResposibility.data.filter(option => option.responsibilityId.toString().indexOf(element.responsibilityId) === 0 ).length == 0 && 
-      this.dataSourceAreaResposibility.data.filter(option => option.areaId.toString().indexOf(element.areaId) === 0 ).length > 0 ||
+      if(this.dataSourceAreaResposibility.data.filter(option => option.responsibilityId == element.responsibilityId).length == 0 && 
+      this.dataSourceAreaResposibility.data.filter(option => option.areaId == element.areaId).length > 0 ||
       this.dataSourceAreaResposibility.data.length == 0 &&
-      this.areaResponsibilitySet.filter(option => option.areaId.toString().indexOf(this.formInput.controls.AreaId.value) === 0).length > 0 &&
+      this.areaResponsibilitySet.filter(option => option.areaId == this.formInput.controls.AreaId.value).length > 0 &&
       element.areaId == this.formInput.controls.AreaId.value){
         remove.push(element);
       }

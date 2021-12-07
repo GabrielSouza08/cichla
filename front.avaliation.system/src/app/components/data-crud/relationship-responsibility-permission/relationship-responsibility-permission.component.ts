@@ -232,22 +232,19 @@ export class RelationshipResponsibilityPermissionComponent implements OnInit {
     let remove: Array<PermissionResposibilities> = [];
     let include: Array<PermissionResposibilities> = [];
     
-    console.log('dados base: ',this.permissionResponsibilitySet)
-
     this.dataSourcePermissionResposibility.data.forEach(element => {
-      console.log('elemento generico: ', element);
-      if(this.permissionResponsibilitySet.filter( option => option.responsibilityId.toString().indexOf(element.responsibilityId) === 0 && 
-      option.permissionId.toString().indexOf(element.permissionId) === 0).length == 0 || 
-      this.permissionResponsibilitySet.filter(option => option.permissionId.toString().indexOf(element.permissionId) === 0).length == 0){
+      if(this.permissionResponsibilitySet.filter( option => option.responsibilityId == element.responsibilityId && 
+      option.permissionId == element.permissionId).length == 0 || 
+      this.permissionResponsibilitySet.filter(option => option.permissionId == element.permissionId).length == 0){
         include.push(element);
       }
     });
 
     this.permissionResponsibilitySet.forEach(element => {
-      if(this.dataSourcePermissionResposibility.data.filter(option => option.responsibilityId.toString().indexOf(element.responsibilityId) === 0 ).length == 0 && 
-      this.dataSourcePermissionResposibility.data.filter(option => option.permissionId.toString().indexOf(element.permissionId) === 0 ).length > 0 ||
+      if(this.dataSourcePermissionResposibility.data.filter(option => option.responsibilityId == element.responsibilityId).length == 0 && 
+      this.dataSourcePermissionResposibility.data.filter(option => option.permissionId == element.permissionId).length > 0 ||
       this.dataSourcePermissionResposibility.data.length == 0 &&
-      this.permissionResponsibilitySet.filter(option => option.permissionId.toString().indexOf(this.formInput.controls.PermissionId.value) === 0).length > 0 &&
+      this.permissionResponsibilitySet.filter(option => option.permissionId == this.formInput.controls.PermissionId.value).length > 0 &&
       element.permissionId == this.formInput.controls.PermissionId.value){
         remove.push(element);
       }
